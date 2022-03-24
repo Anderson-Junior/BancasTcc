@@ -1,0 +1,20 @@
+﻿#sidebar {
+    background-color: #2D5376;
+    text-decoration: none;
+}
+
+.navbar {
+    background: linear-gradient(270deg, #2D5376 43.48%, rgba(0, 100, 148, 0.51) 99.33%);
+}
+
+body {
+    
+}
+
+.btn-color-hover:hover {
+    color: #f8b739;
+}
+
+.nav ul li button {
+    color: #f8b739;
+}

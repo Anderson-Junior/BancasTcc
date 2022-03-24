@@ -1,0 +1,53 @@
+﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Curso>
+
+@{
+    ViewData["Title"] = "Cursos";
+}
+
+<h1>Cursos</h1>
+
+<p>
+    <a asp-action="Create">Cadastrar um novo curso</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Periodos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ativo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Filial)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Periodos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ativo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Filial.FilialId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.CursoId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.CursoId">Inativar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
