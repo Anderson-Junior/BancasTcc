@@ -1,13 +1,13 @@
-﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Curso>
+﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Aluno>
 
 @{
-    ViewData["Title"] = "Cursos";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Cursos</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Cadastrar um novo curso</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -16,13 +16,13 @@
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Periodos)
+                @Html.DisplayNameFor(model => model.Matricula)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ativo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Filial)
+                @Html.DisplayNameFor(model => model.Equipe)
             </th>
             <th></th>
         </tr>
@@ -34,18 +34,18 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Periodos)
+                @Html.DisplayFor(modelItem => item.Matricula)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ativo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Filial.Campus)
+                @Html.DisplayFor(modelItem => item.Equipe.EquipeId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.CursoId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.CursoId">Inativar</a>
+                <a asp-action="Edit" asp-route-id="@item.AlunoId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AlunoId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AlunoId">Delete</a>
             </td>
         </tr>
 }

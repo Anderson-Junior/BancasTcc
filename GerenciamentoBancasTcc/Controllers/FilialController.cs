@@ -48,7 +48,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Filial/Create
         public IActionResult Create()
         {
-            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "InstituicaoId");
+            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "Nome");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FilialId,Email,Cnpj,Telefone,Endereco,Ativo,InstituicaoId")] Filial filial)
+        public async Task<IActionResult> Create([Bind("FilialId,Email,Campus,Cnpj,Telefone,Endereco,Ativo,InstituicaoId")] Filial filial)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "InstituicaoId", filial.InstituicaoId);
+            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "Nome", filial.InstituicaoId);
             return View(filial);
         }
 
@@ -82,7 +82,7 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
-            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "InstituicaoId", filial.InstituicaoId);
+            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "Nome", filial.InstituicaoId);
             return View(filial);
         }
 
@@ -91,7 +91,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FilialId,Email,Cnpj,Telefone,Endereco,Ativo,InstituicaoId")] Filial filial)
+        public async Task<IActionResult> Edit(int id, [Bind("FilialId,Email,Campus,Cnpj,Telefone,Endereco,Ativo,InstituicaoId")] Filial filial)
         {
             if (id != filial.FilialId)
             {
@@ -118,7 +118,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "InstituicaoId", filial.InstituicaoId);
+            ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "Nome", filial.InstituicaoId);
             return View(filial);
         }
 

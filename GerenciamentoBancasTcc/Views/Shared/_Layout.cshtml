@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using GerenciamentoBancasTcc.Domains.Entities
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<Usuario> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,51 +22,36 @@
             <div class="p-4 pt-5">
                 <a asp-action="Index" asp-controller="Home" class="img logo rounded-circle mb-5" style="background-image: url(../../wwwroot/images/logo.png);"></a>
                 <ul class="list-unstyled components mb-5">
-                    <li>
-                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Usuários</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li>
-                                <a asp-area="Identity" asp-page="/Account/Register">Cadastrar usuário</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#menuBanca" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Bancas</a>
-                        <ul class="collapse list-unstyled" id="menuBanca">
-                            <li>
-                                <a asp-action="cadastroBanca" asp-controller="Banca">Cadastrar Banca</a>
-                            </li>
-                        </ul>
-                    </li>  
-                    <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#">Page 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 3</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Notas</a>
-                    </li>
+                    @if (User.IsInRole("Coordenador"))
+                    {
+                        <li>
+                            <a asp-area="Identity" asp-page="/Account/Register">Usuários</a>
+                        </li>
+
+                        <li>
+                            <a asp-action="Index" asp-controller="Banca">Bancas</a>
+                        </li>
+
+                        <li>
+                            <a asp-action="Index" asp-controller="Equipe">Equipes</a>
+                        </li>
+
+                        <li>
+                            <a href="#">Controle de Notas</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <li>
+                            <a asp-action="Index" asp-controller="Instituicao">Instituições</a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Filial">Filiais</a>
+                        </li>
+                    }
+
 
                 </ul>
-
-                <div class="footer">
-                    <p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;
-                        <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </p>
-                </div>
-
             </div>
         </nav>
 
@@ -82,15 +71,15 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         @*<ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="navbar-left">
-                                    <button type="submit" style="width:auto" class="nav-link btn btn-link text-white btn-color-hover">
-                                        Logout
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>*@
-                        <partial name="_LoginPartial"/>
+                                <li class="nav-item">
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="navbar-left">
+                                        <button type="submit" style="width:auto" class="nav-link btn btn-link text-white btn-color-hover">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>*@
+                        <partial name="_LoginPartial" />
                     </div>
                 </div>
             </nav>

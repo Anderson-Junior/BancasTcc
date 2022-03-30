@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,6 +11,10 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Key]
         [Column("FilialId")]
         public int FilialId { get; set; }
+
+        [Column("Campus")]
+        public string Campus { get; set; }
+
         [Column("Email")]
         public string Email { get; set; }
 
@@ -25,6 +30,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Column("Ativo")]
         public bool Ativo { get; set; }
 
+        [DisplayName("Instituição")]
         public int InstituicaoId { get; set; }
         public virtual Instituicao Instituicao { get; set; }
 

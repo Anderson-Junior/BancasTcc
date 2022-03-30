@@ -48,7 +48,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Equipe/Create
         public IActionResult Create()
         {
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId");
+            GetBancas();
             return View();
         }
 
@@ -65,7 +65,9 @@ namespace GerenciamentoBancasTcc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId", equipe.BancaId);
+
+            GetBancas(equipe.EquipeId);
+
             return View(equipe);
         }
 
@@ -82,7 +84,7 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId", equipe.BancaId);
+            GetBancas(equipe.EquipeId);
             return View(equipe);
         }
 
@@ -118,7 +120,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId", equipe.BancaId);
+            GetBancas(equipe.EquipeId);
             return View(equipe);
         }
 
@@ -155,6 +157,14 @@ namespace GerenciamentoBancasTcc.Controllers
         private bool EquipeExists(int id)
         {
             return _context.Equipe.Any(e => e.EquipeId == id);
+        }
+
+        private void GetBancas(int selectedItem = 0)
+        {
+            var bancas = _context.Bancas.ToList();
+            var selectListItems = bancas.ToDictionary(x => x.BancaId.ToString(), y => y.Descricao).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["BancaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
     }
 }

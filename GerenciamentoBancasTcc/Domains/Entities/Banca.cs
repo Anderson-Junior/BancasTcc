@@ -11,6 +11,9 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BancaId { get; set; }
         public DateTime Data { get; set; }
+
+        [Display(Name = "Descrição")]
+        public string Descricao { get; set; }
         public virtual List<Equipe> Equipes { get; set; }
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
     }
