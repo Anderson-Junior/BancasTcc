@@ -37,7 +37,7 @@
                         </li>
 
                         <li>
-                            <a href="#">Controle de Notas</a>
+                            <a asp-action="Index" asp-controller="Aluno">Alunos</a>
                         </li>
                     }
                     @if (User.IsInRole("Administrador"))
@@ -49,8 +49,6 @@
                             <a asp-action="Index" asp-controller="Filial">Filiais</a>
                         </li>
                     }
-
-
                 </ul>
             </div>
         </nav>
