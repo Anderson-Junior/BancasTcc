@@ -48,7 +48,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Aluno/Create
         public IActionResult Create()
         {
-            ViewData["EquipeId"] = new SelectList(_context.Equipe, "EquipeId", "EquipeId");
+            GetEquipes();
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipeId"] = new SelectList(_context.Equipe, "EquipeId", "EquipeId", aluno.EquipeId);
+            GetEquipes(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -82,7 +82,7 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
-            ViewData["EquipeId"] = new SelectList(_context.Equipe, "EquipeId", "EquipeId", aluno.EquipeId);
+            GetEquipes(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -118,7 +118,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipeId"] = new SelectList(_context.Equipe, "EquipeId", "EquipeId", aluno.EquipeId);
+            GetEquipes(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -155,6 +155,14 @@ namespace GerenciamentoBancasTcc.Controllers
         private bool AlunoExists(int id)
         {
             return _context.Alunos.Any(e => e.AlunoId == id);
+        }
+
+        private void GetEquipes(int selectedItem = 0)
+        {
+            var bancas = _context.Equipe.ToList();
+            var selectListItems = bancas.ToDictionary(x => x.EquipeId.ToString(), y => y.Tema).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["EquipeId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
     }
 }

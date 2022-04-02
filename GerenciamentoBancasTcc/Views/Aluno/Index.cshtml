@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Aluno>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Alunos";
 }
 
-<h1>Index</h1>
+<h1>Alunos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Cadastrar um novo aluno</a>
 </p>
 <table class="table">
     <thead>
@@ -40,12 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Ativo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Equipe.EquipeId)
+                @Html.DisplayFor(modelItem => item.Equipe.Tema)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AlunoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AlunoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AlunoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.AlunoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.AlunoId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.AlunoId">Deletar</a>
             </td>
         </tr>
 }

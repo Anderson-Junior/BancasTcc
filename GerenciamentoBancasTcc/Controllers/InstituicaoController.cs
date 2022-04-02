@@ -89,7 +89,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InstituicaoId,Nome")] Instituicao instituicao)
+        public async Task<IActionResult> Edit(int id, [Bind("InstituicaoId,Nome,Ativo")] Instituicao instituicao)
         {
             if (id != instituicao.InstituicaoId)
             {

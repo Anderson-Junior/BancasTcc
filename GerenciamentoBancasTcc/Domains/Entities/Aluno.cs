@@ -21,6 +21,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public ICollection<CursosAlunos> CursosAlunos { get; set; }
 
+        [Display(Name = "Equipe")]
         public int? EquipeId { get; set; }
         public virtual Equipe Equipe { get; set; }
     }

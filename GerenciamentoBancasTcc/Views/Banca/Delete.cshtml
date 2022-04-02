@@ -1,12 +1,12 @@
 ﻿@model GerenciamentoBancasTcc.Domains.Entities.Banca
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Deletar";
 }
 
-<h1>Delete</h1>
+<h1>Deletar</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Tem certeza que deseja deletar esta banca?</h3>
 <div>
     <h4>Banca</h4>
     <hr />
@@ -21,7 +21,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="BancaId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Deletar" class="btn btn-danger" /> |
         <a asp-action="Index">Voltar para lista</a>
     </form>
 </div>
