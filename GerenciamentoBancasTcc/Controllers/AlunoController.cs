@@ -22,7 +22,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Aluno
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Alunos.Include(a => a.Equipe);
+            var applicationDbContext = _context.Alunos;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,6 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             var aluno = await _context.Alunos
-                .Include(a => a.Equipe)
                 .FirstOrDefaultAsync(m => m.AlunoId == id);
             if (aluno == null)
             {
@@ -48,7 +47,6 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Aluno/Create
         public IActionResult Create()
         {
-            GetEquipes();
             return View();
         }
 
@@ -57,7 +55,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlunoId,Nome,Matricula,Ativo,EquipeId")] Aluno aluno)
+        public async Task<IActionResult> Create([Bind("AlunoId,Nome,Matricula,Ativo")] Aluno aluno)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +63,6 @@ namespace GerenciamentoBancasTcc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            GetEquipes(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -82,7 +79,6 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
-            GetEquipes(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -91,7 +87,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlunoId,Nome,Matricula,Ativo,EquipeId")] Aluno aluno)
+        public async Task<IActionResult> Edit(int id, [Bind("AlunoId,Nome,Matricula,Ativo")] Aluno aluno)
         {
             if (id != aluno.AlunoId)
             {
@@ -118,7 +114,6 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            GetEquipes(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -131,7 +126,6 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             var aluno = await _context.Alunos
-                .Include(a => a.Equipe)
                 .FirstOrDefaultAsync(m => m.AlunoId == id);
             if (aluno == null)
             {
@@ -155,14 +149,6 @@ namespace GerenciamentoBancasTcc.Controllers
         private bool AlunoExists(int id)
         {
             return _context.Alunos.Any(e => e.AlunoId == id);
-        }
-
-        private void GetEquipes(int selectedItem = 0)
-        {
-            var bancas = _context.Equipe.ToList();
-            var selectListItems = bancas.ToDictionary(x => x.EquipeId.ToString(), y => y.Tema).ToList();
-            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
-            ViewData["EquipeId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
     }
 }

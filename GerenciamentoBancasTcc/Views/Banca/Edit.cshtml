@@ -4,9 +4,7 @@
     ViewData["Title"] = "Editar";
 }
 
-<h1>Editar</h1>
-
-<h4>Banca</h4>
+<h1>Editar Banca</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,9 +12,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BancaId" />
             <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
+                <label asp-for="CursoId" class="control-label"></label>
+                <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
+                <span asp-validation-for="CursoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tema" class="control-label"></label>
+                <input asp-for="Tema" class="form-control" />
+                <span asp-validation-for="Tema" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioId" class="control-label"></label>
+                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataHora" class="control-label"></label>
+                <input asp-for="DataHora" class="form-control" />
+                <span asp-validation-for="DataHora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sala" class="control-label"></label>
+                <input asp-for="Sala" class="form-control" />
+                <span asp-validation-for="Sala" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>

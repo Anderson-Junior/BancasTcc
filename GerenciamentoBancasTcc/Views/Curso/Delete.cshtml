@@ -1,12 +1,12 @@
 ﻿@model GerenciamentoBancasTcc.Domains.Entities.Curso
 
 @{
-    ViewData["Title"] = "Inativar";
+    ViewData["Title"] = "Deletar";
 }
 
-<h1>Inativar Curso</h1>
+<h1>Deletar</h1>
 
-<h3>Tem certeza que deseja inativar este curso?</h3>
+<h3>Tem certeza que deseja deletar este curso?</h3>
 <div>
     <hr />
     <dl class="row">
@@ -38,7 +38,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="CursoId" />
-        <input type="submit" value="Inativar" class="btn btn-danger" /> |
+        <input type="submit" value="Deletar" class="btn btn-danger" /> |
         <a asp-action="Index">Voltar para lista</a>
     </form>
 </div>

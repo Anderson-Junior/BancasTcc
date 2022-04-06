@@ -78,7 +78,7 @@ namespace GerenciamentoBancasTcc
             //    if (roleManager.RoleExistsAsync(roleName).Result
             //        || roleManager.CreateAsync(new IdentityRole { Name = roleName }).Result.Succeeded)
             //    {
-            //        foreach (string userName in new[] { "ander.lemos.jr@gmail.com", "emersonlemmos@gmail.com", "allan@gmail.com" })
+            //        foreach (string userName in new[] { "ander.lemos.jr@gmail.com"/*, "emersonlemmos@gmail.com", "allan@gmail.com" */})
             //        {
             //            var user = userManager.FindByNameAsync(userName).Result;
 

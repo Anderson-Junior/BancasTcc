@@ -20,11 +20,11 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Column("Ativo")]
         public bool Ativo { get; set; }
 
-        [DisplayName("Filial")]
+        [Display(Name = "Filial")]
         public int FilialId { get; set; }
         public virtual Filial Filial { get; set; }
 
-        public ICollection<CursosUsuarios> CursosUsuarios { get; set; }
         public ICollection<CursosAlunos> CursosAlunos { get; set; }
+        public ICollection<Banca> Bancas { get; set; }
     }
 }

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = RolesHelper.COORDENADOR)]
+    //[Authorize(Roles = RolesHelper.COORDENADOR)]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Usuario> _signInManager;

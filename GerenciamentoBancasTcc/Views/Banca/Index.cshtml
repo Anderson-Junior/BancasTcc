@@ -13,7 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Data)
+                @Html.DisplayNameFor(model => model.Curso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tema)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataHora)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sala)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Descricao)
@@ -22,10 +34,23 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Data)
+                @Html.DisplayFor(modelItem => item.Curso.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tema)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataHora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sala)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Descricao)
@@ -36,6 +61,6 @@
                 <a asp-action="Delete" asp-route-id="@item.BancaId">Deletar</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
