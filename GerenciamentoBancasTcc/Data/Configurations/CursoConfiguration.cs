@@ -13,7 +13,7 @@ namespace GerenciamentoBancasTcc.Data.Configurations
             builder.HasOne(c => c.Filial)
                    .WithMany(c => c.Cursos)
                    .HasForeignKey(c => c.FilialId)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
+using Microsoft.AspNetCore.Authorization;
+using GerenciamentoBancasTcc.Helpers;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
+    [Authorize(Roles = RolesHelper.ADMINISTRADOR)]
     public class InstituicaoController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -54,7 +57,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InstituicaoId,Nome")] Instituicao instituicao)
+        public async Task<IActionResult> Create([Bind("InstituicaoId,Nome,Ativo")] Instituicao instituicao)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +89,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InstituicaoId,Nome")] Instituicao instituicao)
+        public async Task<IActionResult> Edit(int id, [Bind("InstituicaoId,Nome,Ativo")] Instituicao instituicao)
         {
             if (id != instituicao.InstituicaoId)
             {

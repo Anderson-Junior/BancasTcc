@@ -40,12 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Ativo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Filial.FilialId)
+                @Html.DisplayFor(modelItem => item.Filial.Campus)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.CursoId">Editar</a> |
                 <a asp-action="Details" asp-route-id="@item.CursoId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.CursoId">Inativar</a>
+                <a asp-action="Delete" asp-route-id="@item.CursoId">Deletar</a>
             </td>
         </tr>
 }

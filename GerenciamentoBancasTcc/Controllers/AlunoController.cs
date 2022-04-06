@@ -10,23 +10,23 @@ using GerenciamentoBancasTcc.Domains.Entities;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
-    public class EquipeController : Controller
+    public class AlunoController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public EquipeController(ApplicationDbContext context)
+        public AlunoController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Equipe
+        // GET: Aluno
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Equipe.Include(e => e.Banca);
+            var applicationDbContext = _context.Alunos;
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Equipe/Details/5
+        // GET: Aluno/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +34,39 @@ namespace GerenciamentoBancasTcc.Controllers
                 return NotFound();
             }
 
-            var equipe = await _context.Equipe
-                .Include(e => e.Banca)
-                .FirstOrDefaultAsync(m => m.EquipeId == id);
-            if (equipe == null)
+            var aluno = await _context.Alunos
+                .FirstOrDefaultAsync(m => m.AlunoId == id);
+            if (aluno == null)
             {
                 return NotFound();
             }
 
-            return View(equipe);
+            return View(aluno);
         }
 
-        // GET: Equipe/Create
+        // GET: Aluno/Create
         public IActionResult Create()
         {
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId");
             return View();
         }
 
-        // POST: Equipe/Create
+        // POST: Aluno/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EquipeId,Tema,BancaId")] Equipe equipe)
+        public async Task<IActionResult> Create([Bind("AlunoId,Nome,Matricula,Ativo")] Aluno aluno)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(equipe);
+                _context.Add(aluno);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId", equipe.BancaId);
-            return View(equipe);
+            return View(aluno);
         }
 
-        // GET: Equipe/Edit/5
+        // GET: Aluno/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +74,22 @@ namespace GerenciamentoBancasTcc.Controllers
                 return NotFound();
             }
 
-            var equipe = await _context.Equipe.FindAsync(id);
-            if (equipe == null)
+            var aluno = await _context.Alunos.FindAsync(id);
+            if (aluno == null)
             {
                 return NotFound();
             }
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId", equipe.BancaId);
-            return View(equipe);
+            return View(aluno);
         }
 
-        // POST: Equipe/Edit/5
+        // POST: Aluno/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EquipeId,Tema,BancaId")] Equipe equipe)
+        public async Task<IActionResult> Edit(int id, [Bind("AlunoId,Nome,Matricula,Ativo")] Aluno aluno)
         {
-            if (id != equipe.EquipeId)
+            if (id != aluno.AlunoId)
             {
                 return NotFound();
             }
@@ -102,12 +98,12 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 try
                 {
-                    _context.Update(equipe);
+                    _context.Update(aluno);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EquipeExists(equipe.EquipeId))
+                    if (!AlunoExists(aluno.AlunoId))
                     {
                         return NotFound();
                     }
@@ -118,11 +114,10 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BancaId"] = new SelectList(_context.Bancas, "BancaId", "BancaId", equipe.BancaId);
-            return View(equipe);
+            return View(aluno);
         }
 
-        // GET: Equipe/Delete/5
+        // GET: Aluno/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,31 +125,30 @@ namespace GerenciamentoBancasTcc.Controllers
                 return NotFound();
             }
 
-            var equipe = await _context.Equipe
-                .Include(e => e.Banca)
-                .FirstOrDefaultAsync(m => m.EquipeId == id);
-            if (equipe == null)
+            var aluno = await _context.Alunos
+                .FirstOrDefaultAsync(m => m.AlunoId == id);
+            if (aluno == null)
             {
                 return NotFound();
             }
 
-            return View(equipe);
+            return View(aluno);
         }
 
-        // POST: Equipe/Delete/5
+        // POST: Aluno/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var equipe = await _context.Equipe.FindAsync(id);
-            _context.Equipe.Remove(equipe);
+            var aluno = await _context.Alunos.FindAsync(id);
+            _context.Alunos.Remove(aluno);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EquipeExists(int id)
+        private bool AlunoExists(int id)
         {
-            return _context.Equipe.Any(e => e.EquipeId == id);
+            return _context.Alunos.Any(e => e.AlunoId == id);
         }
     }
 }

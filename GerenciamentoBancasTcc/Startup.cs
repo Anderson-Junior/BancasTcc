@@ -36,7 +36,6 @@ namespace GerenciamentoBancasTcc
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, UserManager<Usuario> userManager, RoleManager<IdentityRole> roleManager*/)
         {
@@ -70,15 +69,16 @@ namespace GerenciamentoBancasTcc
 
 
             //foreach (string roleName in new[] {
-            //    //Helpers.RolesHelper.ADMINISTRADOR,
-            //    //Helpers.RolesHelper.PROFESSOR,
-            //    //Helpers.RolesHelper.COORDENADOR,
-            //    Helpers.RolesHelper.ORIENTADOR })
+            //    Helpers.RolesHelper.ADMINISTRADOR,
+            //    Helpers.RolesHelper.PROFESSOR,
+            //    Helpers.RolesHelper.COORDENADOR,
+            //    Helpers.RolesHelper.ORIENTADOR
+            //    })
             //{
             //    if (roleManager.RoleExistsAsync(roleName).Result
             //        || roleManager.CreateAsync(new IdentityRole { Name = roleName }).Result.Succeeded)
             //    {
-            //        foreach (string userName in new[] { "ander.lemos.jr@gmail.com", "emersonlemmos@gmail.com", "allan@gmail.com" })
+            //        foreach (string userName in new[] { "ander.lemos.jr@gmail.com"/*, "emersonlemmos@gmail.com", "allan@gmail.com" */})
             //        {
             //            var user = userManager.FindByNameAsync(userName).Result;
 

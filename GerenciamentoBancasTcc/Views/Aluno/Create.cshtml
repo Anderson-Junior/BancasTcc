@@ -1,10 +1,10 @@
-﻿@model GerenciamentoBancasTcc.Domains.Entities.Curso
+﻿@model GerenciamentoBancasTcc.Domains.Entities.Aluno
 
 @{
-    ViewData["Title"] = "Cadastrar";
+    ViewData["Title"] = "Cadastrar Aluno";
 }
 
-<h1>Cadastrar Curso</h1>
+<h1>Cadastrar Aluno</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,18 +16,14 @@
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Periodos" class="control-label"></label>
-                <input asp-for="Periodos" class="form-control" />
-                <span asp-validation-for="Periodos" class="text-danger"></span>
+                <label asp-for="Matricula" class="control-label"></label>
+                <input asp-for="Matricula" class="form-control" />
+                <span asp-validation-for="Matricula" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
                 </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="FilialId" class="control-label"></label>
-                <select asp-for="FilialId" class ="form-control" asp-items="ViewBag.FilialId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Cadastrar" class="btn btn-primary" />

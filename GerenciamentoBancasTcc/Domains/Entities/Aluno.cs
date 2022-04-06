@@ -20,8 +20,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public bool Ativo { get; set; }
 
         public ICollection<CursosAlunos> CursosAlunos { get; set; }
-
-        public int EquipeId { get; set; }
-        public virtual Equipe Equipe { get; set; }
+        public ICollection<AlunosBancas> AlunosBancas { get; set; }
     }
 }

@@ -1,19 +1,22 @@
-﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Instituicao>
+﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Aluno>
 
 @{
-    ViewData["Title"] = "Instituições";
+    ViewData["Title"] = "Alunos";
 }
 
-<h1>Instituições</h1>
+<h1>Alunos</h1>
 
 <p>
-    <a asp-action="Create">Cadastrar uma nova instituição</a>
+    <a asp-action="Create">Cadastrar um novo aluno</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ativo)
@@ -28,12 +31,15 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Matricula)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Ativo)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.InstituicaoId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.InstituicaoId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.InstituicaoId">Inativar</a>
+                <a asp-action="Edit" asp-route-id="@item.AlunoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.AlunoId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.AlunoId">Deletar</a>
             </td>
         </tr>
 }

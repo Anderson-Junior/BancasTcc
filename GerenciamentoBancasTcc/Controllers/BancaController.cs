@@ -7,22 +7,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
     public class BancaController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Usuario> _userManager;
 
-        public BancaController(ApplicationDbContext context)
+        public BancaController(ApplicationDbContext context, UserManager<Usuario> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Banca
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bancas.ToListAsync());
+            return View(await _context.Bancas
+                .Include(x => x.Curso)
+                .Include(x => x.Usuario)
+                .ToListAsync());
         }
 
         // GET: Banca/Details/5
@@ -34,6 +40,8 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             var banca = await _context.Bancas
+                .Include(x => x.Curso)
+                .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.BancaId == id);
             if (banca == null)
             {
@@ -46,6 +54,8 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Banca/Create
         public IActionResult Create()
         {
+            GetCursos();
+            GetOrientador();
             return View();
         }
 
@@ -54,7 +64,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,Data")] Banca banca)
+        public async Task<IActionResult> Create([Bind("BancaId,CursoId,AlunosBancas,Tema,UsuarioId,DataHora,Sala,Descricao,UsuariosBancas")] Banca banca)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +72,8 @@ namespace GerenciamentoBancasTcc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            GetCursos(banca.BancaId);
+            GetOrientador(banca.BancaId);
             return View(banca);
         }
 
@@ -78,6 +90,8 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
+            GetCursos(banca.BancaId);
+            GetOrientador(banca.BancaId);
             return View(banca);
         }
 
@@ -86,7 +100,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BancaId,Data")] Banca banca)
+        public async Task<IActionResult> Edit(int id, [Bind("BancaId,CursoId,AlunosBancas,Tema,UsuarioId,DataHora,Sala,Descricao,UsuariosBancas")] Banca banca)
         {
             if (id != banca.BancaId)
             {
@@ -113,6 +127,8 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            GetCursos(banca.BancaId);
+            GetOrientador(banca.BancaId);
             return View(banca);
         }
 
@@ -125,6 +141,8 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             var banca = await _context.Bancas
+                .Include(x => x.Curso)
+                .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.BancaId == id);
             if (banca == null)
             {
@@ -148,6 +166,22 @@ namespace GerenciamentoBancasTcc.Controllers
         private bool BancaExists(int id)
         {
             return _context.Bancas.Any(e => e.BancaId == id);
+        }
+
+        private void GetCursos(int selectedItem = 0)
+        {
+            var cursos = _context.Cursos.ToList();
+            var selectListItems = cursos.ToDictionary(x => x.CursoId.ToString(), y => y.Nome).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["CursoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
+        }
+
+        private void GetOrientador(int selectedItem = 0)
+        {
+            var orientadores = _userManager.Users.ToList();
+            var selectListItems = orientadores.ToDictionary(x => x.Id.ToString(), y => y.Nome).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["UsuarioId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
     }
 }

@@ -4,19 +4,21 @@ using GerenciamentoBancasTcc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220324234708_AdicionandoColunaCampusTabelaFilial")]
+    partial class AdicionandoColunaCampusTabelaFilial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.15")
+                .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Aluno", b =>
@@ -31,6 +33,9 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("Ativo");
 
+                    b.Property<int>("EquipeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Matricula")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Matricula");
@@ -41,22 +46,9 @@ namespace GerenciamentoBancasTcc.Data.Migrations
 
                     b.HasKey("AlunoId");
 
+                    b.HasIndex("EquipeId");
+
                     b.ToTable("Alunos");
-                });
-
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.AlunosBancas", b =>
-                {
-                    b.Property<int>("AlunoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BancaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AlunoId", "BancaId");
-
-                    b.HasIndex("BancaId");
-
-                    b.ToTable("AlunosBancas");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Banca", b =>
@@ -66,29 +58,10 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CursoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataHora")
+                    b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Sala")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tema")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsuarioId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("BancaId");
-
-                    b.HasIndex("CursoId");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Bancas");
                 });
@@ -138,6 +111,21 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.ToTable("CursosAlunos");
                 });
 
+            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.CursosUsuarios", b =>
+                {
+                    b.Property<int>("CursoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CursoId", "UsuarioId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("CursosUsuarios");
+                });
+
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.DiasDisponiveis", b =>
                 {
                     b.Property<int>("DiasDisponiveisId")
@@ -156,6 +144,28 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("DiasDisponiveis");
+                });
+
+            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Equipe", b =>
+                {
+                    b.Property<int>("EquipeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("EquipeId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BancaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tema")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Tema");
+
+                    b.HasKey("EquipeId");
+
+                    b.HasIndex("BancaId");
+
+                    b.ToTable("Equipe");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Filial", b =>
@@ -444,40 +454,15 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.AlunosBancas", b =>
+            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Aluno", b =>
                 {
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Aluno", "Aluno")
-                        .WithMany("AlunosBancas")
-                        .HasForeignKey("AlunoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Equipe", "Equipe")
+                        .WithMany("Alunos")
+                        .HasForeignKey("EquipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Banca", "Banca")
-                        .WithMany("AlunosBancas")
-                        .HasForeignKey("BancaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aluno");
-
-                    b.Navigation("Banca");
-                });
-
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Banca", b =>
-                {
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Curso", "Curso")
-                        .WithMany("Bancas")
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Usuario", "Usuario")
-                        .WithMany("Bancas")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Curso");
-
-                    b.Navigation("Usuario");
+                    b.Navigation("Equipe");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Curso", b =>
@@ -485,7 +470,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Filial", "Filial")
                         .WithMany("Cursos")
                         .HasForeignKey("FilialId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Filial");
@@ -510,6 +495,25 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Navigation("Cursos");
                 });
 
+            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.CursosUsuarios", b =>
+                {
+                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Curso", "Cursos")
+                        .WithMany("CursosUsuarios")
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Usuario", "Usuarios")
+                        .WithMany("CursosUsuarios")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cursos");
+
+                    b.Navigation("Usuarios");
+                });
+
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.DiasDisponiveis", b =>
                 {
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Usuario", "Usuario")
@@ -518,6 +522,17 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Equipe", b =>
+                {
+                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Banca", "Banca")
+                        .WithMany("Equipes")
+                        .HasForeignKey("BancaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Banca");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Filial", b =>
@@ -603,23 +618,26 @@ namespace GerenciamentoBancasTcc.Data.Migrations
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Aluno", b =>
                 {
-                    b.Navigation("AlunosBancas");
-
                     b.Navigation("CursosAlunos");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Banca", b =>
                 {
-                    b.Navigation("AlunosBancas");
+                    b.Navigation("Equipes");
 
                     b.Navigation("UsuariosBancas");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Curso", b =>
                 {
-                    b.Navigation("Bancas");
-
                     b.Navigation("CursosAlunos");
+
+                    b.Navigation("CursosUsuarios");
+                });
+
+            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Equipe", b =>
+                {
+                    b.Navigation("Alunos");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Filial", b =>
@@ -634,7 +652,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Usuario", b =>
                 {
-                    b.Navigation("Bancas");
+                    b.Navigation("CursosUsuarios");
 
                     b.Navigation("DiasDisponiveis");
 

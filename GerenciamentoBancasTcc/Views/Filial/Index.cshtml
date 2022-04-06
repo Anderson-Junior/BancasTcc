@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Campus)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Cnpj)
             </th>
             <th>
@@ -40,6 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Campus)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Cnpj)
             </td>
             <td>
@@ -52,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Ativo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Instituicao.InstituicaoId)
+                @Html.DisplayFor(modelItem => item.Instituicao.Nome)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.FilialId">Editar</a> |

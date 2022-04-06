@@ -48,7 +48,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Curso/Create
         public IActionResult Create()
         {
-            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "FilialId");
+            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "Campus");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "FilialId", curso.FilialId);
+            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "Campus", curso.FilialId);
             return View(curso);
         }
 
@@ -82,7 +82,7 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
-            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "FilialId", curso.FilialId);
+            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "Campus", curso.FilialId);
             return View(curso);
         }
 
@@ -118,7 +118,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "FilialId", curso.FilialId);
+            ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "Campus", curso.FilialId);
             return View(curso);
         }
 
@@ -147,8 +147,7 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var curso = await _context.Cursos.FindAsync(id);
-            curso.Ativo = false;
-            _context.Cursos.Update(curso);
+            _context.Cursos.Remove(curso);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
