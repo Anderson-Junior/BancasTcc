@@ -1,0 +1,49 @@
+﻿@model GerenciamentoBancasTcc.Domains.Entities.Usuario
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { data_toggle = "validator", role = "form" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    if (ViewBag.StatusMessage != null)
+    {
+        <div class="alert alert-@string.Format("{0}", (bool)ViewBag.Succeeded ? "success" : "danger")" role="alert">
+            <span>@ViewBag.StatusMessage</span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <div class="card">
+        <div class="card-header">
+            Editar usuário: @Model.UserName
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <div class="col-lg-5 col-xl-4">
+                    @Html.LabelFor(m => m.UserName, "Usuário")
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", disabled = "" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-xl-4">
+                    @Html.LabelFor(m => m.Nome)
+                    @Html.TextBoxFor(m => m.Nome, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-xl-4">
+                    @Html.LabelFor(m => m.Ativo)
+                    <div class="custom-control custom-switch">
+                        @Html.CheckBoxFor(m => m.Ativo, new { @class = "custom-control-input" })
+                        <label class="custom-control-label" for="Ativo"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer clearfix">
+            <div class="pull-right">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" asp-controller="Usuario" class="btn btn-danger">Voltar</a>
+            </div>
+        </div>
+    </div>
+}

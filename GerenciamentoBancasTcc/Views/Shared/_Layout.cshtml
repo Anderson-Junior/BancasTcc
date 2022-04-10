@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/layout.css">
-
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <div class="wrapper d-flex align-items-stretch">
@@ -25,9 +25,8 @@
                     @if (User.IsInRole("Coordenador"))
                     {
                         <li>
-                            <a asp-area="Identity" asp-page="/Account/Register">Usuários</a>
+                            <a asp-action="Index" asp-controller="Usuario">Usuários</a>
                         </li>
-
                         <li>
                             <a asp-action="Index" asp-controller="Banca">Bancas</a>
                         </li>
@@ -69,13 +68,13 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         @*<ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item">
-                                    <form asp-controller="Account" asp-action="Logout" method="post" class="navbar-left">
-                                        <button type="submit" style="width:auto" class="nav-link btn btn-link text-white btn-color-hover">
-                                            Logout
-                                        </button>
-                                    </form>
-                                </li>
+                            <li class="nav-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="navbar-left">
+                            <button type="submit" style="width:auto" class="nav-link btn btn-link text-white btn-color-hover">
+                            Logout
+                            </button>
+                            </form>
+                            </li>
                             </ul>*@
                         <partial name="_LoginPartial" />
                     </div>

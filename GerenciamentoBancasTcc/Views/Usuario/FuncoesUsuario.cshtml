@@ -1,0 +1,74 @@
+﻿@model IList<string>
+@{
+    ViewBag.Title = "Funções do usuário";
+}
+
+@section Styles {
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+}
+
+<input type="hidden" id="user_id" value="@ViewBag.UserId" />
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        Lista de funções do usuário: @ViewBag.UserName
+        <a href="@Url.Action("AdicionarFuncoesUsuario", null, new { id = ViewBag.UserId })" title="Adicionar funções ao usuário" class="btn btn-primary btn-sm">Adicionar</a>
+    </div>
+    <div class="card-body wrapper">
+        <div id="message" class="d-none" role="alert">
+            <span></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div id="result">
+            <partial name="_GridFuncoesUsuario" />
+        </div>
+    </div>
+    <div class="card-footer clearfix">
+        <div class="pull-right">
+            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-danger" })
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script src="~/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $('#message').on('close.bs.alert', function (event) {
+        event.preventDefault();
+        $(this).addClass('d-none');
+    });
+
+    function initPartialView() {
+
+        $("._remove").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Usuario/RemoverFuncaoUsuario",
+                data: {
+                    userId: $("#user_id").val(),
+                    role: $(this).data("role")
+                },
+                statusCode: {
+                    401: function () {
+                        redirectToLogin();
+                    }
+                },
+                success: function (data) {
+                    $("#message").removeClass().addClass("alert alert-success").find('span').first().text("Função removida com sucesso.");
+                    $("#result").html(data);
+                    initPartialView();
+                },
+                error: function () {
+                    $("#message").removeClass().addClass("alert alert-danger").find('span').first().text("Erro ao remover função.");
+                }
+            });
+        });
+
+        handleDataTables();
+    }
+
+    initPartialView();
+</script>
+}

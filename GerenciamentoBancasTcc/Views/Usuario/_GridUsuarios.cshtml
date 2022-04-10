@@ -1,0 +1,42 @@
+﻿@model IList<GerenciamentoBancasTcc.Domains.Entities.Usuario>
+
+<div class="table-responsive">
+    <table id="data_table" class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Funções</th>
+                <th>Ativo</th>
+                <th width="162" class="text-center">
+                    Ações
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Nome</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <small>
+                            @user.UserRoles
+                        </small>
+                    </td>
+                    <td>
+                        @string.Format("{0}", user.Ativo ? "Sim" : "Não")
+                    </td>
+                    <td align="center">
+                        <a href="@Url.Action("EditarUsuario", new { id = user.Id })" class="btn btn-sm btn-primary" title="Editar usuário"><i class="fa fa-edit fa-fw"></i></a>
+                        <a href="@Url.Action("FuncoesUsuario", new { id = user.Id })" class="btn btn-sm btn-primary" title="Funções do usuário"><i class="fa fa-cogs fa-fw"></i></a>
+                        <a href="javascript:void(0)" title="Excluir" class="btn btn-sm btn-primary _remove" data-alias="@user.UserName"><i class="fa fa-remove fa-fw"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

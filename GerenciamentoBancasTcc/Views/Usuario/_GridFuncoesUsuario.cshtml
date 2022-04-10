@@ -1,0 +1,27 @@
+﻿@model IList<string>
+
+<div class="table-responsive">
+    <table id="data_table" class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Função</th>
+                <th align="center" width="10">
+                    Ações
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@role</td>
+                    <td align="center">
+                        <a href="javascript:void(0)" title="Remover função do usuário" class="btn btn-sm btn-primary _remove" data-role="@role">
+                            <i class="fa fa-remove fa-fw"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

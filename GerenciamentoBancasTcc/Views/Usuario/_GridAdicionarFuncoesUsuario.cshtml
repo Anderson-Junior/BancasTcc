@@ -1,0 +1,24 @@
+﻿@model IList<string>
+
+<div class="table-responsive">
+    <table id="data_table" class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th width="20">Adicionar</th>
+                <th>Função</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td align="center">
+                        <input type="checkbox" value="@role" />
+                    </td>
+                    <td>@role</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -11,6 +11,9 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Column("Ativo")]
         public bool Ativo { get; set; }
 
+        [NotMapped]
+        public string UserRoles { get; set; }
+
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
         public ICollection<Banca> Bancas { get; set; }
         public ICollection<DiasDisponiveis> DiasDisponiveis { get; set; }
