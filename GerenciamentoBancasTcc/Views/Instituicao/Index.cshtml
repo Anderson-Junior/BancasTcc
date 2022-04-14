@@ -4,38 +4,53 @@
     ViewData["Title"] = "Instituições";
 }
 
-<h1>Instituições</h1>
-
-<p>
-    <a asp-action="Create">Cadastrar uma nova instituição</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ativo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ativo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.InstituicaoId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.InstituicaoId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.InstituicaoId">Inativar</a>
-            </td>
-        </tr>
+@section Styles {
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 }
-    </tbody>
-</table>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        Lista de instituições
+        <a asp-action="Create">Nova Instituição</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover table-striped table-bordered" id="data_table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nome)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Ativo)
+                    </th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ativo)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.InstituicaoId" class="btn btn-sm btn-primary" title="Editar instituição"><i class="fa fa-edit fa-fw"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.InstituicaoId" class="btn btn-sm btn-primary" title="Detalhes instituição"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.InstituicaoId" class="btn btn-sm btn-primary _remove" title="Excluir instituição"><i class="fa fa-remove fa-fw"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        handleDataTables();
+    </script>
+}

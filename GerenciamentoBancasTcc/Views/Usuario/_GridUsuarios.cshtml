@@ -32,7 +32,7 @@
                     <td align="center">
                         <a href="@Url.Action("EditarUsuario", new { id = user.Id })" class="btn btn-sm btn-primary" title="Editar usuário"><i class="fa fa-edit fa-fw"></i></a>
                         <a href="@Url.Action("FuncoesUsuario", new { id = user.Id })" class="btn btn-sm btn-primary" title="Funções do usuário"><i class="fa fa-cogs fa-fw"></i></a>
-                        <a href="javascript:void(0)" title="Excluir" class="btn btn-sm btn-primary _remove" data-alias="@user.UserName"><i class="fa fa-remove fa-fw"></i></a>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary _remove" title="Excluir" data-alias="@user.UserName"><i class="fa fa-remove fa-fw"></i></a>
                     </td>
                 </tr>
             }

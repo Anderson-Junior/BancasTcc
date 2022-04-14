@@ -1,10 +1,10 @@
 ﻿#sidebar {
-    background-color: #2D5376;
+    background: linear-gradient(180deg, #2D5376 0%, rgba(123, 173, 198, 0.93) 100%);
     text-decoration: none;
 }
 
 .navbar {
-    background: linear-gradient(270deg, #2D5376 43.48%, rgba(0, 100, 148, 0.51) 99.33%);
+    background: linear-gradient(90deg, #2D5376 0%, rgba(123, 173, 198, 0.93) 100%);
 }
 
 body {
