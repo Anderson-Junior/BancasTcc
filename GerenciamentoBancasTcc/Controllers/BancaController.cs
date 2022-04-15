@@ -56,6 +56,7 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             GetCursos();
             GetOrientador();
+            GetAlunos();
             return View();
         }
 
@@ -64,7 +65,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,CursoId,AlunosBancas,Tema,UsuarioId,DataHora,Sala,Descricao,UsuariosBancas")] Banca banca)
+        public async Task<IActionResult> Create([Bind("BancaId,CursoId,Tema,UsuarioId,DataHora,Sala,Descricao,UsuariosBancas")] Banca banca, int[] alunosBanca)
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +75,7 @@ namespace GerenciamentoBancasTcc.Controllers
             }
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
+            GetAlunos(alunosBanca);
             return View(banca);
         }
 
@@ -92,6 +94,7 @@ namespace GerenciamentoBancasTcc.Controllers
             }
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
+            GetAlunos(banca.AlunosBancas.Select(x => x.AlunoId).ToArray());
             return View(banca);
         }
 
@@ -100,7 +103,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BancaId,CursoId,AlunosBancas,Tema,UsuarioId,DataHora,Sala,Descricao,UsuariosBancas")] Banca banca)
+        public async Task<IActionResult> Edit(int id, [Bind("BancaId,CursoId,AlunosBancas,Tema,UsuarioId,DataHora,Sala,Descricao,UsuariosBancas")] Banca banca, int[] alunosBanca)
         {
             if (id != banca.BancaId)
             {
@@ -129,6 +132,7 @@ namespace GerenciamentoBancasTcc.Controllers
             }
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
+            GetAlunos(alunosBanca);
             return View(banca);
         }
 
@@ -182,6 +186,14 @@ namespace GerenciamentoBancasTcc.Controllers
             var selectListItems = orientadores.ToDictionary(x => x.Id.ToString(), y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["UsuarioId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
+        }
+
+        private void GetAlunos(int[] selectedItens = null)
+        {
+            var alunos = _context.Alunos.ToList();
+            var selectListItems = alunos.ToDictionary(x => x.AlunoId.ToString(), y => y.Nome).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["AlunosBancas"] = new MultiSelectList(selectListItems, "Key", "Value", selectedItens);
         }
     }
 }
