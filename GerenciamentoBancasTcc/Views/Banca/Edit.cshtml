@@ -4,6 +4,10 @@
     ViewData["Title"] = "Editar";
 }
 
+@section Styles {
+<link rel="stylesheet" href="~/css/select-pure.css" />
+}
+
 <h1>Editar Banca</h1>
 <hr />
 <div class="row">
@@ -11,10 +15,15 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BancaId" />
+            <input type="hidden" id="alunosBanca" name="alunosBanca" value="@ViewBag.AlunosBanca" />
             <div class="form-group">
                 <label asp-for="CursoId" class="control-label"></label>
                 <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
                 <span asp-validation-for="CursoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Alunos</label>
+                <span id="select-pure"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Tema" class="control-label"></label>
@@ -53,5 +62,9 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script src="~/js/select-pure.min.js" type="text/javascript"></script>
+<script src="~/js/banca-create-edit.js" type="text/javascript"></script>
 }
