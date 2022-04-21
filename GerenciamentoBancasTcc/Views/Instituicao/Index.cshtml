@@ -11,7 +11,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         Lista de instituições
-        <a asp-action="Create">Nova Instituição</a>
+        <a asp-action="Create" class="btn btn-primary">Nova Instituição</a>
     </div>
     <div class="card-body">
         <table class="table table-hover table-striped table-bordered" id="data_table">
@@ -36,7 +36,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Ativo)
                         </td>
-                        <td>
+                        <td style="width: 130px">
                             <a asp-action="Edit" asp-route-id="@item.InstituicaoId" class="btn btn-sm btn-primary" title="Editar instituição"><i class="fa fa-edit fa-fw"></i></a>
                             <a asp-action="Details" asp-route-id="@item.InstituicaoId" class="btn btn-sm btn-primary" title="Detalhes instituição"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.InstituicaoId" class="btn btn-sm btn-primary _remove" title="Excluir instituição"><i class="fa fa-remove fa-fw"></i></a>

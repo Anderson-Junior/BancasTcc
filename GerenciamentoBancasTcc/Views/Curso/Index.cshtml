@@ -11,7 +11,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         Lista de cursos
-        <a asp-action="Create">Novo Curso</a>
+        <a asp-action="Create" class="btn btn-primary">Novo Curso</a>
     </div>
     <div class="card-body">
         <table id="data_table" class="table table-hover table-striped table-bordered">
@@ -29,7 +29,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Filial)
                     </th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +48,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Filial.Campus)
                         </td>
-                        <td>
+                        <td style="width: 130px">
                             <a asp-action="Edit" asp-route-id="@item.CursoId" class="btn btn-sm btn-primary" title="Editar curso"><i class="fa fa-edit fa-fw"></i></a>
                             <a asp-action="Details" asp-route-id="@item.CursoId" class="btn btn-sm btn-primary" title="Detalhes curso"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.CursoId" class="btn btn-sm btn-primary _remove" title="Excluir curso"><i class="fa fa-remove fa-fw"></i></a>

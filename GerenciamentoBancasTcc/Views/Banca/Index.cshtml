@@ -11,7 +11,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         Lista de bancas
-        <a asp-action="Create">Nova Banca</a>
+        <a asp-action="Create" class="btn btn-primary">Nova Banca</a>
     </div>
     <div class="card-body">
         <table id="data_table" class="table table-hover table-striped table-bordered">
@@ -35,7 +35,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Descricao)
                     </th>
-                    <th></th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,7 +60,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Descricao)
                         </td>
-                        <td>
+                        <td style="width: 130px">
                             <a asp-action="Edit" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary" title="Editar banca"><i class="fa fa-edit fa-fw"></i></a>
                             <a asp-action="Details" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary" title="Detalhes banca"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary _remove" title="Excluir banca"><i class="fa fa-remove fa-fw"></i></a>
