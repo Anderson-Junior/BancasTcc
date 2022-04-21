@@ -22,16 +22,14 @@ namespace GerenciamentoBancasTcc.Controllers
             _userManager = userManager;
         }
 
-        // GET: Banca
         public async Task<IActionResult> Index()
         {
             return View(await _context.Bancas
-                .Include(x => x.Curso)
+                .Include(x => x.Turma)
                 .Include(x => x.Usuario)
                 .ToListAsync());
         }
 
-        // GET: Banca/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,7 +38,7 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             var banca = await _context.Bancas
-                .Include(x => x.Curso)
+                .Include(x => x.Turma)
                 .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.BancaId == id);
             if (banca == null)
@@ -51,7 +49,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
-        // GET: Banca/Create
         public IActionResult Create()
         {
             GetCursos();
@@ -59,12 +56,9 @@ namespace GerenciamentoBancasTcc.Controllers
             return View();
         }
 
-        // POST: Banca/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,CursoId,Tema,UsuarioId,DataHora,Sala,Descricao")] Banca banca, string alunosBanca)
+        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,DataHora,Sala,Descricao")] Banca banca, string alunosBanca)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +75,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
-        // GET: Banca/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             Banca banca = null;
@@ -103,12 +96,9 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
-        // POST: Banca/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BancaId,CursoId,Tema,UsuarioId,DataHora,Sala,Descricao")] Banca banca, string alunosBanca)
+        public async Task<IActionResult> Edit(int id, [Bind("BancaId,TurmaId,Tema,UsuarioId,DataHora,Sala,Descricao")] Banca banca, string alunosBanca)
         {
             if (id != banca.BancaId || !BancaExists(banca.BancaId))
             {
@@ -144,7 +134,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
-        // GET: Banca/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -153,7 +142,7 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             var banca = await _context.Bancas
-                .Include(x => x.Curso)
+                .Include(x => x.Turma)
                 .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.BancaId == id);
             if (banca == null)
@@ -164,7 +153,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
-        // POST: Banca/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -176,15 +164,28 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAlunos(int cursoId)
+        public JsonResult GetAlunos(int turmaId)
         {
-            var alunos = from cursoAluno in _context.CursosAlunos
-                         where cursoAluno.CursoId == cursoId
-                         join aluno in _context.Alunos on cursoAluno.AlunoId equals aluno.AlunoId
+            var alunos = from aluno in _context.Alunos
+                         where aluno.TurmaId == turmaId
                          select new
                          {
                              label = aluno.Nome,
                              value = aluno.AlunoId.ToString()
+                         };
+
+            return Json(alunos.ToArray());
+        }
+
+        [HttpGet]
+        public JsonResult GetTurmas(int cursoId)
+        {
+            var alunos = from turma in _context.Turmas
+                         where turma.CursoId == cursoId
+                         select new
+                         {
+                             label = turma.Nome,
+                             value = turma.TurmaId.ToString()
                          };
 
             return Json(alunos.ToArray());

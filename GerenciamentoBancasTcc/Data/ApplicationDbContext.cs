@@ -11,7 +11,7 @@ namespace GerenciamentoBancasTcc.Data
         public DbSet<AlunosBancas> AlunosBancas { get; set; }
         public DbSet<Banca> Bancas { get; set; }
         public DbSet<Curso> Cursos { get; set; }
-        public DbSet<CursosAlunos> CursosAlunos { get; set; }
+        public DbSet<Turma> Turmas { get; set; }
         public DbSet<DiasDisponiveis> DiasDisponiveis { get; set; }
         public DbSet<Filial> Filiais { get; set; }
         public DbSet<Instituicao> Instituicoes { get; set; }

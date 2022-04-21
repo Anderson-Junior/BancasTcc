@@ -25,6 +25,24 @@
         }
     }
 
+    $("#TurmaId").change(function () {
+        getTurmas();
+    });
+
+    getTurmas();
+
+    function getTurmas() {
+        let turmaId = $("#TurmaId option:selected").val();
+        if (turmaId) {
+            $.getJSON("/Banca/GetTurmas?turmaId=" + turmaId, function (data) {
+                initSelectPure(data);
+            });
+        }
+        else {
+            initSelectPure([]);
+        }
+    }
+
     function initSelectPure(options) {
 
         let values = [];

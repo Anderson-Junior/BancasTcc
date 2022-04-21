@@ -11,9 +11,14 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BancaId { get; set; }
 
-        [Display(Name = "Curso")]
-        public int? CursoId { get; set; }
-        public Curso Curso { get; set; }
+        //[Display(Name = "Curso")]
+        //public int? CursoId { get; set; }
+        //public Curso Curso { get; set; }
+
+
+        [Display(Name = "Turma")]
+        public int? TurmaId { get; set; }
+        public Turma Turma { get; set; }
 
         public ICollection<AlunosBancas> AlunosBancas { get; set; }
 

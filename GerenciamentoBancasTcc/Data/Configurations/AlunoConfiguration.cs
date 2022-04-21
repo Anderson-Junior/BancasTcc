@@ -9,6 +9,11 @@ namespace GerenciamentoBancasTcc.Data.Configurations
         public void Configure(EntityTypeBuilder<Aluno> builder)
         {
             builder.HasKey(a => a.AlunoId);
+
+            builder.HasOne(x => x.Turma)
+                   .WithMany(x => x.Alunos)
+                   .HasForeignKey(x => x.TurmaId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
