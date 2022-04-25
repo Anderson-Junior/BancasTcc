@@ -8,7 +8,7 @@
     });
 
     $("#CursoId").change(function () {
-        getAlunos();
+        getTurmas();
     });
 
     getAlunos();
@@ -26,15 +26,15 @@
     }
 
     $("#TurmaId").change(function () {
-        getTurmas();
+        getAlunos();
     });
 
     getTurmas();
 
     function getTurmas() {
-        let turmaId = $("#TurmaId option:selected").val();
-        if (turmaId) {
-            $.getJSON("/Banca/GetTurmas?turmaId=" + turmaId, function (data) {
+        let cursoId = $("#CursoId option:selected").val();
+        if (cursoId) {
+            $.getJSON("/Banca/GetTurmas?cursoId=" + cursoId, function (data) {
                 initSelectPure(data);
             });
         }

@@ -180,15 +180,25 @@ namespace GerenciamentoBancasTcc.Controllers
         [HttpGet]
         public JsonResult GetTurmas(int cursoId)
         {
-            var alunos = from turma in _context.Turmas
+            var turmas = from turma in _context.Turmas
                          where turma.CursoId == cursoId
+                         && turma.Ativo == true
                          select new
                          {
                              label = turma.Nome,
                              value = turma.TurmaId.ToString()
                          };
 
-            return Json(alunos.ToArray());
+            return Json(turmas.ToArray());
+        }
+
+        [HttpGet]
+        public void Teste(int cursoId = 0)
+        {
+            var turmas = _context.Turmas.Where(x => x.CursoId == cursoId && x.Ativo == true).ToList();
+            var selectListItems = turmas.ToDictionary(x => x.TurmaId.ToString(), y => y.Nome).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", cursoId);
         }
 
         private bool BancaExists(int id)
@@ -198,7 +208,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         private void GetCursos(int selectedItem = 0)
         {
-            var cursos = _context.Cursos.ToList();
+            var cursos = _context.Cursos.Where(x => x.Ativo == true).ToList();
             var selectListItems = cursos.ToDictionary(x => x.CursoId.ToString(), y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["CursoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);

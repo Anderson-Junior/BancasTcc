@@ -19,7 +19,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Column("Ativo")]
         public bool Ativo { get; set; }
 
-        public int TurmaId { get; set; }
+        public int? TurmaId { get; set; }
         public Turma Turma { get; set; }
 
         public ICollection<AlunosBancas> AlunosBancas { get; set; }

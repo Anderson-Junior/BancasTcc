@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220421204537_AdicionandoTurma")]
-    partial class AdicionandoTurma
+    [Migration("20220425163929_AdicionandoCampoAtivoEmTurmaECurso")]
+    partial class AdicionandoCampoAtivoEmTurmaECurso
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Nome");
 
-                    b.Property<int>("TurmaId")
+                    b.Property<int?>("TurmaId")
                         .HasColumnType("int");
 
                     b.HasKey("AlunoId");
@@ -225,6 +225,9 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("TurmaId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
 
                     b.Property<int>("CursoId")
                         .HasColumnType("int");
@@ -467,8 +470,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Turma", "Turma")
                         .WithMany("Alunos")
                         .HasForeignKey("TurmaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Turma");
                 });

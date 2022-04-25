@@ -19,8 +19,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                 name: "TurmaId",
                 table: "Alunos",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Turmas",

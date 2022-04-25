@@ -12,6 +12,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public string Nome { get; set; }
 
+        public bool Ativo { get; set; }
         public int CursoId { get; set; }
         public Curso Curso { get; set; }
 
