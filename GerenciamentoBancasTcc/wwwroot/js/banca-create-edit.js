@@ -9,14 +9,19 @@
 
     $("#CursoId").change(function () {
         getTurmas();
+        initSelectPure([]);
     });
 
-    getAlunos();
+    $("#TurmaId").change(function () {
+        getAlunos();
+    });
+
+    initSelectPure([]);
 
     function getAlunos() {
-        let cursoId = $("#CursoId option:selected").val();
-        if (cursoId) {
-            $.getJSON("/Banca/GetAlunos?cursoId=" + cursoId, function (data) {
+        let turmaId = $("#TurmaId option:selected").val();
+        if (turmaId) {
+            $.getJSON("/Banca/GetAlunos?turmaId=" + turmaId, function (data) {
                 initSelectPure(data);
             });
         }
@@ -25,21 +30,16 @@
         }
     }
 
-    $("#TurmaId").change(function () {
-        getAlunos();
-    });
-
-    getTurmas();
-
     function getTurmas() {
+        $("#TurmaId").html("");
         let cursoId = $("#CursoId option:selected").val();
         if (cursoId) {
             $.getJSON("/Banca/GetTurmas?cursoId=" + cursoId, function (data) {
-                initSelectPure(data);
+                $("#TurmaId").append('<option value=""></option>');
+                for (let i = 0; i < data.length; i++) {
+                    $("#TurmaId").append(`<option value="${data[i].value}">${data[i].label}</option>`);
+                }
             });
-        }
-        else {
-            initSelectPure([]);
         }
     }
 

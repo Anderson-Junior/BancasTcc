@@ -167,7 +167,7 @@ namespace GerenciamentoBancasTcc.Controllers
         public JsonResult GetAlunos(int turmaId)
         {
             var alunos = from aluno in _context.Alunos
-                         where aluno.TurmaId == turmaId
+                         where aluno.TurmaId == turmaId && aluno.Ativo
                          select new
                          {
                              label = aluno.Nome,
@@ -181,12 +181,11 @@ namespace GerenciamentoBancasTcc.Controllers
         public JsonResult GetTurmas(int cursoId)
         {
             var turmas = from turma in _context.Turmas
-                         where turma.CursoId == cursoId
-                         && turma.Ativo == true
+                         where turma.CursoId == cursoId && turma.Ativo
                          select new
                          {
                              label = turma.Nome,
-                             value = turma.TurmaId.ToString()
+                             value = turma.TurmaId
                          };
 
             return Json(turmas.ToArray());
