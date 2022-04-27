@@ -89,8 +89,8 @@ namespace GerenciamentoBancasTcc.Controllers
                 return NotFound();
             }
 
-            GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
+            GetTurmasEdit(banca.BancaId);
             ViewData["AlunosBanca"] = string.Join(',', banca.AlunosBancas.Select(x => x.AlunoId));
 
             return View(banca);
@@ -127,8 +127,8 @@ namespace GerenciamentoBancasTcc.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
+            GetTurmasEdit(banca.BancaId);
             ViewData["AlunosBanca"] = alunosBanca;
 
             return View(banca);
@@ -191,15 +191,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return Json(turmas.ToArray());
         }
 
-        [HttpGet]
-        public void Teste(int cursoId = 0)
-        {
-            var turmas = _context.Turmas.Where(x => x.CursoId == cursoId && x.Ativo == true).ToList();
-            var selectListItems = turmas.ToDictionary(x => x.TurmaId.ToString(), y => y.Nome).ToList();
-            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
-            ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", cursoId);
-        }
-
         private bool BancaExists(int id)
         {
             return _context.Bancas.Any(e => e.BancaId == id);
@@ -219,6 +210,14 @@ namespace GerenciamentoBancasTcc.Controllers
             var selectListItems = orientadores.ToDictionary(x => x.Id.ToString(), y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["UsuarioId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
+        }
+
+        private void GetTurmasEdit(int selectedItem = 0)
+        {
+            var turmas = _context.Turmas.Where(x => x.Ativo == true).ToList();
+            var selectListItems = turmas.ToDictionary(x => x.TurmaId.ToString(), y => y.Nome).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
     }
 }
