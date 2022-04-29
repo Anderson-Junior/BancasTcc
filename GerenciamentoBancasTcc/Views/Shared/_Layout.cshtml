@@ -20,7 +20,10 @@
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <a asp-action="Index" asp-controller="Home" class="img logo rounded-circle mb-5" style="background-image: url(../../wwwroot/images/logo.png);"></a>
+                <a asp-action="Index" asp-controller="Home" class="img logo rounded-circle mb-5" 
+                   style="background-image: url(https://www.faculdadefamap.edu.br/wp-content/uploads/2019/11/tcc.png);">
+                </a>
+
                 <ul class="list-unstyled components mb-5">
                     @if (User.IsInRole("Coordenador"))
                     {
