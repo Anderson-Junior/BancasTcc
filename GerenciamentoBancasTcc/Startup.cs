@@ -29,9 +29,7 @@ namespace GerenciamentoBancasTcc
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options =>
-            //                options.LoginPath = "/Account/Login");
+            services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

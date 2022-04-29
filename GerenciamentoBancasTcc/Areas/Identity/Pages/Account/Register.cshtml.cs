@@ -103,8 +103,7 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect("/Usuario/Index");
                     }
                 }
                 foreach (var error in result.Errors)
