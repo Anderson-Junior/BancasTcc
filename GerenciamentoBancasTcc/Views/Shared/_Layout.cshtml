@@ -20,7 +20,7 @@
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <a asp-action="Index" asp-controller="Home" class="img logo rounded-circle mb-5" 
+                <a asp-action="Index" asp-controller="Home" class="img logo rounded-circle mb-5"
                    style="background-image: url(https://www.faculdadefamap.edu.br/wp-content/uploads/2019/11/tcc.png);">
                 </a>
 
@@ -28,18 +28,33 @@
                     @if (User.IsInRole("Coordenador"))
                     {
                         <li>
-                            <a asp-action="Index" asp-controller="Usuario">Usuários</a>
+                            <a asp-action="Index" asp-controller="Aluno">Alunos</a>
+                        </li>
+                        <li>
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Avaliações</a>
+                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                <li>
+                                    <a asp-action="AvaliacaoApresentacao" asp-controller="Avaliacao">Avaliação Apresentação</a>
+                                </li>
+                                <li>
+                                    <a asp-action="AvaliacaoArtigo1" asp-controller="Avaliacao">Avaliação Artigo 01</a>
+                                </li>
+                                <li>
+                                    <a asp-action="AvaliacaoArtigo2" asp-controller="Avaliacao">Avaliação Artigo 02</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Turma">Turmas</a>
                         </li>
                         <li>
                             <a asp-action="Index" asp-controller="Banca">Bancas</a>
                         </li>
-
                         <li>
                             <a asp-action="Index" asp-controller="Curso">Cursos</a>
                         </li>
-
                         <li>
-                            <a asp-action="Index" asp-controller="Aluno">Alunos</a>
+                            <a asp-action="Index" asp-controller="Usuario">Usuários</a>
                         </li>
                     }
                     @if (User.IsInRole("Administrador"))

@@ -1,13 +1,13 @@
-﻿@model GerenciamentoBancasTcc.Domains.Entities.Aluno
+﻿@model GerenciamentoBancasTcc.Domains.Entities.Turma
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes";
 }
 
 <h1>Detalhes</h1>
 
 <div>
-    <h4>Aluno</h4>
+    <h4>Turma</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -17,26 +17,20 @@
             @Html.DisplayFor(model => model.Nome)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Matricula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Matricula)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Ativo)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Ativo)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Turma)
+            @Html.DisplayNameFor(model => model.Curso)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Turma.TurmaId)
+            @Html.DisplayFor(model => model.Curso.CursoId)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.AlunoId">Editar</a> |
+    <a asp-action="Edit" asp-route-id="@Model.TurmaId">Editar</a> |
     <a asp-action="Index">Voltar para lista</a>
 </div>

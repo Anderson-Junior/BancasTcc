@@ -33,7 +33,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public int Sala { get; set; }
 
-        [Display(Name = "Descrição (opcional)")]
+        [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
