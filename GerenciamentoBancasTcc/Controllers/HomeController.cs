@@ -38,6 +38,7 @@ namespace GerenciamentoBancasTcc.Controllers
                           join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
                           join curso in _context.Cursos on turma.CursoId equals curso.CursoId
                           where banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
+                          orderby banca.DataHora
                           select new BancaViewModel
                           {
                               BancaId = banca.BancaId,

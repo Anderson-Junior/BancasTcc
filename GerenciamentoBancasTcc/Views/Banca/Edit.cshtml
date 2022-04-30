@@ -17,12 +17,16 @@
             <input type="hidden" asp-for="BancaId" />
             <input type="hidden" id="alunosBanca" name="alunosBanca" value="@ViewBag.AlunosBanca" />
             <div class="form-group">
+                <label class="control-label">Curso - Selecione para filtrar as turmas</label>
+                <select class="form-control" id="CursoId" asp-items="ViewBag.CursoId"></select>
+            </div>
+            <div class="form-group">
                 <label asp-for="TurmaId" class="control-label"></label>
                 <select asp-for="TurmaId" class="form-control" asp-items="ViewBag.TurmaId"></select>
                 <span asp-validation-for="TurmaId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Alunos</label>
+                <label for="select-pure" class="control-label">Alunos</label>
                 <span id="select-pure"></span>
             </div>
             <div class="form-group">

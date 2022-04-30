@@ -31,19 +31,18 @@
             {
                 <div class="col">
                     <div class="card h-100 divTeste">
+                        <h5 class="card-header">@item.DataHora.ToString("dd/MM/yyyy HH:mm")</h5>
                         <div class="card-body">
-
-                            <h5 class="mt-3">Tema: @Html.DisplayFor(modelItem => item.Tema)</h5>                            
+                            <p><b>Tema:</b> @Html.DisplayFor(modelItem => item.Tema)</p>
                             <p><b>Curso:</b> @item.Curso</p>
                             <p><b>Turma:</b> @item.Turma</p>
                             <p><b>Orientador:</b>  @item.Orientador</p>
                             <p><b>Alunos:</b> @string.Join(", ", item.Alunos)</p>
                             <p><b>Professores:</b> @string.Join(", ", item.Professores)</p>
                             <p><b>Sala:</b> @item.Sala</p>
-                            <p><b>Data/Hora:</b> @item.DataHora.ToString("dd/MM/yyyy hh:mm")</p>
                         </div>
-                        <div class="card-footer">
-                        </div>
+                        @*<div class="card-footer">
+                            </div>*@
                     </div>
                 </div>
             }

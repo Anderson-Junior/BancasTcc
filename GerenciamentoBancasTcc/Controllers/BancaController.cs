@@ -81,7 +81,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
             if (id.HasValue)
             {
-                banca = await _context.Bancas.Include(x => x.AlunosBancas).FirstOrDefaultAsync(x => x.BancaId == id.Value);
+                banca = await _context.Bancas.Include(x => x.Turma).Include(x => x.AlunosBancas).FirstOrDefaultAsync(x => x.BancaId == id.Value);
             }
 
             if (banca == null)
@@ -90,7 +90,8 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             GetOrientador(banca.BancaId);
-            GetTurmasEdit(banca.BancaId);
+            GetCursos(banca.Turma.CursoId);
+            GetTurmasEdit(banca.Turma.CursoId, banca.TurmaId);
             ViewData["AlunosBanca"] = string.Join(',', banca.AlunosBancas.Select(x => x.AlunoId));
 
             return View(banca);
@@ -212,9 +213,9 @@ namespace GerenciamentoBancasTcc.Controllers
             ViewData["UsuarioId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
 
-        private void GetTurmasEdit(int selectedItem = 0)
+        private void GetTurmasEdit(int cursoId, int selectedItem = 0)
         {
-            var turmas = _context.Turmas.Where(x => x.Ativo == true).ToList();
+            var turmas = _context.Turmas.Where(x => x.CursoId == cursoId && x.Ativo).ToList();
             var selectListItems = turmas.ToDictionary(x => x.TurmaId.ToString(), y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);

@@ -16,7 +16,7 @@
         getAlunos();
     });
 
-    initSelectPure([]);
+    getAlunos();
 
     function getAlunos() {
         let turmaId = $("#TurmaId option:selected").val();
