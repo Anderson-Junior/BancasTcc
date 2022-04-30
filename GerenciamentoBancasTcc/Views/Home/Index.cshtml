@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.UsuarioBanca>
+﻿@model IList<GerenciamentoBancasTcc.Models.BancaViewModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -26,32 +26,23 @@
     <div class="container align-items-center">
         <h3>Bem vindo ao Gerenciador de Bancas de TCC</h3>
         <h4>Próximas Bancas:</h4>
-
         <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
             @foreach (var item in Model)
             {
                 <div class="col">
-
                     <div class="card h-100 divTeste">
                         <div class="card-body">
 
-                            <h5 class="mt-3">Tema: @Html.DisplayFor(modelItem => item.Bancas.Tema)</h5>
-                            <p>
-                                <b>
-                                    Alunos:
-                                    @foreach (var i in item.Bancas.AlunosBancas)
-                                    {
-                                        <p>@i.Aluno.Nome</p>
-                                    }
-                                </b>
-                            </p>
-                            <p><b>Orientador:</b>  @Html.DisplayFor(modelItem => item.Bancas.Usuario.Nome)</p>
-                            <p><b>Turma:</b>  @Html.DisplayFor(modelItem => item.Bancas.Turma.Nome)</p>
-                            <p><b>Sala:</b>  @Html.DisplayFor(modelItem => item.Bancas.Sala)</p>                            
-                            <p><b>Data/Hora:</b>  @Html.DisplayFor(modelItem => item.Bancas.DataHora)</p>
+                            <h5 class="mt-3">Tema: @Html.DisplayFor(modelItem => item.Tema)</h5>                            
+                            <p><b>Curso:</b> @item.Curso</p>
+                            <p><b>Turma:</b> @item.Turma</p>
+                            <p><b>Orientador:</b>  @item.Orientador</p>
+                            <p><b>Alunos:</b> @string.Join(", ", item.Alunos)</p>
+                            <p><b>Professores:</b> @string.Join(", ", item.Professores)</p>
+                            <p><b>Sala:</b> @item.Sala</p>
+                            <p><b>Data/Hora:</b> @item.DataHora.ToString("dd/MM/yyyy hh:mm")</p>
                         </div>
                         <div class="card-footer">
-                           
                         </div>
                     </div>
                 </div>
