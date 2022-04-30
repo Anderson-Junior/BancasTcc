@@ -49,6 +49,7 @@ namespace GerenciamentoBancasTcc.Controllers
         public IActionResult Create()
         {
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome");
+            GetCursos();
             return View();
         }
 
@@ -66,6 +67,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome", aluno.TurmaId);
+            GetCursos(aluno.AlunoId);
             return View(aluno);
         }
 
@@ -155,6 +157,28 @@ namespace GerenciamentoBancasTcc.Controllers
         private bool AlunoExists(int id)
         {
             return _context.Alunos.Any(e => e.AlunoId == id);
+        }
+
+        private void GetCursos(int selectedItem = 0)
+        {
+            var cursos = _context.Cursos.Where(x => x.Ativo == true).ToList();
+            var selectListItems = cursos.ToDictionary(x => x.CursoId.ToString(), y => y.Nome).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["CursoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
+        }
+
+        [HttpGet]
+        public JsonResult GetTurmas(int cursoId)
+        {
+            var turmas = from turma in _context.Turmas
+                         where turma.CursoId == cursoId && turma.Ativo
+                         select new
+                         {
+                             label = turma.Nome,
+                             value = turma.TurmaId
+                         };
+
+            return Json(turmas.ToArray());
         }
     }
 }

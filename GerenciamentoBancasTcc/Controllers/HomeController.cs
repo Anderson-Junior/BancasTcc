@@ -30,7 +30,6 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         public async Task<IActionResult> Index()
-        
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
 
