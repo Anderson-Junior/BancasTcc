@@ -4,14 +4,16 @@ using GerenciamentoBancasTcc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220521014056_AdicionandoTabelaConvites")]
+    partial class AdicionandoTabelaConvites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,6 +238,9 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Questoes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UsuarioId")
                         .HasColumnType("nvarchar(450)");
 
@@ -267,26 +272,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasKey("InstituicaoId");
 
                     b.ToTable("Instituicoes");
-                });
-
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Questao", b =>
-                {
-                    b.Property<int>("QuestaoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("FormularioId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Pergunta")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("QuestaoId");
-
-                    b.HasIndex("FormularioId");
-
-                    b.ToTable("Questoes");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Turma", b =>
@@ -652,17 +637,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Questao", b =>
-                {
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Formulario", "Formulario")
-                        .WithMany("Questoes")
-                        .HasForeignKey("FormularioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Formulario");
-                });
-
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Turma", b =>
                 {
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Curso", "Curso")
@@ -771,11 +745,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Filial", b =>
                 {
                     b.Navigation("Cursos");
-                });
-
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Formulario", b =>
-                {
-                    b.Navigation("Questoes");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Instituicao", b =>

@@ -59,7 +59,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FormularioId,Nome,Questoes,UsuarioId,CursoId")] Formulario formulario)
+        public async Task<IActionResult> Create([Bind("FormularioId,Nome,UsuarioId,CursoId")] Formulario formulario)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FormularioId,Nome,Questoes,UsuarioId,CursoId")] Formulario formulario)
+        public async Task<IActionResult> Edit(int id, [Bind("FormularioId,Nome,UsuarioId,CursoId")] Formulario formulario)
         {
             if (id != formulario.FormularioId)
             {
