@@ -16,6 +16,9 @@ namespace GerenciamentoBancasTcc.Data
         public DbSet<Filial> Filiais { get; set; }
         public DbSet<Instituicao> Instituicoes { get; set; }
         public DbSet<UsuarioBanca> UsuariosBancas { get; set; }
+        public DbSet<Formulario> Formularios { get; set; }
+        //public DbSet<Convite> Convites { get; set; }
+        //public DbSet<ConviteUsuario> ConvitesUsuarios { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

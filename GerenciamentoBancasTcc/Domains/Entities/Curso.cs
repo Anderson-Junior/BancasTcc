@@ -22,8 +22,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Display(Name = "Filial")]
         public int FilialId { get; set; }
         public virtual Filial Filial { get; set; }
-
-        //public ICollection<Banca> Bancas { get; set; }
         public ICollection<Turma> Turmas { get; set; }
+        public ICollection<Formulario> Formularios { get; set; }
     }
 }

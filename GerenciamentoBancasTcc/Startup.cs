@@ -1,5 +1,6 @@
 using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Services.Email;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace GerenciamentoBancasTcc
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<IEmailService, EmailService>();
             services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();

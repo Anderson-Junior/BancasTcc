@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
@@ -21,7 +19,6 @@ namespace GerenciamentoBancasTcc.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Usuario> _userManager;
-
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<Usuario> userManager)
         {
             _logger = logger;

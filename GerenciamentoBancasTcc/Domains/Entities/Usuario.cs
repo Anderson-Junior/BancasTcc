@@ -17,5 +17,8 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
         public ICollection<Banca> Bancas { get; set; }
         public ICollection<DiasDisponiveis> DiasDisponiveis { get; set; }
+        public ICollection<Formulario> Formularios { get; set; }
+
+        //public ICollection<ConviteUsuario> ConvitesUsuarios { get; set; }
     }
 }

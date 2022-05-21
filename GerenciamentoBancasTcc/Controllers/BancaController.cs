@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
 using Microsoft.AspNetCore.Identity;
+using GerenciamentoBancasTcc.Models;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
@@ -47,6 +48,33 @@ namespace GerenciamentoBancasTcc.Controllers
             }
 
             return View(banca);
+        }
+
+        public async Task<IActionResult> DetalhesBancaAvaliacoes(int? id)
+        {
+            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
+
+            var result = (from banca in _context.Bancas
+                          join orientador in _context.Users on banca.UsuarioId equals orientador.Id
+                          join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
+                          join curso in _context.Cursos on turma.CursoId equals curso.CursoId
+                          where banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
+                          orderby banca.DataHora
+                          select new BancaViewModel
+                          {
+                              BancaId = banca.BancaId,
+                              Curso = curso.Nome,
+                              DataHora = banca.DataHora,
+                              Orientador = orientador.Nome,
+                              Sala = banca.Sala,
+                              Tema = banca.Tema,
+                              Turma = turma.Nome,
+                              Alunos = banca.AlunosBancas.Select(x => x.Aluno.Nome).ToList(),
+                              Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList()
+
+                          }).Where(x => x.BancaId == id).ToList();
+
+            return View(result);
         }
 
         public IActionResult Create()
