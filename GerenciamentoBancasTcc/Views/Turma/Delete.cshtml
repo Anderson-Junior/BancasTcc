@@ -4,35 +4,54 @@
     ViewData["Title"] = "Deletar";
 }
 
-<h1>Deletar Turma</h1>
-
-<h3>Tem certeza que deseja deletar esta turma?</h3>
 <div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ativo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ativo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Curso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Curso.Nome)
-        </dd class>
-    </dl>
     
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="TurmaId" />
-        <input type="submit" value="Deletar" class="btn btn-danger" /> |
-        <a asp-action="Index">Voltar para lista</a>
-    </form>
+    <a asp-action="Index">Voltar para lista</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Deletar Turma</b>
+                </div>
+                <div class="card-body">
+
+                    <div class="alert alert-danger" role="alert">
+                        Tem certeza que deseja deletar esta turma?
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Nome)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Nome)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Ativo)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Ativo)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Curso)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Curso.Nome)
+                        </dd>
+                    </dl>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="TurmaId" />
+                        <input type="submit" value="Deletar" class="btn btn-danger" />
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>

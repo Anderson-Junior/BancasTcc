@@ -4,33 +4,46 @@
     ViewData["Title"] = "Detalhes";
 }
 
-<h1>Detalhes</h1>
 
 <div>
-    <h4>Turma</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ativo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ativo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Curso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Curso.CursoId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TurmaId">Editar</a> |
     <a asp-action="Index">Voltar para lista</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Detalhes da Turma</b>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Nome)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Nome)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Ativo)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Ativo)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Curso)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Curso.CursoId)
+                        </dd>
+                    </dl>
+
+                    <a asp-action="Edit" asp-route-id="@Model.TurmaId" class="btn btn-primary stretched-link">Editar</a>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>

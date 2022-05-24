@@ -4,57 +4,73 @@
     ViewData["Title"] = "Editar";
 }
 
-<h1>Editar Filial</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="FilialId" />
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Campus" class="control-label"></label>
-                <input asp-for="Campus" class="form-control" />
-                <span asp-validation-for="Campus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cnpj" class="control-label"></label>
-                <input asp-for="Cnpj" class="form-control" />
-                <span asp-validation-for="Cnpj" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefone" class="control-label"></label>
-                <input asp-for="Telefone" class="form-control" />
-                <span asp-validation-for="Telefone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Endereco" class="control-label"></label>
-                <input asp-for="Endereco" class="form-control" />
-                <span asp-validation-for="Endereco" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="InstituicaoId" class="control-label"></label>
-                <select asp-for="InstituicaoId" class="form-control" asp-items="ViewBag.InstituicaoId"></select>
-                <span asp-validation-for="InstituicaoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+
 
 <div>
     <a asp-action="Index">Voltar para lista</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Editar Filial</b>
+                </div>
+                <div class="card-body">
+
+                    <div class="alert alert-warning" role="alert">
+                        Tem certeza que deseja editar as informações da Filial?
+                    </div>
+
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="FilialId" />
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Campus" class="control-label"></label>
+                            <input asp-for="Campus" class="form-control" />
+                            <span asp-validation-for="Campus" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Cnpj" class="control-label"></label>
+                            <input asp-for="Cnpj" class="form-control" />
+                            <span asp-validation-for="Cnpj" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Telefone" class="control-label"></label>
+                            <input asp-for="Telefone" class="form-control" />
+                            <span asp-validation-for="Telefone" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Endereco" class="control-label"></label>
+                            <input asp-for="Endereco" class="form-control" />
+                            <span asp-validation-for="Endereco" class="text-danger"></span>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="InstituicaoId" class="control-label"></label>
+                            <select asp-for="InstituicaoId" class="form-control" asp-items="ViewBag.InstituicaoId"></select>
+                            <span asp-validation-for="InstituicaoId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Salvar" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>
 
 @section Scripts {
