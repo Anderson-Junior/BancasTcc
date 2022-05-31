@@ -20,6 +20,7 @@ namespace GerenciamentoBancasTcc.Data
         public DbSet<Convite> Convites { get; set; }
         public DbSet<ConviteUsuario> ConvitesUsuarios { get; set; }
         public DbSet<Questao> Questoes { get; set; }
+        public DbSet<TipoQuestao> TipoQuestoes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

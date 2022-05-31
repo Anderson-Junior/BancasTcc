@@ -1,42 +1,50 @@
 ﻿@model GerenciamentoBancasTcc.Domains.Entities.Formulario
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Formulário";
 }
 
-<h1>Edit</h1>
-
-<h4>Formulario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="FormularioId" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CursoId" class="control-label"></label>
-                <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
-                <span asp-validation-for="CursoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div>
+    <a asp-action="Index">Voltar para lista</a>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Editar Formulário</b>
+                </div>
+                <div class="card-body">
+
+                    <div class="alert alert-warning" role="alert">
+                        Tem certeza que deseja editar as informações do formulário?
+                    </div>
+
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="FormularioId" />
+                        <div class="form-group">
+                            <label asp-for="Nome" class="control-label"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CursoId" class="control-label"></label>
+                            <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
+                            <span asp-validation-for="CursoId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Salvar" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    <
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>
 
 @section Scripts {

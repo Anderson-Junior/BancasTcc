@@ -1,28 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GerenciamentoBancasTcc.Data;
+using GerenciamentoBancasTcc.Domains.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GerenciamentoBancasTcc.Data;
-using GerenciamentoBancasTcc.Domains.Entities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
     public class FormularioController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Usuario> _userManager;
 
-        public FormularioController(ApplicationDbContext context)
+
+        public FormularioController(ApplicationDbContext context, UserManager<Usuario> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Formulario
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Formularios.Include(f => f.Curso).Include(f => f.Usuario);
+            var applicationDbContext = _context.Formularios.Include(f => f.Curso);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +39,6 @@ namespace GerenciamentoBancasTcc.Controllers
 
             var formulario = await _context.Formularios
                 .Include(f => f.Curso)
-                .Include(f => f.Usuario)
                 .FirstOrDefaultAsync(m => m.FormularioId == id);
             if (formulario == null)
             {
@@ -49,8 +51,8 @@ namespace GerenciamentoBancasTcc.Controllers
         // GET: Formulario/Create
         public IActionResult Create()
         {
-            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "CursoId");
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id");
+            TipoQuestao();
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome");
             return View();
         }
 
@@ -59,16 +61,17 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FormularioId,Nome,UsuarioId,CursoId")] Formulario formulario)
+        public async Task<IActionResult> Create([Bind("FormularioId,Nome,CursoId")] Formulario formulario/*, List<Questao> questoes*/)
         {
+            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
             if (ModelState.IsValid)
             {
+                formulario.UsuarioId = user.Id;
                 _context.Add(formulario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "CursoId", formulario.CursoId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", formulario.UsuarioId);
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome", formulario.CursoId);
             return View(formulario);
         }
 
@@ -85,8 +88,7 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 return NotFound();
             }
-            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "CursoId", formulario.CursoId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", formulario.UsuarioId);
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome", formulario.CursoId);
             return View(formulario);
         }
 
@@ -95,7 +97,7 @@ namespace GerenciamentoBancasTcc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FormularioId,Nome,UsuarioId,CursoId")] Formulario formulario)
+        public async Task<IActionResult> Edit(int id, [Bind("FormularioId,Nome,CursoId")] Formulario formulario)
         {
             if (id != formulario.FormularioId)
             {
@@ -122,8 +124,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "CursoId", formulario.CursoId);
-            ViewData["UsuarioId"] = new SelectList(_context.Users, "Id", "Id", formulario.UsuarioId);
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome", formulario.CursoId);
             return View(formulario);
         }
 
@@ -137,7 +138,6 @@ namespace GerenciamentoBancasTcc.Controllers
 
             var formulario = await _context.Formularios
                 .Include(f => f.Curso)
-                .Include(f => f.Usuario)
                 .FirstOrDefaultAsync(m => m.FormularioId == id);
             if (formulario == null)
             {
@@ -161,6 +161,14 @@ namespace GerenciamentoBancasTcc.Controllers
         private bool FormularioExists(int id)
         {
             return _context.Formularios.Any(e => e.FormularioId == id);
+        }
+
+        private void TipoQuestao(int selectedItem = 0)
+        {
+            var tipoQuestoes = _context.TipoQuestoes.ToList();
+            var selectListItems = tipoQuestoes.ToDictionary(x => x.TipoQuestaoId.ToString(), y => y.Descricao).ToList();
+            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
+            ViewData["TipoQuestaoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
     }
 }

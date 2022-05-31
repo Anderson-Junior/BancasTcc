@@ -1,36 +1,40 @@
 ﻿@model GerenciamentoBancasTcc.Domains.Entities.Formulario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes Formulário";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Formulario</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Curso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Curso.CursoId)
-        </dd>
-    </dl>
+    <a asp-action="Index">Voltar para lista</a>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.FormularioId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Detalhes do formulário</b>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Nome)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Nome)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Curso)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Curso.CursoId)
+                        </dd>
+                    </dl>
+                    <a asp-action="Edit" asp-route-id="@Model.FormularioId" class="btn btn-primary stretched-link">Editar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>

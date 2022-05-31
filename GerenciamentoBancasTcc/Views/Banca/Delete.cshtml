@@ -5,10 +5,7 @@
 }
 
 <div>
-   
-
     <a asp-action="Index">Voltar para lista</a>
-
 </div>
 
 <div class="container">
@@ -20,11 +17,9 @@
                     <b>Deletar Banca</b>
                 </div>
                 <div class="card-body">
-
                     <div class="alert alert-danger" role="alert">
                         Tem certeza que deseja deletar esta banca?
                     </div>
-
                     <dl class="row">
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => model.Turma)
@@ -63,13 +58,10 @@
                             @Html.DisplayFor(model => model.Descricao)
                         </dd>
                     </dl>
-
-
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="BancaId" />
                         <input type="submit" value="Deletar" class="btn btn-danger" />
                     </form>
-
                 </div>
             </div>
         </div>

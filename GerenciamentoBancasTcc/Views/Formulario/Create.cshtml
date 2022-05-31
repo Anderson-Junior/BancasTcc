@@ -4,38 +4,114 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Formulario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class ="form-control" asp-items="ViewBag.UsuarioId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CursoId" class="control-label"></label>
-                <select asp-for="CursoId" class ="form-control" asp-items="ViewBag.CursoId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/select-pure.css" />
+}
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar para lista</a>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Cadastrar Formulário</b>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="CursoId" class="control-label"></label>
+                            <select asp-for="CursoId" id="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Nome do formulário</label>
+                            <input asp-for="Nome" id="NomeFormularioId" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label class="control-label">Selecione o tipo da questão</label>
+                            <select class="form-control" id="TipoQuestaoId" asp-items="ViewBag.TipoQuestaoId"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Pergunta</label>
+                            <input type="text" id="PerguntaId" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="add_pergunta" class="btn btn-primary">Adicionar Pergunta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="card" style="border: solid 2px #2F5578;">
+                <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                    <b>Perguntas Adicionadas</b>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    1. Normas da língua portuguesa e limite de páginas (10 - 20
+                                    páginas, sem contar apêndice/anexo)
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-end">
+                <button type="button" id="cadastrar" class="btn btn-primary">Cadastrar Formulário</button>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $("#cadastrar").click(function () {
+
+        var nomeFormId = $("#NomeFormularioId").val();
+        var cursoId = $("#CursoId").val();
+        $.ajax({
+            type: "POST",
+            url: "/Formulario/Create",
+            data: {
+                Nome: nomeFormId,
+                CursoId: cursoId,
+                //QuestaoId: $("#TipoQuestaoId").val(),
+            },
+            statusCode: {
+                401: function () {
+                    //redirectToLogin();
+                    alert("Não autorizado")
+                }
+            },
+            success: function (data) {
+                $("#message").removeClass().addClass("alert alert-success").find('span').first().text("Função removida com sucesso.");
+                $("#result").html(data);
+                initPartialView();
+            },
+            error: function () {
+                $("#message").removeClass().addClass("alert alert-danger").find('span').first().text("Erro ao remover função.");
+            }
+        });
+    });
+</script>
 }
