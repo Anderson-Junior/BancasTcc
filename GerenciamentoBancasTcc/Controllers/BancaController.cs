@@ -9,6 +9,8 @@ using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
 using Microsoft.AspNetCore.Identity;
 using GerenciamentoBancasTcc.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
@@ -31,7 +33,47 @@ namespace GerenciamentoBancasTcc.Controllers
                 .ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        //public IActionResult Up()
+        //{
+        //    var arquivos = _context.Arquivos.ToList();
+        //    return View(arquivos);
+        //}
+
+        [HttpPost]
+        public IActionResult UploadImagem(IList<IFormFile> arquivos, int bancaId)
+        {
+            IFormFile imagemCarregada = arquivos.FirstOrDefault();
+
+            if (imagemCarregada != null)
+            {
+                MemoryStream ms = new MemoryStream();
+                imagemCarregada.OpenReadStream().CopyTo(ms);
+
+                Arquivos arqui = new Arquivos()
+                {
+                    Descricao = imagemCarregada.FileName,
+                    Dados = ms.ToArray(),
+                    ContentType = imagemCarregada.ContentType,
+                    BancaId = bancaId
+                };
+
+                _context.Arquivos.Add(arqui);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Visualizar(int id)
+        {
+            var arquivosBanco = _context.Arquivos.FirstOrDefault(a => a.ArquivosId == id);
+
+            return File(arquivosBanco.Dados, arquivosBanco.ContentType);
+        }
+
+
+
+        public async Task<IActionResult> UploadArquivo(int? id)
         {
             if (id == null)
             {
@@ -54,10 +96,11 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
 
-            var result = (from banca in _context.Bancas
+            var result = await (from banca in _context.Bancas
                           join orientador in _context.Users on banca.UsuarioId equals orientador.Id
                           join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
                           join curso in _context.Cursos on turma.CursoId equals curso.CursoId
+                          join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
                           where banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
                           orderby banca.DataHora
                           select new BancaViewModel
@@ -69,10 +112,11 @@ namespace GerenciamentoBancasTcc.Controllers
                               Sala = banca.Sala,
                               Tema = banca.Tema,
                               Turma = turma.Nome,
-                              Alunos = banca.AlunosBancas.Select(x => x.Aluno.Nome).ToList(),
-                              Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList()
+                              Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
+                              Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
+                              ArquivoId = arquivos.ArquivosId
 
-                          }).Where(x => x.BancaId == id).ToList();
+                          }).FirstAsync(x => x.BancaId == id);
 
             return View(result);
         }
@@ -248,5 +292,7 @@ namespace GerenciamentoBancasTcc.Controllers
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
+
+
     }
 }

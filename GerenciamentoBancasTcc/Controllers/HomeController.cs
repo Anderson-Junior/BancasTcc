@@ -45,7 +45,7 @@ namespace GerenciamentoBancasTcc.Controllers
                               Sala = banca.Sala,
                               Tema = banca.Tema,
                               Turma = turma.Nome,
-                              Alunos = banca.AlunosBancas.Select(x => x.Aluno.Nome).ToList(),
+                              Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
                               Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList()
 
                           }).ToList();

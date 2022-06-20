@@ -38,7 +38,7 @@
                             <p><b>Curso:</b> @item.Curso</p>
                             <p><b>Turma:</b> @item.Turma</p>
                             <p><b>Orientador:</b>  @item.Orientador</p>
-                            <p><b>Alunos:</b> @string.Join(", ", item.Alunos)</p>
+                            <p><b>Alunos:</b> @string.Join(", ", item.Alunos.Select(x => x.Nome))</p>
                             <p><b>Professores:</b> @string.Join(", ", item.Professores)</p>
                             <p><b>Sala:</b> @item.Sala</p>
                         </div>

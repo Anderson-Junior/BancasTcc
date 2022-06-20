@@ -4,14 +4,16 @@ using GerenciamentoBancasTcc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220617183132_TabelaArquivos")]
+    partial class TabelaArquivos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,13 +68,10 @@ namespace GerenciamentoBancasTcc.Data.Migrations
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Arquivos", b =>
                 {
-                    b.Property<int>("ArquivosId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BancaId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ContentType")
                         .HasColumnType("nvarchar(max)");
@@ -83,10 +82,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ArquivosId");
-
-                    b.HasIndex("BancaId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Arquivos");
                 });
@@ -613,17 +609,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Navigation("Banca");
                 });
 
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Arquivos", b =>
-                {
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Banca", "Banca")
-                        .WithOne("Arquivos")
-                        .HasForeignKey("GerenciamentoBancasTcc.Domains.Entities.Arquivos", "BancaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Banca");
-                });
-
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Banca", b =>
                 {
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Turma", "Turma")
@@ -811,8 +796,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Banca", b =>
                 {
                     b.Navigation("AlunosBancas");
-
-                    b.Navigation("Arquivos");
 
                     b.Navigation("UsuariosBancas");
                 });

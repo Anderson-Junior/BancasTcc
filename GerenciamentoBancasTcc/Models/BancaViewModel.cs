@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GerenciamentoBancasTcc.Domains.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace GerenciamentoBancasTcc.Models
@@ -19,8 +20,9 @@ namespace GerenciamentoBancasTcc.Models
 
         public DateTime DataHora { get; set; }
 
-        public List<string> Alunos { get; set; }
+        public List<Aluno> Alunos { get; set; }
 
         public List<string> Professores { get; set; }
+        public int ArquivoId { get; set; }
     }
 }

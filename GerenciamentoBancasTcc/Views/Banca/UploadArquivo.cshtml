@@ -1,7 +1,7 @@
 ﻿@model GerenciamentoBancasTcc.Domains.Entities.Banca
 
 @{
-    ViewData["Title"] = "Detalhes Banca";
+    ViewData["Title"] = "Upload Arquivos";
 }
 
 
@@ -15,7 +15,7 @@
         <div class="col-md-8">
             <div class="card" style="border: solid 2px #2F5578;">
                 <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
-                    <b>Detalhes da Banca</b>
+                    <b>Anexar Documentação</b>
                 </div>
                 <div class="card-body">
                     <dl class="row">
@@ -56,9 +56,13 @@
                             @Html.DisplayFor(model => model.Descricao)
                         </dd>
                     </dl>
-
-                    <a asp-action="Edit" asp-route-id="@Model.BancaId" class="btn btn-primary stretched-link">Editar</a>
-
+                    <form action="/Banca/UploadImagem" enctype="multipart/form-data" method="post">
+                        <input type="file" class="btn btn-sm" name="arquivos" multiple/>
+                        <br />
+                        <input type="hidden" name="bancaId" value="@Model.BancaId"/>
+                        <br />
+                        <button class="btn btn-sm btn-primary">Anexar</button>
+                    </form>
                 </div>
             </div>
         </div>
