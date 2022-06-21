@@ -24,31 +24,29 @@
 </head>
 <body>
     <div class="container align-items-center">
-        <h3>Bem vindo ao Gerenciador de Bancas de TCC</h3>
-        <h4>Próximas Bancas:</h4>
+        <h4>Minhas Próximas Bancas:</h4>
         <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
             @foreach (var item in Model)
-            { 
-            <a asp-action="DetalhesBancaAvaliacoes" asp-controller="Banca" asp-route-id="@item.BancaId" style="text-decoration: none;">
-                <div class="col">
-                    <div class="card h-100 divTeste">
-                        <h5 class="card-header">@item.DataHora.ToString("dd/MM/yyyy HH:mm")</h5>
-                        <div class="card-body">
-                            <p><b>Tema:</b> @Html.DisplayFor(modelItem => item.Tema)</p>
-                            <p><b>Curso:</b> @item.Curso</p>
-                            <p><b>Turma:</b> @item.Turma</p>
-                            <p><b>Orientador:</b>  @item.Orientador</p>
-                            <p><b>Alunos:</b> @string.Join(", ", item.Alunos.Select(x => x.Nome))</p>
-                            <p><b>Professores:</b> @string.Join(", ", item.Professores)</p>
-                            <p><b>Sala:</b> @item.Sala</p>
+            {
+                <a asp-action="DetalhesBancaAvaliacoes" asp-controller="Banca" asp-route-id="@item.BancaId" style="text-decoration: none;">
+                    <div class="col">
+                        <div class="card">
+                            <h5 class="card-header">@item.DataHora.ToString("dd/MM/yyyy HH:mm")</h5>
+                            <div class="card-body">
+                                <p><b>Tema:</b> @Html.DisplayFor(modelItem => item.Tema)</p>
+                                <p><b>Curso:</b> @item.Curso</p>
+                                <p><b>Turma:</b> @item.Turma</p>
+                                <p><b>Orientador:</b>  @item.Orientador</p>
+                                <p><b>Alunos:</b> @string.Join(", ", item.Alunos.Select(x => x.Nome))</p>
+                                <p><b>Professores:</b> @string.Join(", ", item.Professores)</p>
+                                <p><b>Sala:</b> @item.Sala</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
             }
         </div>
     </div>
-
 
     <!-- Script JQuery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

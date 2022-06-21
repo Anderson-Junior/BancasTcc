@@ -1,19 +1,18 @@
-﻿.container h3 {
+﻿.card {
+    border: solid 2px #2B4B82;
+}
+
+.card:hover {
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+    background-color: #94DDDE;
+    color: #fff;
+    font-size: 18px;
     text-align: center;
 }
 
-.container h5 {
-    text-align: center;
+.card-body {
+    color: black;
 }
-
-.divTeste {
-    border: solid 3px black;
-    border-color: #2D5376;
-    border-radius: 5px;
-    transition: ease-in-out 0.2s;
-}
-
-    .divTeste:hover {
-        border-color: #f8b739;
-        cursor: pointer;
-    }

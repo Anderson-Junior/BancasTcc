@@ -12,38 +12,53 @@
             </button>
         </div>
     }
-    <div class="card">
-        <div class="card-header">
-            Editar usuário: @Model.UserName
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                <div class="col-lg-5 col-xl-4">
-                    @Html.LabelFor(m => m.UserName, "Usuário")
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", disabled = "" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-5 col-xl-4">
-                    @Html.LabelFor(m => m.Nome)
-                    @Html.TextBoxFor(m => m.Nome, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-5 col-xl-4">
-                    @Html.LabelFor(m => m.Ativo)
-                    <div class="custom-control custom-switch">
-                        @Html.CheckBoxFor(m => m.Ativo, new { @class = "custom-control-input" })
-                        <label class="custom-control-label" for="Ativo"></label>
+
+    <div>
+        <a asp-action="Index" asp-controller="Usuario">Voltar para lista</a>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="card" style="border: solid 2px #2F5578;">
+                    <div class="card-header text-center" style=" background-color: #73A0B9; color: #fff; font-size: 18px">
+                        <b>Editar Usuário</b>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="alert alert-warning" role="alert">
+                            Tem certeza que deseja editar as informações do usuário?
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.UserName, "Usuário")
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", disabled = "" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.Nome)
+                                @Html.TextBoxFor(m => m.Nome, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.Ativo)
+                                <div class="custom-control custom-switch">
+                                    @Html.CheckBoxFor(m => m.Ativo, new { @class = "custom-control-input" })
+                                    <label class="custom-control-label" for="Ativo"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="submit" value="Salvar" class="btn btn-primary" />
+
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer clearfix">
-            <div class="pull-right">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
-                <a asp-action="Index" asp-controller="Usuario" class="btn btn-danger">Voltar</a>
-            </div>
+            <div class="col-md-2"></div>
         </div>
     </div>
 }

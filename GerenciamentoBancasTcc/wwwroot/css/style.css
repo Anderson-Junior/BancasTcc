@@ -8242,12 +8242,16 @@ h1, h2, h3, h4, h5,
       padding: 10px 0;
       display: block;
       color: rgba(255, 255, 255, 0.8);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-      #sidebar ul li a:hover {
-        color: #f8b739; }
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+      text-decoration: none;
+    }
+        #sidebar ul li a:hover {
+            color: #F7B4A7;
+        }
     #sidebar ul li.active > a {
-      background: transparent;
-      color: #f8b739; }
+        background: transparent;
+        color: #F7B4A7;
+    }
   @media (max-width: 991.98px) {
     #sidebar {
       margin-left: -300px; }
@@ -8279,11 +8283,14 @@ a[data-toggle="collapse"] {
   transition: all 0.3s; }
 
 .btn.btn-primary {
-  background: #f8b739;
-  border-color: #f8b739; }
-  .btn.btn-primary:hover, .btn.btn-primary:focus {
-    background: #f8b739 !important;
-    border-color: #f8b739 !important; }
+    background: #F7B4A7;
+    border-color: #F7B4A7;
+}
+
+.btn.btn-primary:hover, .btn.btn-primary:focus {
+    background: #94DDDE !important;
+    border-color: #94DDDE !important;
+}
 
 .footer p {
   color: rgba(255, 255, 255, 0.5); }
