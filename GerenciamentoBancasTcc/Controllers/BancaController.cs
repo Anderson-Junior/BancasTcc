@@ -67,7 +67,6 @@ namespace GerenciamentoBancasTcc.Controllers
         public IActionResult Visualizar(int id)
         {
             var arquivosBanco = _context.Arquivos.FirstOrDefault(a => a.ArquivosId == id);
-
             return File(arquivosBanco.Dados, arquivosBanco.ContentType);
         }
 

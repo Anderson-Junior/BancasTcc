@@ -10,11 +10,13 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Column("TurmaId")]
         public int TurmaId { get; set; }
 
+        [Required(ErrorMessage = "É necessário informar um nome para a turma.")]
         public string Nome { get; set; }
 
         public bool Ativo { get; set; }
 
         [Display(Name = "Curso")]
+        [Required(ErrorMessage = "É necessário selecionar um curso.")]
         public int CursoId { get; set; }
         public Curso Curso { get; set; }
 

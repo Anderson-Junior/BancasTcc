@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
-    [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR)]
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -25,7 +25,7 @@ namespace GerenciamentoBancasTcc.Controllers
             _context = context;
             _userManager = userManager;
         }
-
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR + "," + RolesHelper.ADMINISTRADOR)]
         public async Task<IActionResult> Index()
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
@@ -53,13 +53,8 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(result);
         }
 
-        public IActionResult cadastroUsuario()
-        {
-            return View();
-        }
-
         [Authorize(Roles = RolesHelper.COORDENADOR)]
-        public IActionResult Privacy()
+        public IActionResult cadastroUsuario()
         {
             return View();
         }

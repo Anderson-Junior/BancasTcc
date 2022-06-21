@@ -11,6 +11,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public int InstituicaoId { get; set; }
 
         [Column("Nome")]
+        [Required(ErrorMessage = "É necessário informar o nome da instituição.")]
         public string Nome { get; set; }
 
         [Column("Ativo")]

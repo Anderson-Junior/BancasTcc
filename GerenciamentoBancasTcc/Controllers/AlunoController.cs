@@ -64,10 +64,14 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 _context.Add(aluno);
                 await _context.SaveChangesAsync();
+                TempData["mensagemSucesso"] = "Aluno cadastrado com sucesso!";
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome", aluno.TurmaId);
             GetCursos(aluno.AlunoId);
+            TempData["mensagemErro"] = "Erro ao cadastrar o aluno!";
+
             return View(aluno);
         }
 
