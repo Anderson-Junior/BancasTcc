@@ -45,7 +45,10 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [DataType(DataType.Password)]
+            [DataType(DataType.Password )]
+
+            [Display(Name = "Senha")]
+
             public string Password { get; set; }
 
             [Display(Name = "Lembrar-me?")]

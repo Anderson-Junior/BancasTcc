@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: #2B4B82;
+    background: #94DDDE;
 }
 
 #login .container #login-row #login-column #login-box {
@@ -15,7 +15,7 @@ body {
     height: 500px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     border-radius: 3px;
-    background-color: #94DDDE;
+    background-color: #2B4B82;
 }
 
 #login .container #login-row #login-column #login-box #login-form {
