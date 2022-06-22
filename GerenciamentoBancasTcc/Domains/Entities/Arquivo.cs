@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciamentoBancasTcc.Domains.Entities
 {
-    public class Arquivos
+    public class Arquivo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

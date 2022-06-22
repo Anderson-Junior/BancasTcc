@@ -60,7 +60,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 MemoryStream ms = new MemoryStream();
                 imagemCarregada.OpenReadStream().CopyTo(ms);
 
-                Arquivos arqui = new Arquivos()
+                Arquivo arqui = new Arquivo()
                 {
                     Descricao = imagemCarregada.FileName,
                     Dados = ms.ToArray(),

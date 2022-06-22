@@ -37,7 +37,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
-        public Arquivos Arquivos { get; set; }
+        public ICollection<Arquivo> Arquivos { get; set; }
 
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
     }

@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace GerenciamentoBancasTcc.Data.Configurations
 {
 
-    public class ArquivoConfiguration : IEntityTypeConfiguration<Arquivos>
+    public class ArquivoConfiguration : IEntityTypeConfiguration<Arquivo>
     {
-        public void Configure(EntityTypeBuilder<Arquivos> builder)
+        public void Configure(EntityTypeBuilder<Arquivo> builder)
         {
             builder.HasKey(x => x.ArquivosId);
 
-            //builder.HasOne(x => x.Banca)
-            //        .WithOne(x => x.Arquivos)
-            //        .HasForeignKey<Banca>(b => b.BancaId);
+            builder.HasOne(x => x.Banca)
+                    .WithMany(x => x.Arquivos)
+                    .HasForeignKey(x => x.BancaId)
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
