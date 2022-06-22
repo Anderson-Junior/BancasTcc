@@ -7,6 +7,25 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 }
+@if (TempData["mensagemSucesso"] != null)
+{
+    <div id="message" class="alert alert-success" role="alert">
+        @TempData["mensagemSucesso"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (TempData["mensagemErro"] != null)
+{
+    <div id="message" class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         Lista de alunos
@@ -59,12 +78,14 @@
         handleDataTables();
     </script>
     <script>
+            $('#message').on('close.bs.alert', function (event) {
+                event.preventDefault();
+                $(this).addClass('d-none');
+            });
 
-
-     if (@TempData["mensagemSucesso"] != null)
-     {
-         setTimeout(function() { alert(@TempData["mensagemSucesso"]); }, 4000);
-     }
-
+            @*if (@TempData["mensagemSucesso"] != null)
+            {
+                $("#message").removeClass().addClass("alert alert-success").find('span').first().text("Função removida com sucesso.");
+            }*@
     </script>
 }

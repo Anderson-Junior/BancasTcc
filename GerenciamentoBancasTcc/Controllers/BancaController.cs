@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using GerenciamentoBancasTcc.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using GerenciamentoBancasTcc.Services.Email;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
@@ -18,11 +19,13 @@ namespace GerenciamentoBancasTcc.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Usuario> _userManager;
+        private readonly IEmailService _emailService;
 
-        public BancaController(ApplicationDbContext context, UserManager<Usuario> userManager)
+        public BancaController(ApplicationDbContext context, UserManager<Usuario> userManager, IEmailService emailService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Index()
@@ -33,11 +36,19 @@ namespace GerenciamentoBancasTcc.Controllers
                 .ToListAsync());
         }
 
-        //public IActionResult Up()
-        //{
-        //    var arquivos = _context.Arquivos.ToList();
-        //    return View(arquivos);
-        //}
+        [HttpGet]
+        public IActionResult EnviarConvite()
+        {
+            var email = _emailService.SendMail();
+            if(email == true)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("UploadImagem");
+            }
+        }
 
         [HttpPost]
         public IActionResult UploadImagem(IList<IFormFile> arquivos, int bancaId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -24,7 +25,7 @@ namespace GerenciamentoBancasTcc.Services.Email
                 _mailMessage.CC.Add("ander.lemos.jr@gmail.com");
                 _mailMessage.Subject = "Teste Gerenciador de Bancas de TCC";
                 _mailMessage.IsBodyHtml = true;
-                _mailMessage.Body = "<b>Teste</b>";
+                _mailMessage.Body = File.ReadAllText(@"Views/Shared/EmailConvite.cshtml");
 
                 //CONFIGURAÇÃO COM PORTA
                 SmtpClient _smtpClient = new SmtpClient("smtp.office365.com", Convert.ToInt32("587"));

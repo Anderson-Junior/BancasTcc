@@ -110,6 +110,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.Update(aluno);
                     await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = "Aluno atualizado com sucesso!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,6 +126,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome", aluno.TurmaId);
+            TempData["mensagemErro"] = "Erro ao atualizar aluno!";
             return View(aluno);
         }
 
@@ -153,9 +155,19 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var aluno = await _context.Alunos.FindAsync(id);
-            _context.Alunos.Remove(aluno);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Alunos.Remove(aluno);
+                await _context.SaveChangesAsync();
+                TempData["mensagemSucesso"] = "Aluno excluído com sucesso!";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir aluno!";
+            }
+            return View(aluno);
         }
 
         private bool AlunoExists(int id)
