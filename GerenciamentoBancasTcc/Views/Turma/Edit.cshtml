@@ -4,7 +4,24 @@
     ViewData["Title"] = "Editar";
 }
 
-
+@if (TempData["mensagemSucesso"] != null)
+{
+    <div id="message" class="alert alert-success" role="alert">
+        @TempData["mensagemSucesso"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (TempData["mensagemErro"] != null)
+{
+    <div id="message" class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
 <div>
     <a asp-action="Index">Voltar para lista</a>
@@ -28,6 +45,11 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="TurmaId" />
                         <div class="form-group">
+                            <label asp-for="CursoId" class="control-label"></label>
+                            <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
+                            <span asp-validation-for="CursoId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Nome" class="control-label"></label>
                             <input asp-for="Nome" class="form-control" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
@@ -36,11 +58,6 @@
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
                             </label>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="CursoId" class="control-label"></label>
-                            <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId"></select>
-                            <span asp-validation-for="CursoId" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Salvar" class="btn btn-primary" />

@@ -84,6 +84,7 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    TempData["mensagemSucesso"] = "Usuário cadastrado com sucesso!";
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -106,6 +107,7 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
                         return LocalRedirect("/Usuario/Index");
                     }
                 }
+                TempData["mensagemErro"] = "Erro ao cadastrar o usuário!";
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

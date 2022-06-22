@@ -15,8 +15,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Required(ErrorMessage = "É necessário selecionar a turma.")]
         public int TurmaId { get; set; }
         public Turma Turma { get; set; }
-
-        [Required(ErrorMessage = "É necessário selecionar o(s) alunos.")]
         public ICollection<AlunosBancas> AlunosBancas { get; set; }
 
         [Required(ErrorMessage = "É necessário preencher o tema da banca.")]

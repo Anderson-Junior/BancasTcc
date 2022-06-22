@@ -3,7 +3,24 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@if (TempData["mensagemSucesso"] != null)
+{
+    <div id="message" class="alert alert-success" role="alert">
+        @TempData["mensagemSucesso"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (TempData["mensagemErro"] != null)
+{
+    <div id="message" class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 @section Styles {
     <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 }
@@ -31,22 +48,22 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Ativo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Curso.Nome)
-                    </td>
-                    <td style="width: 130px">
-                        <a asp-action="Edit" asp-route-id="@item.TurmaId" class="btn btn-sm btn-primary" title="Editar turma"><i class="fa fa-edit fa-fw"></i></a>
-                        <a asp-action="Details" asp-route-id="@item.TurmaId" class="btn btn-sm btn-primary" title="Detalhes turma"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.TurmaId" class="btn btn-sm btn-primary _remove" title="Excluir turma"><i class="fa fa-remove fa-fw"></i></a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ativo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Curso.Nome)
+                        </td>
+                        <td style="width: 130px">
+                            <a asp-action="Edit" asp-route-id="@item.TurmaId" class="btn btn-sm btn-primary" title="Editar turma"><i class="fa fa-edit fa-fw"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.TurmaId" class="btn btn-sm btn-primary" title="Detalhes turma"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.TurmaId" class="btn btn-sm btn-primary _remove" title="Excluir turma"><i class="fa fa-remove fa-fw"></i></a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

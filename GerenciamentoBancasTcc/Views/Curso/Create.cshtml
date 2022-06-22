@@ -4,7 +4,12 @@
     ViewData["Title"] = "Cadastrar";
 }
 
-
+@if (TempData["mensagemErro"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+    </div>
+}
 
 <div>
     <a asp-action="Index">Voltar para lista</a>

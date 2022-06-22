@@ -3,9 +3,14 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+@if (TempData["mensagemErro"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+    </div>
+}
 @section Styles {
-<link rel="stylesheet" href="~/css/select-pure.css" />
+    <link rel="stylesheet" href="~/css/select-pure.css" />
 }
 
 <div>
@@ -75,9 +80,9 @@
 
 
 @section Scripts {
-@{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
-<script src="~/js/select-pure.min.js" type="text/javascript"></script>
-<script src="~/js/banca-create-edit.js" type="text/javascript"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/select-pure.min.js" type="text/javascript"></script>
+    <script src="~/js/banca-create-edit.js" type="text/javascript"></script>
 }

@@ -58,7 +58,7 @@
                             </dd>
                         </dl>
                         <form action="/Banca/UploadImagem" enctype="multipart/form-data" method="post">
-                            <input type="file" class="btn btn-sm" name="arquivos" accept="application/pdf" />
+                            <input type="file" class="btn btn-sm" name="arquivos" accept="application/pdf" required/>
                             <br />
                             <input type="hidden" name="bancaId" value="@Model.BancaId" />
                             <br />

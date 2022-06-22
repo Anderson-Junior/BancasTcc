@@ -3,6 +3,7 @@ using GerenciamentoBancasTcc.Domains.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,9 +60,17 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(turma);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(turma);
+                    await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = string.Format("Turma {0} cadastrada com sucesso!", turma.Nome);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["mensagemErro"] = "Erro ao cadastrar a turma! " + ex.Message;
+                }
             }
             ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome", turma.CursoId);
             return View(turma);
@@ -102,15 +111,18 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.Update(turma);
                     await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = string.Format("Turma {0} atualizada com sucesso!", turma.Nome);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!TurmaExists(turma.TurmaId))
                     {
+                        TempData["mensagemErro"] = "Esta turma não está cadastrada no sistema!";
                         return NotFound();
                     }
                     else
                     {
+                        TempData["mensagemErro"] = "Erro ao atualizar a turma! " + ex.Message;
                         throw;
                     }
                 }
@@ -145,9 +157,18 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turma = await _context.Turmas.FindAsync(id);
-            _context.Turmas.Remove(turma);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Turmas.Remove(turma);
+                await _context.SaveChangesAsync();
+                TempData["mensagemSucesso"] = string.Format("Turma {0} excluída com sucesso!", turma.Nome);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir a turma! " + ex.Message;
+            }
+            return View(turma);
         }
 
         private bool TurmaExists(int id)

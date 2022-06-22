@@ -61,9 +61,17 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(curso);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(curso);
+                    await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = string.Format("Curso {0} cadastrado com sucesso!", curso.Nome);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    TempData["mensagemErro"] = "Erro ao cadastrar o curso! " + ex.Message;
+                }
             }
             ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "Campus", curso.FilialId);
             return View(curso);
@@ -104,15 +112,18 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.Update(curso);
                     await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = string.Format("Curso {0} atualizado com sucesso!", curso.Nome);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!CursoExists(curso.CursoId))
                     {
+                        TempData["mensagemErro"] = "Este curso não está o no sistema!";
                         return NotFound();
                     }
                     else
                     {
+                        TempData["mensagemErro"] = "Erro ao atualizar o curso! " + ex.Message;
                         throw;
                     }
                 }
@@ -147,9 +158,18 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var curso = await _context.Cursos.FindAsync(id);
-            _context.Cursos.Remove(curso);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Cursos.Remove(curso);
+                await _context.SaveChangesAsync();
+                TempData["mensagemSucesso"] = string.Format("Curso {0} excluído com sucesso!", curso.Nome);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex) 
+            {
+                TempData["mensagemErro"] = "Erro ao excluir o curso! " + ex.Message;
+            }
+            return View(curso);
         }
 
         private bool CursoExists(int id)

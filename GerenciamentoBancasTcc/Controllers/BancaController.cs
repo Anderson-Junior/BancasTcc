@@ -54,22 +54,31 @@ namespace GerenciamentoBancasTcc.Controllers
         public IActionResult UploadImagem(IList<IFormFile> arquivos, int bancaId)
         {
             IFormFile imagemCarregada = arquivos.FirstOrDefault();
-
+   
             if (imagemCarregada != null)
             {
-                MemoryStream ms = new MemoryStream();
-                imagemCarregada.OpenReadStream().CopyTo(ms);
-
-                Arquivo arqui = new Arquivo()
+                try
                 {
-                    Descricao = imagemCarregada.FileName,
-                    Dados = ms.ToArray(),
-                    ContentType = imagemCarregada.ContentType,
-                    BancaId = bancaId
-                };
+                    MemoryStream ms = new MemoryStream();
+                    imagemCarregada.OpenReadStream().CopyTo(ms);
 
-                _context.Arquivos.Add(arqui);
-                _context.SaveChanges();
+                    Arquivo arqui = new Arquivo()
+                    {
+                        Descricao = imagemCarregada.FileName,
+                        Dados = ms.ToArray(),
+                        ContentType = imagemCarregada.ContentType,
+                        BancaId = bancaId
+                    };
+
+                    _context.Arquivos.Add(arqui);
+                    _context.SaveChanges();
+                    TempData["mensagemSucesso"] = "Arquivo enviado com sucesso!";
+                }
+                catch (Exception ex)
+                {
+                    TempData["mensagemErro"] = "Erro ao enviar arquivo! " + ex.Message;
+                    return View("UploadArquivo");
+                }
             }
 
             return RedirectToAction("Index");
@@ -144,16 +153,24 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             if (ModelState.IsValid)
             {
-                banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
-                _context.Add(banca);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
+                    _context.Add(banca);
+                    await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = "Banca cadastrada com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    TempData["mensagemErro"] = "Erro ao cadastrar banca! " + ex.Message;
+                }
             }
 
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
             ViewData["AlunosBanca"] = alunosBanca;
-
+           
             return View(banca);
         }
 
@@ -201,9 +218,11 @@ namespace GerenciamentoBancasTcc.Controllers
 
                     _context.Update(banca);
                     await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = "Banca atualizada com sucesso!";
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
+                    TempData["mensagemErro"] = "Erro ao atualizar a banca! " + ex.Message;
                     throw;
                 }
 
@@ -213,7 +232,7 @@ namespace GerenciamentoBancasTcc.Controllers
             GetOrientador(banca.BancaId);
             GetTurmasEdit(banca.BancaId);
             ViewData["AlunosBanca"] = alunosBanca;
-
+            
             return View(banca);
         }
 
@@ -241,9 +260,19 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var banca = await _context.Bancas.FindAsync(id);
-            _context.Bancas.Remove(banca);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Bancas.Remove(banca);
+                await _context.SaveChangesAsync();
+                TempData["mensagemSucesso"] = "Banca excluída com sucesso!";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir banca! " + ex.Message;
+            }
+            return View(banca);
         }
 
         [HttpGet]

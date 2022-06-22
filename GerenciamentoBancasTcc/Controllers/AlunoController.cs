@@ -64,13 +64,13 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 _context.Add(aluno);
                 await _context.SaveChangesAsync();
-                TempData["mensagemSucesso"] = "Aluno cadastrado com sucesso!";
+                TempData["mensagemSucesso"] = string.Format("Aluno(a) {0} cadastrado(a) com sucesso!", aluno.Nome);
 
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome", aluno.TurmaId);
             GetCursos(aluno.AlunoId);
-            TempData["mensagemErro"] = "Erro ao cadastrar o aluno!";
+            TempData["mensagemErro"] = "Erro ao cadastrar aluno(a)!";
 
             return View(aluno);
         }
@@ -110,23 +110,25 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.Update(aluno);
                     await _context.SaveChangesAsync();
-                    TempData["mensagemSucesso"] = "Aluno atualizado com sucesso!";
+                    TempData["mensagemSucesso"] = string.Format("Aluno(a) {0} atualizado(a) com sucesso!", aluno.Nome);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!AlunoExists(aluno.AlunoId))
                     {
+                        TempData["mensagemErro"] = "Este(a) aluno(a) não está cadastrado no sistema!";
                         return NotFound();
                     }
                     else
                     {
+                        TempData["mensagemErro"] = "Erro ao atualizar aluno(a)! " + ex.Message;
                         throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome", aluno.TurmaId);
-            TempData["mensagemErro"] = "Erro ao atualizar aluno!";
+            
             return View(aluno);
         }
 
@@ -159,13 +161,13 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 _context.Alunos.Remove(aluno);
                 await _context.SaveChangesAsync();
-                TempData["mensagemSucesso"] = "Aluno excluído com sucesso!";
+                TempData["mensagemSucesso"] = string.Format("Aluno(a) {0} excluído(a) com sucesso!", aluno.Nome);
 
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)
             {
-                TempData["mensagemErro"] = "Erro ao excluir aluno!";
+                TempData["mensagemErro"] = "Erro ao excluir aluno(a)! " + ex.Message;
             }
             return View(aluno);
         }
