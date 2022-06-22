@@ -113,29 +113,27 @@ namespace GerenciamentoBancasTcc.Controllers
 
         public async Task<IActionResult> DetalhesBancaAvaliacoes(int? id)
         {
-            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
-
             var result = await (from banca in _context.Bancas
-                          join orientador in _context.Users on banca.UsuarioId equals orientador.Id
-                          join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
-                          join curso in _context.Cursos on turma.CursoId equals curso.CursoId
-                          join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
-                          where banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
-                          orderby banca.DataHora
-                          select new BancaViewModel
-                          {
-                              BancaId = banca.BancaId,
-                              Curso = curso.Nome,
-                              DataHora = banca.DataHora,
-                              Orientador = orientador.Nome,
-                              Sala = banca.Sala,
-                              Tema = banca.Tema,
-                              Turma = turma.Nome,
-                              Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
-                              Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
-                              ArquivoId = arquivos.ArquivosId
-
-                          }).FirstAsync(x => x.BancaId == id);
+                                join orientador in _context.Users on banca.UsuarioId equals orientador.Id
+                                join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
+                                join curso in _context.Cursos on turma.CursoId equals curso.CursoId
+                                //join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
+                                where banca.BancaId == id
+                                orderby banca.DataHora
+                                select new BancaViewModel
+                                {
+                                    BancaId = banca.BancaId,
+                                    Curso = curso.Nome,
+                                    DataHora = banca.DataHora,
+                                    Orientador = orientador.Nome,
+                                    Sala = banca.Sala,
+                                    Tema = banca.Tema,
+                                    Turma = turma.Nome,
+                                    Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
+                                    Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
+                                    //ArquivoId = arquivos.ArquivosId
+                                    Arquivos = banca.Arquivos.ToList()
+                                }).FirstAsync();
 
             return View(result);
         }

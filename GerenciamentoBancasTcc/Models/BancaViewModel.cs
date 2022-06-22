@@ -23,6 +23,7 @@ namespace GerenciamentoBancasTcc.Models
         public List<Aluno> Alunos { get; set; }
 
         public List<string> Professores { get; set; }
-        public int ArquivoId { get; set; }
+
+        public List<Arquivo> Arquivos { get; set; }
     }
 }
