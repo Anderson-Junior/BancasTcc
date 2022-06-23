@@ -8145,14 +8145,14 @@ a {
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;
     transition: .3s all ease;
-    color: #F7B4A7;
+    color: #EEA084;
 }
     a:hover, a:focus {
         text-decoration: none !important;
         outline: none !important;
         -webkit-box-shadow: none;
         box-shadow: none;
-        color: #EEA084;
+        color: #F7B4A7;
     }
 
 button {
@@ -8287,13 +8287,13 @@ a[data-toggle="collapse"] {
   transition: all 0.3s; }
 
 .btn.btn-primary {
-    background: #F7B4A7;
-    border-color: #F7B4A7;
+    background: #EEA084;
+    border-color: #EEA084;
 }
 
     .btn.btn-primary:hover, .btn.btn-primary:focus {
-        background: #EEA084 !important;
-        border-color: #EEA084 !important;
+        background: #F7B4A7 !important;
+        border-color: #F7B4A7 !important;
     }
 
 .footer p {

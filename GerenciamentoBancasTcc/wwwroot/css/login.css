@@ -51,14 +51,14 @@ body {
 }
 
 #btn-entrar {
-    background-color: #F7B4A7;
+    background-color: #EEA084;
     border-radius: 5px;
     height: 50px;
     color: white;
 }
 
     #btn-entrar:hover {
-        background-color: #EEA084;
+        background-color: #F7B4A7;
     }
 
 .forgot-password, a {
