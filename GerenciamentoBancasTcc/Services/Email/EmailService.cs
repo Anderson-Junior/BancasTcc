@@ -22,7 +22,7 @@ namespace GerenciamentoBancasTcc.Services.Email
                 // Destinatario seta no metodo abaixo
 
                 //Contrói o MailMessage
-                _mailMessage.CC.Add("ander.lemos.jr@gmail.com");
+                _mailMessage.CC.Add("allanhorning117@gmail.com");
                 _mailMessage.Subject = "Teste Gerenciador de Bancas de TCC";
                 _mailMessage.IsBodyHtml = true;
                 _mailMessage.Body = File.ReadAllText(@"Views/Shared/EmailConvite.cshtml");

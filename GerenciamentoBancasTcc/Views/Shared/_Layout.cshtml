@@ -28,36 +28,53 @@
                     @if (User.IsInRole("Coordenador"))
                     {
                         <li>
-                            <a asp-action="Index" asp-controller="Aluno">Alunos</a>
+                            <a asp-action="Index" asp-controller="Aluno">
+                                <i class="fa fa-users" aria-hidden="true" style="margin-right:3px;"></i>
+                                Alunos
+                            </a>
                         </li>
                         <li>
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Avaliações</a>
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="fa fa-file-text" aria-hidden="true" style="margin-right:8px;"></i>
+                                Avaliações</a>
                             <ul class="collapse list-unstyled" id="homeSubmenu">
                                 <li>
-                                    <a asp-action="AvaliacaoApresentacao" asp-controller="Avaliacao">Avaliação Apresentação</a>
+                                    <a asp-action="AvaliacaoApresentacao" style="padding-left: 25px;" asp-controller="Avaliacao">Avaliação Apresentação</a>
                                 </li>
                                 <li>
-                                    <a asp-action="AvaliacaoArtigo1" asp-controller="Avaliacao">Avaliação Artigo 01</a>
+                                    <a asp-action="AvaliacaoArtigo1" style="padding-left: 25px;" asp-controller="Avaliacao">Avaliação Artigo 01</a>
                                 </li>
                                 <li>
-                                    <a asp-action="AvaliacaoArtigo2" asp-controller="Avaliacao">Avaliação Artigo 02</a>
+                                    <a asp-action="AvaliacaoArtigo2" style="padding-left: 25px;" asp-controller="Avaliacao">Avaliação Artigo 02</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Formulario">Formulário</a>
+                            <a asp-action="Index" asp-controller="Banca">
+                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
+                            Bancas</a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Turma">Turmas</a>
+                            <a asp-action="Index" asp-controller="Curso">
+                                <i class="fa fa-book" aria-hidden="true" style="margin-right:5px;"></i>
+                                Cursos
+                            </a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Banca">Bancas</a>
+                            <a asp-action="Index" asp-controller="Formulario">
+                                <i class="fa fa-file-text" aria-hidden="true" style="margin-right:8px;"></i>
+                                Formulário
+                            </a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Curso">Cursos</a>
+                            <a asp-action="Index" asp-controller="Turma">
+                                <i class="fa fa-align-justify" aria-hidden="true" style="margin-right:5px;"></i>
+                            Turmas</a>
                         </li>
                         <li>
-                            <a asp-action="Index" asp-controller="Usuario">Usuários</a>
+                            <a asp-action="Index" asp-controller="Usuario">
+                                <i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>
+                            Usuários</a>
                         </li>
                     }
                     @if (User.IsInRole("Administrador"))
@@ -108,6 +125,7 @@
     <script src="~/js/popper.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/main.js"></script>
+    <script src="~/js/all.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

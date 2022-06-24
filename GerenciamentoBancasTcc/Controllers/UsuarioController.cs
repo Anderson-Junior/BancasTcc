@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
-    [Authorize(Roles = RolesHelper.ADMINISTRADOR)]
+    [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
     public class UsuarioController : Controller
     {
         private readonly ApplicationDbContext _context;
