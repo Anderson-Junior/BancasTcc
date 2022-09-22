@@ -38,5 +38,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public ICollection<Arquivo> Arquivos { get; set; }
 
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
+        public ICollection<Convite> Convites { get; set; }
     }
 }
