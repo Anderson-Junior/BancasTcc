@@ -90,8 +90,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return File(arquivosBanco.Dados, arquivosBanco.ContentType);
         }
 
-
-
         public async Task<IActionResult> UploadArquivo(int? id)
         {
             if (id == null)
@@ -329,7 +327,12 @@ namespace GerenciamentoBancasTcc.Controllers
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
-
-
+        
+        [HttpGet]
+        public async Task<IActionResult> Professores()
+        {
+            var professores = await _context.Users.ToListAsync();
+            return Json(professores);
+        } 
     }
 }
