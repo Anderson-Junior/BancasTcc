@@ -333,6 +333,13 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             var professores = await _context.Users.ToListAsync();
             return Json(professores);
-        } 
+        }
+
+        [HttpPost]
+        public IActionResult ConvidarProfessores(string[] ids)
+        {
+            // Enviar convites
+            return Json(new { result = "Convites enviados" });
+        }
     }
 }
