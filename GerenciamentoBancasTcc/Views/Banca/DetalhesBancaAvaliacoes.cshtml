@@ -44,7 +44,7 @@
                         <p><b>Sala:</b> @Model.Sala</p>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-primary btn-sm" id="teste" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-primary btn-sm" id="btn_convidar" data-toggle="modal" data-target="#exampleModal">
                             Convidar Professores
                         </button>
                     </div>
@@ -166,7 +166,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btn-convidar" class="btn btn-primary btn-sm" data-dismiss="modal">Convidar</button>
+                    <button type="button" id="btn_enviar_convites" class="btn btn-primary btn-sm" data-dismiss="modal">Convidar</button>
                 </div>
             </div>
         </div>
@@ -184,85 +184,90 @@
 <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 <script type="text/javascript">
 
-    var cols =
-        [
-            { data: "id" },
-            { data: "nome" }
-        ];
+    $(function () {
 
-    var table = $('#tableProfessores').DataTable({
-        language: {
-            sEmptyTable: "Nenhum registro encontrado",
-            sInfoPostFix: "",
-            sInfoThousands: ".",
-            sLoadingRecords: "Carregando...",
-            sProcessing: "Processando...",
-            sZeroRecords: "Nenhum registro encontrado",
-            sSearch: "Pesquisar",
-            zeroRecords: "Nenhum registro encontrado",
-            info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-            infoEmpty: "Mostrando 0 a 0 de 0 registros",
-            infoFiltered: "(filtrados de _MAX_ registros)",
-            lengthMenu: "_MENU_ por página",
-            oPaginate: {
-                sNext: "Próximo",
-                sPrevious: "Anterior",
-                sFirst: "Primeiro",
-                sLast: "Último"
+        $.noConflict();
+
+        var cols =
+            [
+                { data: "id" },
+                { data: "nome" }
+            ];
+
+        var table = $('#tableProfessores').DataTable({
+            language: {
+                sEmptyTable: "Nenhum registro encontrado",
+                sInfoPostFix: "",
+                sInfoThousands: ".",
+                sLoadingRecords: "Carregando...",
+                sProcessing: "Processando...",
+                sZeroRecords: "Nenhum registro encontrado",
+                sSearch: "Pesquisar",
+                zeroRecords: "Nenhum registro encontrado",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                infoFiltered: "(filtrados de _MAX_ registros)",
+                lengthMenu: "_MENU_ por página",
+                oPaginate: {
+                    sNext: "Próximo",
+                    sPrevious: "Anterior",
+                    sFirst: "Primeiro",
+                    sLast: "Último"
+                },
+                oAria: {
+                    sSortAscending: ": Ordenar colunas de forma ascendente",
+                    sSortDescending: ": Ordenar colunas de forma descendente"
+                },
+                select: {
+                    rows: {
+                        '_': '%d selecionados',
+                        '0': '',
+                        '1': '%d selecionado'
+                    }
+                }
             },
-            oAria: {
-                sSortAscending: ": Ordenar colunas de forma ascendente",
-                sSortDescending: ": Ordenar colunas de forma descendente"
-            },
+            columns: cols,
+            pageLength: 10,
+            columnDefs: [
+                {
+                    targets: 0,
+                    checkboxes: {
+                        selectRow: true
+                    }
+                }
+            ],
             select: {
-                rows: {
-                    '_': '%d selecionados',
-                    '0': '',
-                    '1': '%d selecionado'
-                }
-            }
-        },
-        columns: cols,
-        pageLength: 10,
-        columnDefs: [
-            {
-                targets: 0,
-                checkboxes: {
-                    selectRow: true
-                }
-            }
-        ],
-        select: {
-            'style': 'multi'
-        },
-        order: [[1, 'asc']]
-    });
-
-    $('#teste').click(function () {
-        $.ajax({
-            type: 'GET',
-            url: "/Banca/Professores",
-            complete: function () {
-                $('#tableProfessores').resize();
+                style: 'multi'
             },
-            success: function (response) {
-                table.clear();
-                table.rows.add(response).draw();
-                table.column(0).checkboxes.deselectAll();
+            order: [[1, 'asc']]
+        });
+
+        $('#btn_convidar').click(function () {
+            $.ajax({
+                type: 'GET',
+                url: "/Banca/Professores",
+                complete: function () {
+                    $('#tableProfessores').resize();
+                },
+                success: function (response) {
+                    table.clear();
+                    table.rows.add(response).draw();
+                    table.column(0).checkboxes.deselectAll();
+                }
+            });
+        });
+
+        $('#btn_enviar_convites').click(function () {
+            var rows_selected = table.column(0).checkboxes.selected().toArray();
+            if (rows_selected.length === 0) {
+                alert('Nenhum registro selecionado!');
+            }
+            else {
+                $.post('/Banca/ConvidarProfessores', { ids: rows_selected }, function (response) {
+                    alert(response.result);
+                }, 'json');
             }
         });
-    });
-
-    $('#btn-convidar').click(function () {
-        var rows_selected = table.column(0).checkboxes.selected().toArray();
-        if (rows_selected.length === 0) {
-            alert('Nenhuma linha selecionada');
-        }
-        else {
-            $.post('/Banca/ConvidarProfessores', { ids: rows_selected }, function (response) {
-                alert(response.result);
-            }, 'json');
-        }
     });
 
 </script>
