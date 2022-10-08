@@ -1,0 +1,54 @@
+﻿@model GerenciamentoBancasTcc.Domains.Entities.Questao
+
+@{
+    ViewData["Title"] = "Cadastrar";
+}
+@if (TempData["mensagemErro"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+    </div>
+}
+<div>
+    <a asp-action="Index">Voltar para lista</a>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card" style="border: solid 2px #2B4B82;">
+                <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 18px">
+                    <b>Cadastrar Questão</b>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Pergunta" class="control-label"></label>
+                            <input asp-for="Pergunta" class="form-control" />
+                            <span asp-validation-for="Pergunta" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TipoQuestaoId" class="control-label">Selecione o tipo da questão</label>
+                            <select asp-for="TipoQuestaoId" class="form-control" asp-items="ViewBag.TipoQuestaoId"></select>
+                            <span asp-validation-for="TipoQuestaoId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="OrdemPergunta" class="control-label"></label>
+                            <input asp-for="OrdemPergunta" class="form-control" />
+                            <span asp-validation-for="OrdemPergunta" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Cadastrar" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

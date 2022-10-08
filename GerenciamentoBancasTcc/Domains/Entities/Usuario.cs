@@ -18,7 +18,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public ICollection<Banca> Bancas { get; set; }
         public ICollection<Formulario> Formularios { get; set; }
 
-        public ICollection<Convite> ConvitesCoodenadores { get; set; }
+        //public ICollection<Convite> ConvitesCoodenadores { get; set; }
         public Convite ConviteProfessor { get; set; }
     }
 }

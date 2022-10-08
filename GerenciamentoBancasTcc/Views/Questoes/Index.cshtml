@@ -1,0 +1,87 @@
+﻿@model IEnumerable<GerenciamentoBancasTcc.Domains.Entities.Questao>
+
+@{
+    ViewData["Title"] = "Questões";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+}
+
+@if (TempData["mensagemSucesso"] != null)
+{
+    <div id="message" class="alert alert-success" role="alert">
+        @TempData["mensagemSucesso"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (TempData["mensagemErro"] != null)
+{
+    <div id="message" class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        Lista de questões
+        <a asp-action="Create" class="btn btn-primary">Nova Questão</a>
+    </div>
+    <div class="card-body">
+        <table id="data_table" class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Pergunta)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TipoQuestao)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrdemPergunta)
+                    </th>
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.Formulario)
+                    </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pergunta)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoQuestao.Descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrdemPergunta)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Formulario.Nome)
+                        </td>*@
+                        <td style="width: 130px">
+                            <a asp-action="Edit" asp-route-id="@item.QuestaoId" class="btn btn-sm btn-primary" title="Editar questão"><i class="fa fa-edit fa-fw"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.QuestaoId" class="btn btn-sm btn-primary" title="Detalhes questão"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.QuestaoId" class="btn btn-sm btn-primary _remove" title="Excluir questão"><i class="fa fa-remove fa-fw"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        handleDataTables();
+    </script>
+}

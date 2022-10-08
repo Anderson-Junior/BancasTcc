@@ -18,7 +18,7 @@ namespace GerenciamentoBancasTcc.Models
 
         public int Sala { get; set; }
 
-        public DateTime DataHora { get; set; }
+        public DateTime? DataHora { get; set; }
 
         public List<Aluno> Alunos { get; set; }
 

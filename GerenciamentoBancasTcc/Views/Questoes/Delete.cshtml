@@ -1,4 +1,4 @@
-﻿@model GerenciamentoBancasTcc.Domains.Entities.Aluno
+﻿@model GerenciamentoBancasTcc.Domains.Entities.Questao
 
 @{
     ViewData["Title"] = "Deletar";
@@ -31,38 +31,41 @@
         <div class="col-md-8">
             <div class="card" style="border: solid 2px #2B4B82;">
                 <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 18px">
-                    <b>Deletar Aluno</b>
+                    <b>Deletar Questão</b>
                 </div>
                 <div class="card-body">
-
                     <div class="alert alert-danger" role="alert">
-                        Tem certeza que deseja deletar este aluno?
+                        Tem certeza que deseja deletar esta questão?
                     </div>
-
                     <dl class="row">
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Nome)
+                            @Html.DisplayNameFor(model => model.Pergunta)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Nome)
+                            @Html.DisplayFor(model => model.Pergunta)
                         </dd>
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Ativo)
+                            @Html.DisplayNameFor(model => model.TipoQuestao.Descricao)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Ativo)
+                            @Html.DisplayFor(model => model.TipoQuestao.Descricao)
                         </dd>
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Turma)
+                            @Html.DisplayNameFor(model => model.OrdemPergunta)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Turma.TurmaId)
+                            @Html.DisplayFor(model => model.OrdemPergunta)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Formulario)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Formulario.Nome)
                         </dd>
                     </dl>
-
                     <form asp-action="Delete">
-                        <input type="hidden" asp-for="AlunoId" />
-                        <input type="submit" value="Deletar" class="btn btn-danger" />
+                        <input type="hidden" asp-for="QuestaoId" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> 
                     </form>
                 </div>
             </div>

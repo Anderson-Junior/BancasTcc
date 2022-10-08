@@ -27,7 +27,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         [Display(Name = "Data/Hora")]
         [Required(ErrorMessage = "É necessário informar a data e a hora.")]
-        public DateTime DataHora { get; set; }
+        public DateTime? DataHora { get; set; }
 
         [Required(ErrorMessage = "É necessário informar a sala.")]
         public int Sala { get; set; }
@@ -39,5 +39,18 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
         public ICollection<Convite> Convites { get; set; }
+
+        //public ICollection<DiaDisponivel> DiasDisponiveis { get; set; }
+
+
+        public DateTime PrimeiroDia { get; set; }
+        public DateTime SegundoDia { get; set; }
+        public DateTime TerceiroDia { get; set; }
+
+        public bool PrimeiroHorario { get; set; }
+        public bool SegundoHorario { get; set; }
+        public bool TerceiroHorario { get; set; }
+
+        public int QtdProfBanca { get; set; }
     }
 }

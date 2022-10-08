@@ -1,7 +1,9 @@
-﻿namespace GerenciamentoBancasTcc.Services.Email
+﻿using System.Collections.Generic;
+
+namespace GerenciamentoBancasTcc.Services.Email
 {
     public interface IEmailService
     {
-        bool SendMail();
+        bool SendMail(string email);
     }
 }

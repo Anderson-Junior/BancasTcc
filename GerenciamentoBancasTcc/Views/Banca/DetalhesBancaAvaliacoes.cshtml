@@ -36,7 +36,7 @@
                 <div>
 
                     <div>
-                        <p><b>Data/Hora:</b> @Model.DataHora.ToString("dd/MM/yyyy HH:mm")</p>
+                        @*<p><b>Data/Hora:</b> @Model.DataHora.ToString("dd/MM/yyyy HH:mm")</p>*@
                         <p><b>Curso:</b> @Model.Curso</p>
                         <p><b>Turma:</b> @Model.Turma</p>
                         <p><b>Orientador:</b>  @Model.Orientador</p>
@@ -75,7 +75,7 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Aluno
+                                        Aluno(s)
                                     </th>
                                     <th>
 
@@ -104,7 +104,7 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Aluno
+                                        Aluno(s)
                                     </th>
                                     <th>
                                         Nota Documentação
@@ -250,6 +250,7 @@
                     $('#tableProfessores').resize();
                 },
                 success: function (response) {
+                    console.log(response);
                     table.clear();
                     table.rows.add(response).draw();
                     table.column(0).checkboxes.deselectAll();
@@ -263,7 +264,7 @@
                 alert('Nenhum registro selecionado!');
             }
             else {
-                $.post('/Banca/ConvidarProfessores', { ids: rows_selected }, function (response) {
+                $.post('/Banca/ConvidarProfessores', { idsProfessores: rows_selected, idBanca: @Model.BancaId }, function (response) {
                     alert(response.result);
                 }, 'json');
             }

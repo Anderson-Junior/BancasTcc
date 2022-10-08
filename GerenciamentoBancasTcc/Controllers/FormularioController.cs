@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,14 +21,12 @@ namespace GerenciamentoBancasTcc.Controllers
             _userManager = userManager;
         }
 
-        // GET: Formulario
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Formularios.Include(f => f.Curso);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Formulario/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,17 +45,12 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(formulario);
         }
 
-        // GET: Formulario/Create
         public IActionResult Create()
         {
-            TipoQuestao();
             ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome");
             return View();
         }
 
-        // POST: Formulario/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FormularioId,Nome,CursoId")] Formulario formulario/*, List<Questao> questoes*/)
@@ -75,7 +67,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(formulario);
         }
 
-        // GET: Formulario/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,9 +83,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(formulario);
         }
 
-        // POST: Formulario/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FormularioId,Nome,CursoId")] Formulario formulario)
@@ -128,7 +116,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(formulario);
         }
 
-        // GET: Formulario/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +134,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(formulario);
         }
 
-        // POST: Formulario/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -163,12 +149,12 @@ namespace GerenciamentoBancasTcc.Controllers
             return _context.Formularios.Any(e => e.FormularioId == id);
         }
 
-        private void TipoQuestao(int selectedItem = 0)
+        [HttpGet]
+        public IActionResult Perguntas()
         {
-            var tipoQuestoes = _context.TipoQuestoes.ToList();
-            var selectListItems = tipoQuestoes.ToDictionary(x => x.TipoQuestaoId.ToString(), y => y.Descricao).ToList();
-            selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
-            ViewData["TipoQuestaoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
+            var perguntas = _context.Questoes.ToList();
+
+            return Json(perguntas);
         }
     }
 }

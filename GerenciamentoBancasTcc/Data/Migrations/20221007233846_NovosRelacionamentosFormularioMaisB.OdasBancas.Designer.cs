@@ -4,14 +4,16 @@ using GerenciamentoBancasTcc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221007233846_NovosRelacionamentosFormularioMaisB.OdasBancas")]
+    partial class NovosRelacionamentosFormularioMaisBOdasBancas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,21 +337,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasIndex("FormularioId");
 
                     b.ToTable("Questoes");
-                });
-
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.TipoQuestao", b =>
-                {
-                    b.Property<int>("TipoQuestaoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TipoQuestaoId");
-
-                    b.ToTable("TipoQuestoes");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Turma", b =>

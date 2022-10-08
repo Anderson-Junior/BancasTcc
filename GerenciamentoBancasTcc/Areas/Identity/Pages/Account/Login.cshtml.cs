@@ -40,11 +40,11 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Informe seu e-mail de acesso.")]
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Informe sua senha de acesso.")]
             [DataType(DataType.Password )]
 
             [Display(Name = "Senha")]
@@ -81,14 +81,14 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(Input.Email);
-                if (user.Ativo)
+                if (user != null)
                 {
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                     var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
-                        _logger.LogInformation("User logged in.");
+                        _logger.LogInformation("Usuário conectado.");
                         return LocalRedirect(returnUrl);
                     }
                     if (result.RequiresTwoFactor)
@@ -97,18 +97,18 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
                     }
                     if (result.IsLockedOut)
                     {
-                        _logger.LogWarning("User account locked out.");
+                        _logger.LogWarning("Conta de usuário bloqueada.");
                         return RedirectToPage("./Lockout");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        ModelState.AddModelError(string.Empty, "Tentativa de login inválida.");
                         return Page();
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Usuário inativo.");
+                    ModelState.AddModelError(string.Empty, "Usuário inválido.");
                     return Page();
                 }
             }

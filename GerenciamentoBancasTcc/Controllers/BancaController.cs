@@ -12,6 +12,8 @@ using GerenciamentoBancasTcc.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using GerenciamentoBancasTcc.Services.Email;
+using GerenciamentoBancasTcc.Domains.Enums;
+using GerenciamentoBancasTcc.Domains.Dtos;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
@@ -36,25 +38,11 @@ namespace GerenciamentoBancasTcc.Controllers
                 .ToListAsync());
         }
 
-        [HttpGet]
-        public IActionResult EnviarConvite()
-        {
-            var email = _emailService.SendMail();
-            if(email == true)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("UploadImagem");
-            }
-        }
-
         [HttpPost]
         public IActionResult UploadImagem(IList<IFormFile> arquivos, int bancaId)
         {
             IFormFile imagemCarregada = arquivos.FirstOrDefault();
-   
+
             if (imagemCarregada != null)
             {
                 try
@@ -136,6 +124,33 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(result);
         }
 
+        public async Task<IActionResult> Convite(int? id)
+        {
+            var result = await (from banca in _context.Bancas
+                                join orientador in _context.Users on banca.UsuarioId equals orientador.Id
+                                join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
+                                join curso in _context.Cursos on turma.CursoId equals curso.CursoId
+                                //join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
+                                where banca.BancaId == id
+                                orderby banca.DataHora
+                                select new BancaViewModel
+                                {
+                                    BancaId = banca.BancaId,
+                                    Curso = curso.Nome,
+                                    DataHora = banca.DataHora,
+                                    Orientador = orientador.Nome,
+                                    Sala = banca.Sala,
+                                    Tema = banca.Tema,
+                                    Turma = turma.Nome,
+                                    Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
+                                    Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
+                                    //ArquivoId = arquivos.ArquivosId
+                                    Arquivos = banca.Arquivos.ToList()
+                                }).FirstAsync();
+
+            return View(result);
+        }
+
         public IActionResult Create()
         {
             GetCursos();
@@ -145,7 +160,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,DataHora,Sala,Descricao")] Banca banca, string alunosBanca)
+        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,PrimeiroDia,SegundoDia,TerceiroDia,PrimeiroHorario,SegundoHorario,TerceiroHorario")] Banca banca, string alunosBanca)
         {
             if (ModelState.IsValid)
             {
@@ -157,7 +172,7 @@ namespace GerenciamentoBancasTcc.Controllers
                     TempData["mensagemSucesso"] = "Banca cadastrada com sucesso!";
                     return RedirectToAction(nameof(Index));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     TempData["mensagemErro"] = "Erro ao cadastrar banca! " + ex.Message;
                 }
@@ -166,7 +181,7 @@ namespace GerenciamentoBancasTcc.Controllers
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
             ViewData["AlunosBanca"] = alunosBanca;
-           
+
             return View(banca);
         }
 
@@ -228,7 +243,7 @@ namespace GerenciamentoBancasTcc.Controllers
             GetOrientador(banca.BancaId);
             GetTurmasEdit(banca.BancaId);
             ViewData["AlunosBanca"] = alunosBanca;
-            
+
             return View(banca);
         }
 
@@ -327,7 +342,7 @@ namespace GerenciamentoBancasTcc.Controllers
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Professores()
         {
@@ -336,10 +351,96 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConvidarProfessores(string[] ids)
+        public async Task<IActionResult> ConvidarProfessores(string[] idsProfessores, int idBanca)
         {
-            // Enviar convites
-            return Json(new { result = "Convites enviados" });
+            try
+            {
+                foreach (var id in idsProfessores)
+                {
+                    var professoresConvidados = await _context.Users.Where(x => x.Id == id).ToListAsync();
+
+                    foreach (var professor in professoresConvidados)
+                    {
+                        var emailEnviado = _emailService.SendMail(professor.Email);
+
+                        if (emailEnviado)
+                        {
+                            Convite convite = new()
+                            {
+                                ProfessorId = professor.Id,
+                                BancaId = idBanca
+                            };
+                            _context.Convites.Add(convite);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+                return Json(new { result = "Convites enviados" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite, List<DateTime> diasSelecPeloProf)
+        {
+            RetornoConviteDto retorno = new();
+            try
+            {
+                var convite = await _context.Convites.SingleOrDefaultAsync(x => x.ConviteId == idConvite);
+
+                if (convite != null)
+                {
+                    if (statusConvite == 1) // 1 = aceito
+                    {
+                        var banca = await _context.Bancas.SingleOrDefaultAsync(x => x.BancaId == convite.BancaId);
+
+                        if(banca.QtdProfBanca > convite.QuantidadeAceites)
+                        {
+                            foreach (var diaSelecionado in diasSelecPeloProf)
+                            {
+                                if (banca.PrimeiroDia == diaSelecionado)
+                                {
+                                    convite.QtdPrimeiroDia += 1;
+                                    convite.QuantidadeAceites += 1;
+                                   
+                                    convite.StatusConvite = StatusConvite.Aceito;
+                                    convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor aceitou o convite
+
+                                    retorno.mensagem = "Convite aceito.";
+                                }
+                            }
+                        }
+                    }
+                    else if (statusConvite == 2) // 2 = recusado
+                    {
+                        convite.StatusConvite = StatusConvite.Recusado;
+                        convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor recusou o convite
+
+                        retorno.mensagem = "Convite recusado.";
+                    }
+                    else if (statusConvite == 3) // 3 = cancelado
+                    {
+                        convite.StatusConvite = StatusConvite.Cancelado;
+                        convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor cancelou a presença
+
+                        retorno.mensagem = "Convite cancelado.";
+                    }
+
+                    _context.Update(convite);
+                    await _context.SaveChangesAsync();
+                }
+
+                retorno.statusCode = 200;
+                return Ok(retorno);
+            }
+            catch (Exception ex)
+            {
+                retorno.statusCode = 400;
+                retorno.mensagem = ex.Message;
+                return BadRequest(retorno);
+            }
         }
     }
 }

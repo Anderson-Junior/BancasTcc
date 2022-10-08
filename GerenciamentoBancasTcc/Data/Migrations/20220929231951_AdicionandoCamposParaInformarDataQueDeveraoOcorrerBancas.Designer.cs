@@ -4,14 +4,16 @@ using GerenciamentoBancasTcc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220929231951_AdicionandoCamposParaInformarDataQueDeveraoOcorrerBancas")]
+    partial class AdicionandoCamposParaInformarDataQueDeveraoOcorrerBancas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,9 +110,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Property<bool>("PrimeiroHorario")
                         .HasColumnType("bit");
 
-                    b.Property<int>("QtdProfBanca")
-                        .HasColumnType("int");
-
                     b.Property<int>("Sala")
                         .HasColumnType("int");
 
@@ -144,47 +143,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Bancas");
-                });
-
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Convite", b =>
-                {
-                    b.Property<Guid>("ConviteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("BancaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataHoraAcao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProfessorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("QtdPrimeiroDia")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QtdSegundoDia")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QtdTerceiroDia")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantidadeAceites")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusConvite")
-                        .HasColumnType("int");
-
-                    b.HasKey("ConviteId");
-
-                    b.HasIndex("BancaId");
-
-                    b.HasIndex("ProfessorId")
-                        .IsUnique()
-                        .HasFilter("[ProfessorId] IS NOT NULL");
-
-                    b.ToTable("Convites");
                 });
 
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Curso", b =>
@@ -320,13 +278,17 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FormularioId")
+                    b.Property<int>("FormularioId")
                         .HasColumnType("int");
 
                     b.Property<int>("OrdemPergunta")
                         .HasColumnType("int");
 
                     b.Property<string>("Pergunta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -660,23 +622,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Convite", b =>
-                {
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Banca", "Banca")
-                        .WithMany("Convites")
-                        .HasForeignKey("BancaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Usuario", "Professor")
-                        .WithOne("ConviteProfessor")
-                        .HasForeignKey("GerenciamentoBancasTcc.Domains.Entities.Convite", "ProfessorId");
-
-                    b.Navigation("Banca");
-
-                    b.Navigation("Professor");
-                });
-
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Curso", b =>
                 {
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Filial", "Filial")
@@ -722,7 +667,8 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Formulario", "Formulario")
                         .WithMany("Questoes")
                         .HasForeignKey("FormularioId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Formulario");
                 });
@@ -819,8 +765,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
 
                     b.Navigation("Arquivos");
 
-                    b.Navigation("Convites");
-
                     b.Navigation("UsuariosBancas");
                 });
 
@@ -856,8 +800,6 @@ namespace GerenciamentoBancasTcc.Data.Migrations
             modelBuilder.Entity("GerenciamentoBancasTcc.Domains.Entities.Usuario", b =>
                 {
                     b.Navigation("Bancas");
-
-                    b.Navigation("ConviteProfessor");
 
                     b.Navigation("Formularios");
 

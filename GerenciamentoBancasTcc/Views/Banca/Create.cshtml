@@ -51,10 +51,37 @@
                             <label asp-for="UsuarioId" class="control-label"></label>
                             <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
                         </div>
+                        <label class="control-label">Escolha 3 opções de data para a banca</label>
                         <div class="form-group">
-                            <label asp-for="DataHora" class="control-label"></label>
-                            <input asp-for="DataHora" class="form-control" />
-                            <span asp-validation-for="DataHora" class="text-danger"></span>
+                            <input class="form-control" type="date" asp-for="PrimeiroDia" />
+                            <span asp-validation-for="PrimeiroDia" class="text-danger"></span>
+                            <br />
+                            <input class="form-control" type="date" asp-for="SegundoDia" />
+                            <span asp-validation-for="SegundoDia" class="text-danger"></span>
+                            <br />
+                            <input class="form-control" type="date" asp-for="TerceiroDia" />
+                            <span asp-validation-for="TerceiroDia" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Selecione os horários em que deve ocorrer a banca</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="PrimeiroHorario" value="true" id="primeiro-horario">
+                                <label class="form-check-label" asp-for="PrimeiroHorario">
+                                    19:00 às 19:50
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SegundoHorario" value="true" id="segundo-horario">
+                                <label class="form-check-label" asp-for="SegundoHorario">
+                                    19:50 às 20:40
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="TerceiroHorario" value="true" id="terceiro-horario">
+                                <label class="form-check-label" asp-for="TerceiroHorario">
+                                    21:00 às 21:50
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="Sala" class="control-label"></label>
@@ -76,13 +103,20 @@
     </div>
 </div>
 
-
-
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script src="~/js/select-pure.min.js" type="text/javascript"></script>
     <script src="~/js/banca-create-edit.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        var TurmaId = $("#TurmaId").val();
+
+
+
+
+
+    </script>
 }

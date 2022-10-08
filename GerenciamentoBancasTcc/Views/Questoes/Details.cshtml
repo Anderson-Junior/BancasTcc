@@ -1,9 +1,8 @@
-﻿@model GerenciamentoBancasTcc.Domains.Entities.Aluno
+﻿@model GerenciamentoBancasTcc.Domains.Entities.Questao
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes";
 }
-
 <div>
     <a asp-action="Index">Voltar para lista</a>
 </div>
@@ -14,30 +13,36 @@
         <div class="col-md-8">
             <div class="card" style="border: solid 2px #2B4B82;">
                 <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 18px">
-                    <b>Detalhes do Aluno</b>
+                    <b>Detalhes da Questão</b>
                 </div>
                 <div class="card-body">
                     <dl class="row">
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Nome)
+                            @Html.DisplayNameFor(model => model.Pergunta)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Nome)
+                            @Html.DisplayFor(model => model.Pergunta)
                         </dd>
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Ativo)
+                            @Html.DisplayNameFor(model => model.TipoQuestao.Descricao)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Ativo)
+                            @Html.DisplayFor(model => model.TipoQuestao.Descricao)
                         </dd>
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Turma)
+                            @Html.DisplayNameFor(model => model.OrdemPergunta)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Turma.TurmaId)
+                            @Html.DisplayFor(model => model.OrdemPergunta)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Formulario)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Formulario.Nome)
                         </dd>
                     </dl>
-                    <a asp-action="Edit" asp-route-id="@Model.AlunoId" class="btn btn-primary stretched-link">Editar</a>
+                    <a asp-action="Edit" asp-route-id="@Model.QuestaoId" class="btn btn-primary stretched-link">Editar</a>
                 </div>
             </div>
         </div>
