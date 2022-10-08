@@ -150,11 +150,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return PartialView("_GridFuncoesUsuario", await _userManager.GetRolesAsync(user));
         }
 
-        //[HttpPost]
-        //public async Task<PartialViewResult> AdicionarDiasDisponiveis()
-        //{
-
-        //}
         #endregion
 
         #region Helpers

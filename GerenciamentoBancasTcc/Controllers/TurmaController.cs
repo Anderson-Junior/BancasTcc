@@ -18,14 +18,12 @@ namespace GerenciamentoBancasTcc.Controllers
             _context = context;
         }
 
-        // GET: Turma
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Turmas.Include(t => t.Curso);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Turma/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,16 +42,12 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
-        // GET: Turma/Create
         public IActionResult Create()
         {
             ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome");
             return View();
         }
 
-        // POST: Turma/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TurmaId,Nome,Ativo,CursoId")] Turma turma)
@@ -76,7 +70,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
-        // GET: Turma/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,9 +86,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
-        // POST: Turma/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TurmaId,Nome,Ativo,CursoId")] Turma turma)
@@ -132,7 +122,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
-        // GET: Turma/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -151,7 +140,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
-        // POST: Turma/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

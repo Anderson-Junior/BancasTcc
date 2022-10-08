@@ -19,14 +19,12 @@ namespace GerenciamentoBancasTcc.Controllers
             _context = context;
         }
 
-        // GET: Filial
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Filiais.Include(f => f.Instituicao);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Filial/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,16 +43,12 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(filial);
         }
 
-        // GET: Filial/Create
         public IActionResult Create()
         {
             ViewData["InstituicaoId"] = new SelectList(_context.Instituicoes, "InstituicaoId", "Nome");
             return View();
         }
 
-        // POST: Filial/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FilialId,Email,Campus,Cnpj,Telefone,Endereco,Ativo,InstituicaoId")] Filial filial)
@@ -69,7 +63,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(filial);
         }
 
-        // GET: Filial/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,9 +79,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(filial);
         }
 
-        // POST: Filial/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FilialId,Email,Campus,Cnpj,Telefone,Endereco,Ativo,InstituicaoId")] Filial filial)
@@ -122,7 +112,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(filial);
         }
 
-        // GET: Filial/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +130,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(filial);
         }
 
-        // POST: Filial/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
