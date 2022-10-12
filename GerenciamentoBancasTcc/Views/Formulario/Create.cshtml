@@ -37,7 +37,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Nome do formulário</label>
-                            <input asp-for="Nome" id="NomeFormularioId" class="form-control" />
+                            <input asp-for="Nome" id="NomeFormulario" class="form-control" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -150,6 +150,31 @@
                     table.clear();
                     table.rows.add(response).draw();
                     table.column(0).checkboxes.deselectAll();
+                }
+            });
+        });
+
+        $('#cadastrar').click(function () {
+            var cursoId = $('#CursoId').val();
+            var nomeFormulario = $('#NomeFormulario').val();
+
+            var rows_selected = table.column(0).checkboxes.selected().toArray();
+            if (rows_selected.length === 0) {
+                alert('Nenhum registro selecionado!');
+            }
+            else {
+                $.post('/Formulario/Cadastrar', { Nome: nomeFormulario, CursoId: cursoId, idsQuestoes: rows_selected }, function (response) {
+                    window.location.replace("https://localhost:5001/Formulario");
+                });
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Formulario/Cadastrar",
+                data: {
+                    Nome: nomeFormulario,
+                    CursoId: cursoId,
+                    idsQuestoes: rows_selected
                 }
             });
         });

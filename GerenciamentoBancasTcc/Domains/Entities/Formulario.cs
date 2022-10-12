@@ -10,6 +10,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Required(ErrorMessage = "É necessário informar um nome para o formulário.")]
         public string Nome { get; set; }
         public string UsuarioId { get; set; }
+        [Display(Name = "Professor")]
         public Usuario Usuario { get; set; }
 
         [Display(Name = "Curso")]

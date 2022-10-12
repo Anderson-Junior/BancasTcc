@@ -7,7 +7,24 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 }
-
+@if (TempData["mensagemSucesso"] != null)
+{
+    <div id="message" class="alert alert-success" role="alert">
+        @TempData["mensagemSucesso"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (TempData["mensagemErro"] != null)
+{
+    <div id="message" class="alert alert-danger" role="alert">
+        @TempData["mensagemErro"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         Lista de formulários
@@ -23,25 +40,31 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Curso)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Usuario)
+                    </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Curso.CursoId)
-                    </td>
-                    <td style="width: 130px">
-                        <a asp-action="Edit" asp-route-id="@item.FormularioId" class="btn btn-sm btn-primary" title="Editar formulário"><i class="fa fa-edit fa-fw"></i></a>
-                        <a asp-action="Details" asp-route-id="@item.FormularioId" class="btn btn-sm btn-primary" title="Detalhes formulário"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.FormularioId" class="btn btn-sm btn-primary _remove" title="Excluir formulário"><i class="fa fa-remove fa-fw"></i></a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Curso.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Usuario.Nome)
+                        </td>
+                        <td style="width: 130px">
+                            <a asp-action="Edit" asp-route-id="@item.FormularioId" class="btn btn-sm btn-primary" title="Editar formulário"><i class="fa fa-edit fa-fw"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.FormularioId" class="btn btn-sm btn-primary" title="Detalhes formulário"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.FormularioId" class="btn btn-sm btn-primary _remove" title="Excluir formulário"><i class="fa fa-remove fa-fw"></i></a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

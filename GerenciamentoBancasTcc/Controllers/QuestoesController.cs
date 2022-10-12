@@ -21,7 +21,10 @@ namespace GerenciamentoBancasTcc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Questoes.Include(q => q.Formulario);
+            var applicationDbContext = _context.Questoes
+                .Include(q => q.Formulario)
+                .Include(x => x.TipoQuestao);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,6 +37,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
             var questao = await _context.Questoes
                 .Include(q => q.Formulario)
+                .Include(x => x.TipoQuestao)
                 .FirstOrDefaultAsync(m => m.QuestaoId == id);
             if (questao == null)
             {
@@ -51,7 +55,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestaoId,Pergunta,TipoQuestaoId,OrdemPergunta")] Questao questao)
+        public async Task<IActionResult> Create([Bind("QuestaoId,Pergunta,TipoQuestaoId")] Questao questao)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +94,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("QuestaoId,Pergunta,TipoQuestaoId,OrdemPergunta")] Questao questao)
+        public async Task<IActionResult> Edit(int id, [Bind("QuestaoId,Pergunta,TipoQuestaoId")] Questao questao)
         {
             if (id != questao.QuestaoId)
             {
@@ -130,6 +134,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
             var questao = await _context.Questoes
                 .Include(q => q.Formulario)
+                .Include(x => x.TipoQuestao)
                 .FirstOrDefaultAsync(m => m.QuestaoId == id);
             if (questao == null)
             {

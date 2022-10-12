@@ -84,7 +84,7 @@ namespace GerenciamentoBancasTcc.Controllers
             ViewData["TurmaId"] = new SelectList(_context.Turmas, "TurmaId", "Nome", aluno.TurmaId);
             return View(aluno);
         }
-8.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AlunoId,Nome,Matricula,Ativo,TurmaId")] Aluno aluno)

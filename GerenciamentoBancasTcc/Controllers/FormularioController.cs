@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,7 +25,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Formularios.Include(f => f.Curso);
+            var applicationDbContext = _context.Formularios.Include(f => f.Curso).Include(x => x.Usuario);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,6 +38,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
             var formulario = await _context.Formularios
                 .Include(f => f.Curso)
+                .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.FormularioId == id);
             if (formulario == null)
             {
@@ -52,17 +55,39 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FormularioId,Nome,CursoId")] Formulario formulario/*, List<Questao> questoes*/)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastrar([Bind("FormularioId,Nome,CursoId")] Formulario formulario, string[] idsQuestoes)
         {
-            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
-            if (ModelState.IsValid)
+            formulario.Questoes = new List<Questao>();
+
+            try
             {
+                Usuario user = await _userManager.GetUserAsync(HttpContext.User);
                 formulario.UsuarioId = user.Id;
-                _context.Add(formulario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                if (ModelState.IsValid)
+                {
+                    if(idsQuestoes != null)
+                    {
+                        foreach (var idQuestao in idsQuestoes)
+                        {
+                            var questao = await _context.Questoes.FirstOrDefaultAsync(x => x.QuestaoId == Int32.Parse(idQuestao));                  
+                            formulario.Questoes.Add(questao);
+                        }
+                    }
+       
+                    _context.Add(formulario);
+                    await _context.SaveChangesAsync();
+
+                    TempData["mensagemSucesso"] = "Formulário cadastrado com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            catch(Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir fomulário! " + ex.Message;
+            }
+
             ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome", formulario.CursoId);
             return View(formulario);
         }
@@ -125,6 +150,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
             var formulario = await _context.Formularios
                 .Include(f => f.Curso)
+                .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.FormularioId == id);
             if (formulario == null)
             {

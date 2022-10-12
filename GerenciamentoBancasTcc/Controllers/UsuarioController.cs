@@ -133,7 +133,6 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<PartialViewResult> AdicionarFuncoesUsuario(string userId, string[] roles)
         {
             var user = await _userManager.FindByIdAsync(userId);
-
             foreach (string role in roles)
             {
                 await _userManager.AddToRoleAsync(user, role);

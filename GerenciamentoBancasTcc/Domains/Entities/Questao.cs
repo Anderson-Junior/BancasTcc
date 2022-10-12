@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciamentoBancasTcc.Domains.Entities
@@ -14,11 +13,9 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         [Required(ErrorMessage = "É necessário selecionar o tipo da pergunta.")]
         public int TipoQuestaoId { get; set; }
-        public TipoQuestao TipoQuestao { get; set; }
 
-        [Required(ErrorMessage = "É necessário informar a ordem da pergunta.")]
-        [DisplayName("Ordem da questão")]
-        public int OrdemPergunta { get; set; }
+        [Display(Name = "Tipo da questão")]
+        public TipoQuestao TipoQuestao { get; set; }
 
         public int? FormularioId { get; set; }
         public Formulario Formulario { get; set; }
