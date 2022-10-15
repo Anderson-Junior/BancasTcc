@@ -30,7 +30,7 @@
             {
                 <a asp-action="Convite" asp-controller="Banca" asp-route-id="@item.BancaId" style="text-decoration: none;">
                     <div class="col">
-                        <div class="card cardIndex">
+                        <div class="card cardIndex mb-3" style="height: 55vh">
                             @*<h5 class="card-header">@item.DataHora.ToString("dd/MM/yyyy HH:mm")</h5>*@
                             <div class="card-body">
                                 <p><b>Tema:</b> @Html.DisplayFor(modelItem => item.Tema)</p>
