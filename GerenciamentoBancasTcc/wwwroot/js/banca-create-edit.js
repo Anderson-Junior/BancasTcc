@@ -62,4 +62,11 @@
             icon: "fa fa-times"
         });
     }
+
+    //$('#date-picker').mobiscroll().datepicker({
+    //    controls: ['calendar'],
+    //    selectMultiple: true,
+    //    selectMin: 1,
+    //    selectCounter: true
+    //});
 });

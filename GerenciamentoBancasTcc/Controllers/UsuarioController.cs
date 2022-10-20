@@ -149,6 +149,35 @@ namespace GerenciamentoBancasTcc.Controllers
             return PartialView("_GridFuncoesUsuario", await _userManager.GetRolesAsync(user));
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> AdicionarDiasDisponiveis()
+        {
+            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
+            return View(user);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> AdicionarDiasDisponiveis(string diasDisponiveis)
+        {
+            try
+            {
+                Usuario user = await _userManager.GetUserAsync(HttpContext.User);
+
+                user.DiasDisponiveis = diasDisponiveis;
+                await _context.SaveChangesAsync();
+
+                TempData["mensagemSucesso"] = string.Format("Dias disponíveis informados com sucesso!");
+
+                return View(user);
+            }
+            catch(Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao informar os dias disponiveis! " + ex.Message;
+                return View();
+            }
+        }
         #endregion
 
         #region Helpers

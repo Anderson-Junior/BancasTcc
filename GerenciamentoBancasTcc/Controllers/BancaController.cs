@@ -160,10 +160,12 @@ namespace GerenciamentoBancasTcc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,PrimeiroDia,SegundoDia,TerceiroDia,PrimeiroHorario,SegundoHorario,TerceiroHorario")] Banca banca, string alunosBanca)
+        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca,DiasQueDevemOcorrerBanca")] Banca banca, string alunosBanca)
         {
-            if (ModelState.IsValid)
-            {
+            banca.DiasQueDevemOcorrerBanca = "19/10/2022,20/10/2022,21/10/2022";
+
+            //if (ModelState.IsValid)
+            //{
                 try
                 {
                     banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
@@ -176,7 +178,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     TempData["mensagemErro"] = "Erro ao cadastrar banca! " + ex.Message;
                 }
-            }
+            //}
 
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
@@ -400,16 +402,7 @@ namespace GerenciamentoBancasTcc.Controllers
                         {
                             foreach (var diaSelecionado in diasSelecPeloProf)
                             {
-                                if (banca.PrimeiroDia == diaSelecionado)
-                                {
-                                    convite.QtdPrimeiroDia += 1;
-                                    convite.QuantidadeAceites += 1;
-                                   
-                                    convite.StatusConvite = StatusConvite.Aceito;
-                                    convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor aceitou o convite
-
-                                    retorno.mensagem = "Convite aceito.";
-                                }
+                                
                             }
                         }
                     }

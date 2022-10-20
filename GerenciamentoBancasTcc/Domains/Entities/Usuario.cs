@@ -20,5 +20,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         //public ICollection<Convite> ConvitesCoodenadores { get; set; }
         public Convite ConviteProfessor { get; set; }
+        public string DiasDisponiveis { get; set; }
     }
 }
