@@ -124,33 +124,6 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(result);
         }
 
-        public async Task<IActionResult> Convite(int? id)
-        {
-            var result = await (from banca in _context.Bancas
-                                join orientador in _context.Users on banca.UsuarioId equals orientador.Id
-                                join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
-                                join curso in _context.Cursos on turma.CursoId equals curso.CursoId
-                                //join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
-                                where banca.BancaId == id
-                                orderby banca.DataHora
-                                select new BancaViewModel
-                                {
-                                    BancaId = banca.BancaId,
-                                    Curso = curso.Nome,
-                                    DataHora = banca.DataHora,
-                                    Orientador = orientador.Nome,
-                                    Sala = banca.Sala,
-                                    Tema = banca.Tema,
-                                    Turma = turma.Nome,
-                                    Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
-                                    Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
-                                    //ArquivoId = arquivos.ArquivosId
-                                    Arquivos = banca.Arquivos.ToList()
-                                }).FirstAsync();
-
-            return View(result);
-        }
-
         public IActionResult Create()
         {
             GetCursos();
@@ -162,23 +135,56 @@ namespace GerenciamentoBancasTcc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca,DiasQueDevemOcorrerBanca")] Banca banca, string alunosBanca)
         {
-            banca.DiasQueDevemOcorrerBanca = "19/10/2022,20/10/2022,21/10/2022";
+            string[] diasBanca = banca.DiasQueDevemOcorrerBanca.Split(",");
 
-            //if (ModelState.IsValid)
-            //{
+            if (ModelState.IsValid)
+            {
                 try
                 {
                     banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
                     _context.Add(banca);
                     await _context.SaveChangesAsync();
                     TempData["mensagemSucesso"] = "Banca cadastrada com sucesso!";
+
+                    var professores = await _context.Users.ToListAsync();
+                        
+                    foreach(var p in professores)
+                    {
+                        if(p.DiasDisponiveis != null)
+                        {
+                            string[] diasDisponiveisProfessor = p.DiasDisponiveis.Split(",");
+
+                            foreach (var diaProfessor in diasDisponiveisProfessor)
+                            {
+                                foreach (var diaBanca in diasBanca)
+                                {
+                                    diaBanca.Trim();
+                                    if (diaProfessor == diaBanca)
+                                    {
+                                        var emailEnviado = _emailService.SendMail(p.Email);
+                                        if (emailEnviado)
+                                        {
+                                            Convite convite = new()
+                                            {
+                                                UsuarioId = p.Id,
+                                                BancaId = banca.BancaId
+                                            };
+                                            _context.Convites.Add(convite);
+                                            _context.SaveChanges();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
                     TempData["mensagemErro"] = "Erro ao cadastrar banca! " + ex.Message;
                 }
-            //}
+            }
 
             GetCursos(banca.BancaId);
             GetOrientador(banca.BancaId);
@@ -369,7 +375,7 @@ namespace GerenciamentoBancasTcc.Controllers
                         {
                             Convite convite = new()
                             {
-                                ProfessorId = professor.Id,
+                                UsuarioId = professor.Id,
                                 BancaId = idBanca
                             };
                             _context.Convites.Add(convite);

@@ -15,9 +15,10 @@ namespace GerenciamentoBancasTcc.Data.Configurations
                 .HasForeignKey(x => x.BancaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(a => a.Professor)
-               .WithOne(b => b.ConviteProfessor)
-               .HasForeignKey<Convite>(b => b.ProfessorId);
+            builder.HasOne(x => x.Usuario)
+               .WithMany(x => x.Convites)
+               .HasForeignKey(x => x.UsuarioId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
