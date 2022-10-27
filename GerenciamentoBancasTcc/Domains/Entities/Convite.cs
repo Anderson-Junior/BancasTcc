@@ -14,7 +14,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public StatusConvite StatusConvite { get; set; }
         public DateTime DataHoraAcao { get; set; }
         public int QuantidadeAceites { get; set; }
-
+        public string DiaConvite { get; set; }
         public int BancaId { get; set; }
         public Banca Banca { get; set; }
 

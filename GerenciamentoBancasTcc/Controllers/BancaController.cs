@@ -167,7 +167,8 @@ namespace GerenciamentoBancasTcc.Controllers
                                             Convite convite = new()
                                             {
                                                 UsuarioId = p.Id,
-                                                BancaId = banca.BancaId
+                                                BancaId = banca.BancaId,
+                                                DiaConvite = diaBanca
                                             };
                                             _context.Convites.Add(convite);
                                             _context.SaveChanges();
@@ -388,57 +389,6 @@ namespace GerenciamentoBancasTcc.Controllers
             catch (Exception ex)
             {
                 return Json(new { result = ex.Message });
-            }
-        }
-
-        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite, List<DateTime> diasSelecPeloProf)
-        {
-            RetornoConviteDto retorno = new();
-            try
-            {
-                var convite = await _context.Convites.SingleOrDefaultAsync(x => x.ConviteId == idConvite);
-
-                if (convite != null)
-                {
-                    if (statusConvite == 1) // 1 = aceito
-                    {
-                        var banca = await _context.Bancas.SingleOrDefaultAsync(x => x.BancaId == convite.BancaId);
-
-                        if(banca.QtdProfBanca > convite.QuantidadeAceites)
-                        {
-                            foreach (var diaSelecionado in diasSelecPeloProf)
-                            {
-                                
-                            }
-                        }
-                    }
-                    else if (statusConvite == 2) // 2 = recusado
-                    {
-                        convite.StatusConvite = StatusConvite.Recusado;
-                        convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor recusou o convite
-
-                        retorno.mensagem = "Convite recusado.";
-                    }
-                    else if (statusConvite == 3) // 3 = cancelado
-                    {
-                        convite.StatusConvite = StatusConvite.Cancelado;
-                        convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor cancelou a presença
-
-                        retorno.mensagem = "Convite cancelado.";
-                    }
-
-                    _context.Update(convite);
-                    await _context.SaveChangesAsync();
-                }
-
-                retorno.statusCode = 200;
-                return Ok(retorno);
-            }
-            catch (Exception ex)
-            {
-                retorno.statusCode = 400;
-                retorno.mensagem = ex.Message;
-                return BadRequest(retorno);
             }
         }
     }

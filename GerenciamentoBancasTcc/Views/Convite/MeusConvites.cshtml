@@ -60,7 +60,7 @@
                             @Html.DisplayFor(modelItem => item.QuantidadeAceites)
                         </td>
                         <td style="width: 130px">
-                            <a asp-action="Convite" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary" title="Ver detalhes do convite"><i class="fa fa-edit fa-fw"></i></a>
+                            <a asp-action="DetalhesConvite" asp-route-id="@item.ConviteId" class="btn btn-sm btn-primary" title="Ver detalhes do convite"><i class="fa fa-edit fa-fw"></i></a>
                     </tr>
                 }
             </tbody>

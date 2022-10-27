@@ -20,7 +20,7 @@ namespace GerenciamentoBancasTcc.Services.Email
                 SmtpClient _smtpClient = new SmtpClient("smtp.office365.com", Convert.ToInt32("587"));
 
                 _smtpClient.UseDefaultCredentials = false;
-                _smtpClient.Credentials = new NetworkCredential("ander.junior@hotmail.com", "educar@5101");
+                _smtpClient.Credentials = new NetworkCredential("ander.junior@hotmail.com", "senha");
 
                 _smtpClient.EnableSsl = true;
                 _mailMessage.CC.Add(email);

@@ -1,0 +1,144 @@
+﻿@model GerenciamentoBancasTcc.Models.ConviteViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Meus estilos -->
+    <link rel="stylesheet" href="~/css/index.css">
+</head>
+<body>
+    <div class="container align-items-center">
+        <div class="card">
+            <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
+                <p class="mb-0">@Html.DisplayFor(modelItem => Model.Banca)</p>
+            </div>
+            <div class="card-body">
+                <div>
+                    <div>
+                        <div>
+                            @*<p><b>Data/Hora:</b> @Model.DataHora.ToString("dd/MM/yyyy HH:mm")</p>*@
+                            <p><b>Curso:</b> @Model.Curso</p>
+                            <p><b>Turma:</b> @Model.Turma</p>
+                            <p><b>Orientador:</b>  @Model.Orientador</p>
+                            <p><b>Professores:</b> @string.Join(", ", Model.Professor)</p>
+                            <p><b>Sala:</b> @Model.Sala</p>
+                            <input type="hidden" id="conviteId" value="@Model.ConviteId" />
+                        </div>
+                    </div>
+                    <div>
+                        <input type="button" id="btn-aceitar" class="btn btn-sm btn-primary" value="Aceitar" />
+                        <input type="button" id="btn-recusar" class="btn btn-sm btn-warning" value="Recusar" />
+                        <input type="button" id="btn-cancelar" class="btn btn-sm btn-danger" value="Cancelar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- Script JQuery-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!-- JS Bootstrap-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<!--Datatables-->
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
+<!--Datatable checkboxes-->
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Convite/GetStatusConvite",
+            data: {
+                idConvite: $("#conviteId").val()
+            },
+            success: function (data) {
+                if (data.statusConvite == "Aceito") {
+                    $("#btn-aceitar").hide();
+                    $("#btn-recusar").hide();
+                }
+                else if (data.statusConvite == "Recusado" || data.statusConvite == "Cancelado") {
+                    $("#btn-aceitar").show();
+                    $("#btn-recusar").show();
+                }
+            },     
+        });
+    });
+
+    var statusConvite;
+    $("#btn-aceitar").click(function () {
+        statusConvite = 1;
+
+        $.ajax({
+            type: "POST",
+            url: "/Convite/AceitarConvite",
+            data: {
+                idConvite: $("#conviteId").val(),
+                statusConvite: statusConvite
+            },
+            success: function (data) {
+                alert("Deu boa")
+            },
+            error: function () {
+                alert("deu ruim")
+            }
+        });
+    });
+
+    $("#btn-recusar").click(function () {
+        statusConvite = 2;
+
+        $.ajax({
+            type: "POST",
+            url: "/Convite/RecusarConvite",
+            data: {
+                idConvite: $("#conviteId").val(),
+                statusConvite: statusConvite
+            },
+            success: function (data) {
+                alert("Deu boa")
+            },
+            error: function () {
+                alert("deu ruim")
+            }
+        });
+    });
+
+    $("#btn-cancelar").click(function () {
+        statusConvite = 3;
+
+        $.ajax({
+            type: "POST",
+            url: "/Convite/CancelarConvite",
+            data: {
+                idConvite: $("#conviteId").val(),
+                statusConvite: statusConvite
+            },
+            success: function (data) {
+                alert("Deu boa")
+            },
+            error: function () {
+                alert("deu ruim")
+            }
+        });
+    })
+
+    
+</script>

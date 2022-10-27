@@ -1,5 +1,7 @@
 ﻿using GerenciamentoBancasTcc.Data;
+using GerenciamentoBancasTcc.Domains.Dtos;
 using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Domains.Enums;
 using GerenciamentoBancasTcc.Models;
 using GerenciamentoBancasTcc.Services.Email;
 using Microsoft.AspNetCore.Identity;
@@ -33,31 +35,115 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(convitesRecebidos);
         }
 
-        public async Task<IActionResult> Convite(int? id)
+        public async Task<IActionResult> DetalhesConvite(Guid? id)
         {
-            var result = await (from banca in _context.Bancas
-                                join orientador in _context.Users on banca.UsuarioId equals orientador.Id
-                                join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
-                                join curso in _context.Cursos on turma.CursoId equals curso.CursoId
-                                //join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
-                                where banca.BancaId == id
-                                orderby banca.DataHora
-                                select new BancaViewModel
-                                {
-                                    BancaId = banca.BancaId,
-                                    Curso = curso.Nome,
-                                    DataHora = banca.DataHora,
-                                    Orientador = orientador.Nome,
-                                    Sala = banca.Sala,
-                                    Tema = banca.Tema,
-                                    Turma = turma.Nome,
-                                    Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
-                                    Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
-                                    //ArquivoId = arquivos.ArquivosId
-                                    Arquivos = banca.Arquivos.ToList()
-                                }).FirstAsync();
+            var resultado = await (from convite in _context.Convites
+                                   join banca in _context.Bancas on convite.BancaId equals banca.BancaId
+                                   join usuario in _context.Users on convite.UsuarioId equals usuario.Id
+                                   join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
+                                   join curso in _context.Cursos on turma.CursoId equals curso.CursoId
+                                   where convite.ConviteId == id
+                                   select new ConviteViewModel
+                                   {
+                                       ConviteId = convite.ConviteId,
+                                       DataHoraAcao = convite.DataHoraAcao,
+                                       Professor = convite.Usuario.Nome,
+                                       Banca = convite.Banca.Tema,
+                                       StatusConvite = convite.StatusConvite,
+                                       Curso = curso.Nome,
+                                       Turma = turma.Nome,
+                                       Orientador = usuario.Nome,
+                                       Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
+                                       Sala = banca.Sala,
+                                       Tema = banca.Tema
+                                   }).FirstAsync();
 
-            return View(result);
+            return View(resultado);
         }
+
+        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite)
+        {
+            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
+            RetornoConviteDto retorno = new();
+            try
+            {
+                var convite = await _context.Convites.SingleOrDefaultAsync(x => x.ConviteId == idConvite);
+
+                if (convite != null)
+                {
+                    if (statusConvite == 1) // 1 = aceito
+                    {
+                        var banca = await _context.Bancas.SingleOrDefaultAsync(x => x.BancaId == convite.BancaId);
+
+                        if (banca.QtdProfBanca > convite.QuantidadeAceites)
+                        {
+                            convite.StatusConvite = StatusConvite.Aceito;
+                            convite.DataHoraAcao = DateTime.Now;
+                            convite.QuantidadeAceites += 1;
+
+                            UsuarioBanca usuarioBanca = new()
+                            {
+                                BancaId = banca.BancaId,
+                                UsuarioId = user.Id
+                            };
+
+                            await _context.UsuariosBancas.AddAsync(usuarioBanca);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    else if (statusConvite == 2) // 2 = recusado
+                    {
+                        convite.StatusConvite = StatusConvite.Recusado;
+                        convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor recusou o convite
+
+                        retorno.mensagem = "Convite recusado.";
+                    }
+                    else if (statusConvite == 3) // 3 = cancelado
+                    {
+                        convite.StatusConvite = StatusConvite.Cancelado;
+                        convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor cancelou a presença
+
+                        retorno.mensagem = "Convite cancelado.";
+                    }
+
+                    _context.Update(convite);
+                    await _context.SaveChangesAsync();
+                }
+
+                retorno.statusCode = 200;
+                return Ok(retorno);
+            }
+            catch (Exception ex)
+            {
+                retorno.statusCode = 400;
+                retorno.mensagem = ex.Message;
+                return BadRequest(retorno);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStatusConvite(Guid idConvite)
+        {
+            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
+            var convitesRecebidos = await _context.Convites.FirstOrDefaultAsync(x => x.ConviteId == idConvite);
+            var statusConvite = string.Empty;
+
+            if (convitesRecebidos.StatusConvite == StatusConvite.Aceito)
+            {
+                statusConvite = "Aceito";  
+            }
+
+            if(convitesRecebidos.StatusConvite == StatusConvite.Recusado)
+            {
+                statusConvite = "Recusado";
+            }
+
+            if(convitesRecebidos.StatusConvite == StatusConvite.Cancelado)
+            {
+                statusConvite = "Cancelado";
+            }
+
+            return Json(statusConvite);
+        }   
     }
 }
