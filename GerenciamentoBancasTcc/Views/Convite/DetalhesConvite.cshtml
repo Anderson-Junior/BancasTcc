@@ -107,7 +107,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Convite/RecusarConvite",
+            url: "/Convite/AceitarConvite",
             data: {
                 idConvite: $("#conviteId").val(),
                 statusConvite: statusConvite
@@ -126,7 +126,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Convite/CancelarConvite",
+            url: "/Convite/AceitarConvite",
             data: {
                 idConvite: $("#conviteId").val(),
                 statusConvite: statusConvite
@@ -138,7 +138,8 @@
                 alert("deu ruim")
             }
         });
-    })
+    });
 
+           
     
 </script>

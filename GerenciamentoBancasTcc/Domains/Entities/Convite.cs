@@ -11,8 +11,14 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ConviteId { get; set; }
+
+        [Display(Name = "Status")]
         public StatusConvite StatusConvite { get; set; }
+
+        [Display(Name = "Data/Hora")]
         public DateTime DataHoraAcao { get; set; }
+
+        [Display(Name = "Número de aceites")]
         public int QuantidadeAceites { get; set; }
         public string DiaConvite { get; set; }
         public int BancaId { get; set; }

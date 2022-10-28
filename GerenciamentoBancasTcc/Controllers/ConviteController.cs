@@ -30,7 +30,10 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> MeusConvites()
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
-            var convitesRecebidos = await _context.Convites.Where(x => x.UsuarioId == user.Id).ToListAsync();
+            var convitesRecebidos = await _context.Convites
+                .Where(x => x.UsuarioId == user.Id && (x.StatusConvite == 0 || x.StatusConvite == StatusConvite.Aceito))
+                .Include(x => x.Banca)
+                .ToListAsync();
 
             return View(convitesRecebidos);
         }
@@ -68,13 +71,12 @@ namespace GerenciamentoBancasTcc.Controllers
             try
             {
                 var convite = await _context.Convites.SingleOrDefaultAsync(x => x.ConviteId == idConvite);
+                var banca = await _context.Bancas.SingleOrDefaultAsync(x => x.BancaId == convite.BancaId);
 
                 if (convite != null)
                 {
                     if (statusConvite == 1) // 1 = aceito
                     {
-                        var banca = await _context.Bancas.SingleOrDefaultAsync(x => x.BancaId == convite.BancaId);
-
                         if (banca.QtdProfBanca > convite.QuantidadeAceites)
                         {
                             convite.StatusConvite = StatusConvite.Aceito;
@@ -88,7 +90,6 @@ namespace GerenciamentoBancasTcc.Controllers
                             };
 
                             await _context.UsuariosBancas.AddAsync(usuarioBanca);
-                            await _context.SaveChangesAsync();
                         }
                     }
                     else if (statusConvite == 2) // 2 = recusado
@@ -100,13 +101,19 @@ namespace GerenciamentoBancasTcc.Controllers
                     }
                     else if (statusConvite == 3) // 3 = cancelado
                     {
+                        var usuarioBanca = await _context.UsuariosBancas.FirstOrDefaultAsync(x => x.UsuarioId == user.Id && x.BancaId == banca.BancaId);
+                        if (usuarioBanca != null)
+                        {
+                            _context.Remove(usuarioBanca);
+                        }
+
                         convite.StatusConvite = StatusConvite.Cancelado;
                         convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor cancelou a presença
+                        convite.QuantidadeAceites -= 1;
 
                         retorno.mensagem = "Convite cancelado.";
                     }
-
-                    _context.Update(convite);
+    
                     await _context.SaveChangesAsync();
                 }
 

@@ -38,7 +38,7 @@
                         @Html.DisplayNameFor(model => model.StatusConvite)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DataHoraAcao)
+                        @Html.DisplayNameFor(model => model.Banca.Tema)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.QuantidadeAceites)
@@ -49,19 +49,19 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StatusConvite)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DataHoraAcao)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QuantidadeAceites)
-                        </td>
-                        <td style="width: 130px">
-                            <a asp-action="DetalhesConvite" asp-route-id="@item.ConviteId" class="btn btn-sm btn-primary" title="Ver detalhes do convite"><i class="fa fa-edit fa-fw"></i></a>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StatusConvite)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Banca.Tema)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QuantidadeAceites)
+                    </td>
+                    <td style="width: 130px">
+                        <a asp-action="DetalhesConvite" asp-route-id="@item.ConviteId" class="btn btn-sm btn-primary" title="Ver detalhes do convite"><i class="fa fa-edit fa-fw"></i></a>
+                </tr>
                 }
             </tbody>
         </table>
