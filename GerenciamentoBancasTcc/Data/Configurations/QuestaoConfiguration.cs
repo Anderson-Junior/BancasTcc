@@ -13,7 +13,7 @@ namespace GerenciamentoBancasTcc.Data.Configurations
             builder.HasOne(x => x.Formulario)
                    .WithMany(x => x.Questoes)
                    .HasForeignKey(x => x.FormularioId)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(x => x.TipoQuestao)
                    .WithMany(x => x.Questoes)

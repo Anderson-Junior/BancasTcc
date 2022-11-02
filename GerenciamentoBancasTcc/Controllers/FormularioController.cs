@@ -123,15 +123,18 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.Update(formulario);
                     await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = string.Format("Formulário editado com sucesso!");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!FormularioExists(formulario.FormularioId))
                     {
+                        TempData["mensagemErro"] = "Este formulário não está cadastrada no sistema!";
                         return NotFound();
                     }
                     else
                     {
+                        TempData["mensagemErro"] = "Erro ao atualizar formulário! " + ex.Message;
                         throw;
                     }
                 }
@@ -165,9 +168,19 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var formulario = await _context.Formularios.FindAsync(id);
-            _context.Formularios.Remove(formulario);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Formularios.Remove(formulario);
+                await _context.SaveChangesAsync();
+
+                TempData["mensagemSucesso"] = string.Format("Questão excluída com sucesso!");
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir questão " + ex.Message;
+            }
+            return View(formulario);  
         }
 
         private bool FormularioExists(int id)

@@ -107,15 +107,18 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.Update(questao);
                     await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = string.Format("Questão editada com sucesso!");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!QuestaoExists(questao.QuestaoId))
                     {
+                        TempData["mensagemErro"] = "Esta questão não está cadastrada no sistema!";
                         return NotFound();
                     }
                     else
                     {
+                        TempData["mensagemErro"] = "Erro ao atualizar questão! " + ex.Message;
                         throw;
                     }
                 }
@@ -149,21 +152,24 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var questao = await _context.Questoes.FindAsync(id);
-            _context.Questoes.Remove(questao);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Questoes.Remove(questao);
+                await _context.SaveChangesAsync();
+
+                TempData["mensagemSucesso"] = string.Format("Questão excluída com sucesso!");
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir questão " + ex.Message;
+            }
+            return View(questao);
         }
 
         private bool QuestaoExists(int id)
         {
             return _context.Questoes.Any(e => e.QuestaoId == id);
         }
-        //private void TipoQuestao(int selectedItem = 0)
-        //{
-        //    var tipoQuestoes = _context.TipoQuestoes.ToList();
-        //    var selectListItems = tipoQuestoes.ToDictionary(x => x.TipoQuestaoId.ToString(), y => y.Descricao).ToList();
-        //    selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
-        //    ViewData["TipoQuestaoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
-        //}
     }
 }

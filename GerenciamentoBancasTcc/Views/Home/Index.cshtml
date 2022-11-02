@@ -28,7 +28,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             @foreach (var item in Model)
             {
-                <a asp-action="Convite" asp-controller="Banca" asp-route-id="@item.BancaId" style="text-decoration: none;">
+                <a asp-action="DetalhesBancaAvaliacoes" asp-controller="Banca" asp-route-id="@item.BancaId" style="text-decoration: none;">
                     <div class="col">
                         <div class="card cardIndex mb-3" style="height: 55vh; overflow: hidden;">
                             @*<h5 class="card-header">@item.DataHora.ToString("dd/MM/yyyy HH:mm")</h5>*@
