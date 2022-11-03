@@ -48,13 +48,13 @@
         <div class="col-md-8">
             <div class="card" style="border: solid 2px #2B4B82;">
                 <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 18px">
-                    <b>Cadastrar Questão</b>
+                    <b>Infome os dias em que terá disponibilidade para participar das bancas</b>
                 </div>
                 <div class="card-body">
                     <form asp-action="AdicionarDiasDisponiveis">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="DiasDisponiveis" class="control-label">Infome os dias que terá disponibilidade para participar da bancas</label>
+                            <label asp-for="DiasDisponiveis" class="control-label">Infome os dias</label>
                             <div class="col-md-3">
                                 <div class="input-group mt-3 mb-3">
                                     <input asp-for="DiasDisponiveis" type="text" class="form-control" id="datepicker">
