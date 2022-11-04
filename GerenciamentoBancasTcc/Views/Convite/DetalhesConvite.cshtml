@@ -35,6 +35,12 @@
                             <p><b>Curso:</b> @Model.Curso</p>
                             <p><b>Turma:</b> @Model.Turma</p>
                             <p><b>Orientador:</b>  @Model.Orientador</p>
+                            <p><b>Alunos:</b> 
+                                @foreach (var aluno in Model.Alunos)
+                                {
+                                    @(aluno.Nome + ", ")
+                                }
+                            </p>
                             <p><b>Professores:</b> @string.Join(", ", Model.Professor)</p>
                             <p><b>Sala:</b> @Model.Sala</p>
                             <input type="hidden" id="conviteId" value="@Model.ConviteId" />
@@ -70,13 +76,17 @@
                 idConvite: $("#conviteId").val()
             },
             success: function (data) {
-                if (data.statusConvite == "Aceito") {
+                if (data == 1) {
+                    console.log("status 1")
                     $("#btn-aceitar").hide();
                     $("#btn-recusar").hide();
                 }
-                else if (data.statusConvite == "Recusado" || data.statusConvite == "Cancelado") {
-                    $("#btn-aceitar").show();
-                    $("#btn-recusar").show();
+                else if (data == 2) {
+                    $("#btn-cancelar").hide();
+                    $("#btn-recusar").hide();
+                }
+                else if (data == 3) {
+                    $("#btn-cancelar").hide();
                 }
             },     
         });
@@ -94,7 +104,7 @@
                 statusConvite: statusConvite
             },
             success: function (data) {
-                alert("Deu boa")
+                window.location.replace("https://localhost:5001/Convite/MeusConvites");
             },
             error: function () {
                 alert("deu ruim")
@@ -113,7 +123,7 @@
                 statusConvite: statusConvite
             },
             success: function (data) {
-                alert("Deu boa")
+                window.location.replace("https://localhost:5001/Convite/MeusConvites");
             },
             error: function () {
                 alert("deu ruim")
@@ -132,7 +142,7 @@
                 statusConvite: statusConvite
             },
             success: function (data) {
-                alert("Deu boa")
+                window.location.replace("https://localhost:5001/Convite/MeusConvites");
             },
             error: function () {
                 alert("deu ruim")

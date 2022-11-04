@@ -31,7 +31,7 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
             var convitesRecebidos = await _context.Convites
-                .Where(x => x.UsuarioId == user.Id && (x.StatusConvite == 0 || x.StatusConvite == StatusConvite.Aceito))
+                .Where(x => x.UsuarioId == user.Id)
                 .Include(x => x.Banca)
                 .ToListAsync();
 
@@ -90,6 +90,7 @@ namespace GerenciamentoBancasTcc.Controllers
                             };
 
                             await _context.UsuariosBancas.AddAsync(usuarioBanca);
+                            TempData["mensagemSucesso"] = "Convite aceito com sucesso!";
                         }
                     }
                     else if (statusConvite == 2) // 2 = recusado
@@ -97,6 +98,7 @@ namespace GerenciamentoBancasTcc.Controllers
                         convite.StatusConvite = StatusConvite.Recusado;
                         convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor recusou o convite
 
+                        TempData["mensagemSucesso"] = "Convite recusado!";
                         retorno.mensagem = "Convite recusado.";
                     }
                     else if (statusConvite == 3) // 3 = cancelado
@@ -111,6 +113,7 @@ namespace GerenciamentoBancasTcc.Controllers
                         convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor cancelou a presença
                         convite.QuantidadeAceites -= 1;
 
+                        TempData["mensagemSucesso"] = "Convite cancelado!";
                         retorno.mensagem = "Convite cancelado.";
                     }
     
@@ -133,21 +136,21 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
             var convitesRecebidos = await _context.Convites.FirstOrDefaultAsync(x => x.ConviteId == idConvite);
-            var statusConvite = string.Empty;
+            var statusConvite = 0;
 
             if (convitesRecebidos.StatusConvite == StatusConvite.Aceito)
             {
-                statusConvite = "Aceito";  
+                statusConvite = 1;  
             }
 
             if(convitesRecebidos.StatusConvite == StatusConvite.Recusado)
             {
-                statusConvite = "Recusado";
+                statusConvite = 2;
             }
 
             if(convitesRecebidos.StatusConvite == StatusConvite.Cancelado)
             {
-                statusConvite = "Cancelado";
+                statusConvite = 3;
             }
 
             return Json(statusConvite);
