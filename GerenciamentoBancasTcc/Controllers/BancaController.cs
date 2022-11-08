@@ -369,7 +369,8 @@ namespace GerenciamentoBancasTcc.Controllers
 
                     foreach (var professor in professoresConvidados)
                     {
-                        var emailEnviado = _emailService.SendMail(professor.Email);
+                        var emailEnviado = _emailService.SendMailInvite(professor.Email,
+                                            "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária");
 
                         if (emailEnviado)
                         {
