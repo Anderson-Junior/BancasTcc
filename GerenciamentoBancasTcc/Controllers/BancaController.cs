@@ -159,20 +159,19 @@ namespace GerenciamentoBancasTcc.Controllers
                                     diaBanca.Trim();
                                     if (diaProfessor == diaBanca)
                                     {
-                                        //var emailEnviado = _emailService.SendMail(p.Email, 
-                                        //    "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária",
-                                        //    );
-                                        //if (emailEnviado)
-                                        //{
-                                        //    Convite convite = new()
-                                        //    {
-                                        //        UsuarioId = p.Id,
-                                        //        BancaId = banca.BancaId,
-                                        //        DiaConvite = diaBanca
-                                        //    };
-                                        //    _context.Convites.Add(convite);
-                                        //    _context.SaveChanges();
-                                        //}
+                                        var emailEnviado = _emailService.SendMailInvite(p.Email, 
+                                            "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária");
+                                        if (emailEnviado)
+                                        {
+                                            Convite convite = new()
+                                            {
+                                                UsuarioId = p.Id,
+                                                BancaId = banca.BancaId,
+                                                DiaConvite = diaBanca
+                                            };
+                                            _context.Convites.Add(convite);
+                                            _context.SaveChanges();
+                                        }
                                     }
                                 }
                             }
@@ -370,18 +369,18 @@ namespace GerenciamentoBancasTcc.Controllers
 
                     foreach (var professor in professoresConvidados)
                     {
-                        //var emailEnviado = _emailService.SendMail(professor.Email);
+                        var emailEnviado = _emailService.SendMail(professor.Email);
 
-                        //if (emailEnviado)
-                        //{
-                        //    Convite convite = new()
-                        //    {
-                        //        UsuarioId = professor.Id,
-                        //        BancaId = idBanca
-                        //    };
-                        //    _context.Convites.Add(convite);
-                        //    _context.SaveChanges();
-                        //}
+                        if (emailEnviado)
+                        {
+                            Convite convite = new()
+                            {
+                                UsuarioId = professor.Id,
+                                BancaId = idBanca
+                            };
+                            _context.Convites.Add(convite);
+                            _context.SaveChanges();
+                        }
                     }
                 }
                 return Json(new { result = "Convites enviados" });
