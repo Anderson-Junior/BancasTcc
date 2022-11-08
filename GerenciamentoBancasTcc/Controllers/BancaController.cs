@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GerenciamentoBancasTcc.Data;
+using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Models;
+using GerenciamentoBancasTcc.Services.Email;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GerenciamentoBancasTcc.Data;
-using GerenciamentoBancasTcc.Domains.Entities;
-using Microsoft.AspNetCore.Identity;
-using GerenciamentoBancasTcc.Models;
-using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using GerenciamentoBancasTcc.Services.Email;
-using GerenciamentoBancasTcc.Domains.Enums;
-using GerenciamentoBancasTcc.Domains.Dtos;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
@@ -161,18 +159,20 @@ namespace GerenciamentoBancasTcc.Controllers
                                     diaBanca.Trim();
                                     if (diaProfessor == diaBanca)
                                     {
-                                        var emailEnviado = _emailService.SendMail(p.Email);
-                                        if (emailEnviado)
-                                        {
-                                            Convite convite = new()
-                                            {
-                                                UsuarioId = p.Id,
-                                                BancaId = banca.BancaId,
-                                                DiaConvite = diaBanca
-                                            };
-                                            _context.Convites.Add(convite);
-                                            _context.SaveChanges();
-                                        }
+                                        //var emailEnviado = _emailService.SendMail(p.Email, 
+                                        //    "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária",
+                                        //    );
+                                        //if (emailEnviado)
+                                        //{
+                                        //    Convite convite = new()
+                                        //    {
+                                        //        UsuarioId = p.Id,
+                                        //        BancaId = banca.BancaId,
+                                        //        DiaConvite = diaBanca
+                                        //    };
+                                        //    _context.Convites.Add(convite);
+                                        //    _context.SaveChanges();
+                                        //}
                                     }
                                 }
                             }
@@ -370,18 +370,18 @@ namespace GerenciamentoBancasTcc.Controllers
 
                     foreach (var professor in professoresConvidados)
                     {
-                        var emailEnviado = _emailService.SendMail(professor.Email);
+                        //var emailEnviado = _emailService.SendMail(professor.Email);
 
-                        if (emailEnviado)
-                        {
-                            Convite convite = new()
-                            {
-                                UsuarioId = professor.Id,
-                                BancaId = idBanca
-                            };
-                            _context.Convites.Add(convite);
-                            _context.SaveChanges();
-                        }
+                        //if (emailEnviado)
+                        //{
+                        //    Convite convite = new()
+                        //    {
+                        //        UsuarioId = professor.Id,
+                        //        BancaId = idBanca
+                        //    };
+                        //    _context.Convites.Add(convite);
+                        //    _context.SaveChanges();
+                        //}
                     }
                 }
                 return Json(new { result = "Convites enviados" });

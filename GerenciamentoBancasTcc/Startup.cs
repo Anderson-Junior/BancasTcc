@@ -1,7 +1,6 @@
 using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
 using GerenciamentoBancasTcc.Services.Email;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

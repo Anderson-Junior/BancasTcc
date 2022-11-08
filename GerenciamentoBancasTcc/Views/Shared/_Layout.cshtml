@@ -39,15 +39,6 @@
                                 Avaliações
                             </a>
                             <ul class="collapse list-unstyled" id="homeSubmenu">
-                                @*<li>
-                                    <a asp-action="AvaliacaoApresentacao" style="padding-left: 25px;" asp-controller="Avaliacao">Avaliação Apresentação</a>
-                                </li>
-                                <li>
-                                    <a asp-action="AvaliacaoArtigo1" style="padding-left: 25px;" asp-controller="Avaliacao">Avaliação Artigo 01</a>
-                                </li>
-                                <li>
-                                    <a asp-action="AvaliacaoArtigo2" style="padding-left: 25px;" asp-controller="Avaliacao">Avaliação Artigo 02</a>
-                                </li>*@
                                 <li>
                                     <a asp-action="Index" style="padding-left: 25px;" asp-controller="Questoes">
                                         <i class="fa fa-question-circle" aria-hidden="true" style="margin-right:8px;"></i>
@@ -88,18 +79,22 @@
                         </li>
                     }
 
-                    <li>
-                        <a asp-action="MeusConvites" asp-controller="Convite">
-                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
-                            Meus convites
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="AdicionarDiasDisponiveis" asp-controller="Usuario">
-                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
-                            Dias disponíveis
-                        </a>
-                    </li>
+                    @if (User.IsInRole("Professor"))
+                    {
+                        <li>
+                            <a asp-action="MeusConvites" asp-controller="Convite">
+                                <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
+                                Meus convites
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="AdicionarDiasDisponiveis" asp-controller="Usuario">
+                                <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
+                                Dias disponíveis
+                            </a>
+                        </li>
+                    }
+
 
                     @if (User.IsInRole("Administrador"))
                     {

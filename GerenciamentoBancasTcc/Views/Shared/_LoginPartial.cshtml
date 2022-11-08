@@ -4,22 +4,30 @@
 @inject UserManager<Usuario> UserManager
 
 
-<ul class="navbar-nav col-md-12">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá, @UserManager.GetUserAsync(User).Result.Nome !</a>
-    </li>
-    <li class="nav-item align-content-end" style="margin-left: 70%">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-white" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
+<div class="container">
+    <div class="row">
+        <ul class="navbar-nav">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <div class="col-md-11">
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá, @UserManager.GetUserAsync(User).Result.Nome !</a>
+                </li>
+        </div>
+        <div class="col-md-1">
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-white" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </form>
+            </li>
+        </div>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+            </ul>
+        </div>
+        </div>
