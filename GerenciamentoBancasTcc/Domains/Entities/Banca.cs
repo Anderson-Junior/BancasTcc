@@ -43,7 +43,8 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
         public ICollection<Convite> Convites { get; set; }
+        public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
 
-        public string DiasQueDevemOcorrerBanca{ get; set; }
+        //public string DiasQueDevemOcorrerBanca{ get; set; }
     }
 }

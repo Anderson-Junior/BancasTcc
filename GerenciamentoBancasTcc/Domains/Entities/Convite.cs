@@ -1,5 +1,6 @@
 ﻿using GerenciamentoBancasTcc.Domains.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,8 +28,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
 
-        public int QtdPrimeiroDia { get; set; }
-        public int QtdSegundoDia { get; set; }
-        public int QtdTerceiroDia { get; set; }
+        [Display(Name = "Possíveis datas")]
+        public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
     }
 }

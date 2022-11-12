@@ -20,6 +20,7 @@ namespace GerenciamentoBancasTcc.Data
         public DbSet<Questao> Questoes { get; set; }
         public DbSet<TipoQuestao> TipoQuestoes { get; set; }
         public DbSet<Arquivo> Arquivos { get; set; }
+        public DbSet<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

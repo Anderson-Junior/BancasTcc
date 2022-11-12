@@ -33,6 +33,7 @@ namespace GerenciamentoBancasTcc.Controllers
             var convitesRecebidos = await _context.Convites
                 .Where(x => x.UsuarioId == user.Id)
                 .Include(x => x.Banca)
+                .Include(x => x.DiaQueDeveOcorrerBancas)
                 .ToListAsync();
 
             return View(convitesRecebidos);
@@ -64,7 +65,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(resultado);
         }
 
-        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite)
+        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite, List<string> diasSelecionados)
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
             RetornoConviteDto retorno = new();
@@ -82,6 +83,15 @@ namespace GerenciamentoBancasTcc.Controllers
                             convite.StatusConvite = StatusConvite.Aceito;
                             convite.DataHoraAcao = DateTime.Now;
                             convite.QuantidadeAceites += 1;
+
+                            DiaQueDeveOcorrerBanca diaQueDeveOcorrerBanca = new()
+                            {
+                                
+                            };
+                            foreach (var dia in diasSelecionados)
+                            {
+                                
+                            }
 
                             UsuarioBanca usuarioBanca = new()
                             {

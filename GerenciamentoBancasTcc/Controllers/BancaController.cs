@@ -130,53 +130,55 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca,DiasQueDevemOcorrerBanca")] Banca banca, string alunosBanca)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca")] Banca banca, string alunosBanca, string[] possiveisDiasParaBanca)
         {
-            string[] diasBanca = banca.DiasQueDevemOcorrerBanca.Split(",");
-
+            alunosBanca = "6";
             if (ModelState.IsValid)
             {
                 try
                 {
                     banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
+
                     _context.Add(banca);
                     await _context.SaveChangesAsync();
-                    TempData["mensagemSucesso"] = "Banca cadastrada com sucesso!";
 
-                    var professores = await _context.Users.ToListAsync();
-                        
-                    foreach(var p in professores)
+                    //var professores = await _context.Users.;ToListAsync();
+                    var professores = await _context.Users.Where(x => x.Id == "0a354a4f-c8f4-4d56-b8c3-f92d4408c398").ToListAsync();
+                    Convite convite = new();
+
+                    foreach (var professor in professores)
                     {
-                        if(p.DiasDisponiveis != null)
-                        {
-                            string[] diasDisponiveisProfessor = p.DiasDisponiveis.Split(",");
+                        var emailEnviado = _emailService.SendMailInvite(professor.Email,
+                            "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária");
 
-                            foreach (var diaProfessor in diasDisponiveisProfessor)
-                            {
-                                foreach (var diaBanca in diasBanca)
-                                {
-                                    diaBanca.Trim();
-                                    if (diaProfessor == diaBanca)
-                                    {
-                                        var emailEnviado = _emailService.SendMailInvite(p.Email, 
-                                            "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária");
-                                        if (emailEnviado)
-                                        {
-                                            Convite convite = new()
-                                            {
-                                                UsuarioId = p.Id,
-                                                BancaId = banca.BancaId,
-                                                DiaConvite = diaBanca
-                                            };
-                                            _context.Convites.Add(convite);
-                                            _context.SaveChanges();
-                                        }
-                                    }
-                                }
-                            }
+                        if (emailEnviado)
+                        {
+                            convite.UsuarioId = professor.Id;
+                            convite.BancaId = banca.BancaId;
+
+                            _context.Convites.Add(convite);
+                            _context.SaveChanges();
                         }
                     }
+
+                    foreach (var dia in possiveisDiasParaBanca)
+                    {
+                        DiaQueDeveOcorrerBanca diaQueDeveOcorrerBanca = new()
+                        {
+                            BancaId = banca.BancaId,
+                            ConviteId = convite.ConviteId,
+                            PossivelDataHoraInicial = DateTime.Parse(dia)
+                        };
+
+                        _context.DiaQueDeveOcorrerBancas.Add(diaQueDeveOcorrerBanca);
+                        _context.SaveChanges();
+
+                        banca.DiaQueDeveOcorrerBancas.Add(diaQueDeveOcorrerBanca);
+                    }
+
+                    _context.SaveChanges();
+                    TempData["mensagemSucesso"] = "Banca cadastrada com sucesso!";
 
                     return RedirectToAction(nameof(Index));
                 }
