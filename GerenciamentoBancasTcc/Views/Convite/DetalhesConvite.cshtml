@@ -35,7 +35,8 @@
                             <p><b>Curso:</b> @Model.Curso</p>
                             <p><b>Turma:</b> @Model.Turma</p>
                             <p><b>Orientador:</b>  @Model.Orientador</p>
-                            <p><b>Alunos:</b> 
+                            <p>
+                                <b>Alunos:</b>
                                 @foreach (var aluno in Model.Alunos)
                                 {
                                     @(aluno.Nome + ", ")
@@ -43,6 +44,33 @@
                             </p>
                             <p><b>Professores:</b> @string.Join(", ", Model.Professor)</p>
                             <p><b>Sala:</b> @Model.Sala</p>
+                            <p>
+                                <b>Datas:</b>
+                                <table id="data_table" class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.DiaQueDeveOcorrerBancas)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var data in Model.DiaQueDeveOcorrerBancas)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" value="@data.DiaQueDeveOcorrerBancaId" name="diasSelecionados"/>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => data.PossivelDataHoraInicial)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </p>
+
                             <input type="hidden" id="conviteId" value="@Model.ConviteId" />
                         </div>
                     </div>
@@ -88,7 +116,7 @@
                 else if (data == 3) {
                     $("#btn-cancelar").hide();
                 }
-            },     
+            },
         });
     });
 
@@ -96,12 +124,23 @@
     $("#btn-aceitar").click(function () {
         statusConvite = 1;
 
+        var dias = [];
+        $.each($("input[name='diasSelecionados']:checked"), function () {
+            dias.push($(this).val());
+        });
+
+        var diasSelcionados = dias.join(", ");
+
+        alert("Selected say(s) are: " + dias.join(", "));
+        alert("ID do convite é: " + $("#conviteId").val())
+
         $.ajax({
             type: "POST",
             url: "/Convite/AceitarConvite",
             data: {
                 idConvite: $("#conviteId").val(),
-                statusConvite: statusConvite
+                statusConvite: statusConvite,
+                idDiasSelecionados: diasSelcionados
             },
             success: function (data) {
                 window.location.replace("https://localhost:5001/Convite/MeusConvites");
@@ -150,6 +189,6 @@
         });
     });
 
-           
-    
+
+
 </script>

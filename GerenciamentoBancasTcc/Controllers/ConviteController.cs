@@ -59,16 +59,19 @@ namespace GerenciamentoBancasTcc.Controllers
                                        Orientador = usuario.Nome,
                                        Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
                                        Sala = banca.Sala,
-                                       Tema = banca.Tema
+                                       Tema = banca.Tema,
+                                       DiaQueDeveOcorrerBancas = banca.DiaQueDeveOcorrerBancas
                                    }).FirstAsync();
 
             return View(resultado);
         }
 
-        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite, List<string> diasSelecionados)
+        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite, string idDiasSelecionados)
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
             RetornoConviteDto retorno = new();
+
+            string[] _IdsDiaSelecionados = idDiasSelecionados.Split(",");
             try
             {
                 var convite = await _context.Convites.SingleOrDefaultAsync(x => x.ConviteId == idConvite);
@@ -80,17 +83,19 @@ namespace GerenciamentoBancasTcc.Controllers
                     {
                         if (banca.QtdProfBanca > convite.QuantidadeAceites)
                         {
-                            convite.StatusConvite = StatusConvite.Aceito;
-                            convite.DataHoraAcao = DateTime.Now;
-                            convite.QuantidadeAceites += 1;
+                            foreach (var idDiaSelecionado in _IdsDiaSelecionados)
+                            {
+                                var diaSelecProf = _context.DiaQueDeveOcorrerBancas.SingleOrDefault(x => x.DiaQueDeveOcorrerBancaId == Int32.Parse(idDiaSelecionado));
 
-                            DiaQueDeveOcorrerBanca diaQueDeveOcorrerBanca = new()
-                            {
-                                
-                            };
-                            foreach (var dia in diasSelecionados)
-                            {
-                                
+                                foreach(var possiveisDiasBanca in banca.DiaQueDeveOcorrerBancas)
+                                {
+                                    if (possiveisDiasBanca.DiaQueDeveOcorrerBancaId == diaSelecProf.DiaQueDeveOcorrerBancaId)
+                                    {
+                                        convite.StatusConvite = StatusConvite.Aceito;
+                                        convite.DataHoraAcao = DateTime.Now;
+                                        convite.QuantidadeAceites += 1;
+                                    }
+                                }                              
                             }
 
                             UsuarioBanca usuarioBanca = new()

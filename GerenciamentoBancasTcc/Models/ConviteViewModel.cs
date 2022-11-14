@@ -2,6 +2,7 @@
 using GerenciamentoBancasTcc.Domains.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GerenciamentoBancasTcc.Models
 {
@@ -28,5 +29,8 @@ namespace GerenciamentoBancasTcc.Models
         public int Sala { get; set; }
 
         public List<Aluno> Alunos { get; set; }
+
+        [Display(Name = "Possíveis datas")]
+        public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
     }
 }
