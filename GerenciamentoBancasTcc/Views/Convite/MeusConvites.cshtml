@@ -41,9 +41,6 @@
                         @Html.DisplayNameFor(model => model.Banca.Tema)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.QuantidadeAceites)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.DiaQueDeveOcorrerBancas)
                     </th>
                     <th>Ações</th>
@@ -58,9 +55,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Banca.Tema)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QuantidadeAceites)
                     </td>
                     <td>
                         @foreach (var dia in item.DiaQueDeveOcorrerBancas)

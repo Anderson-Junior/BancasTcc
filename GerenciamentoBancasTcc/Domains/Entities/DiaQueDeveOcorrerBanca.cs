@@ -17,5 +17,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public Guid ConviteId { get; set; }
         public Convite Convite { get; set; }
+
+        public int QtdAceites { get; set; }
     }
 }

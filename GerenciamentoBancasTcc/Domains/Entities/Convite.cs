@@ -19,8 +19,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Display(Name = "Data/Hora")]
         public DateTime DataHoraAcao { get; set; }
 
-        [Display(Name = "Número de aceites")]
-        public int QuantidadeAceites { get; set; }
         public string DiaConvite { get; set; }
         public int BancaId { get; set; }
         public Banca Banca { get; set; }

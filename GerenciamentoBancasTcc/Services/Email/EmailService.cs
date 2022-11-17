@@ -12,7 +12,7 @@ namespace GerenciamentoBancasTcc.Services.Email
             try
             {
                 MailMessage _mailMessage = new MailMessage();
-                _mailMessage.From = new MailAddress("ander.junior@hotmail.com");
+                _mailMessage.From = new MailAddress("gerenciador.de.bancas@outlook.com");
                 _mailMessage.Subject = subject;
                 _mailMessage.IsBodyHtml = true;
                 _mailMessage.Body = body;
@@ -20,7 +20,7 @@ namespace GerenciamentoBancasTcc.Services.Email
                 SmtpClient _smtpClient = new SmtpClient("smtp.office365.com", Convert.ToInt32("587"));
 
                 _smtpClient.UseDefaultCredentials = false;
-                _smtpClient.Credentials = new NetworkCredential("ander.junior@hotmail.com", "senha");
+                _smtpClient.Credentials = new NetworkCredential("gerenciador.de.bancas@outlook.com", "Gerenciador123@");
 
                 _smtpClient.EnableSsl = true;
                 _mailMessage.CC.Add(email);
@@ -39,7 +39,7 @@ namespace GerenciamentoBancasTcc.Services.Email
             try
             {
                 MailMessage _mailMessage = new MailMessage();
-                _mailMessage.From = new MailAddress("ander.junior@hotmail.com");
+                _mailMessage.From = new MailAddress("gerenciador.de.bancas@outlook.com");
                 _mailMessage.Subject = subject;
                 _mailMessage.IsBodyHtml = true;
                 _mailMessage.Body = File.ReadAllText(@"Views/Shared/EmailConvite.cshtml");
@@ -47,7 +47,7 @@ namespace GerenciamentoBancasTcc.Services.Email
                 SmtpClient _smtpClient = new SmtpClient("smtp.office365.com", Convert.ToInt32("587"));
 
                 _smtpClient.UseDefaultCredentials = false;
-                _smtpClient.Credentials = new NetworkCredential("ander.junior@hotmail.com", "senha");
+                _smtpClient.Credentials = new NetworkCredential("gerenciador.de.bancas@outlook.com", "Gerenciador123@");
 
                 _smtpClient.EnableSsl = true;
                 _mailMessage.CC.Add(email);

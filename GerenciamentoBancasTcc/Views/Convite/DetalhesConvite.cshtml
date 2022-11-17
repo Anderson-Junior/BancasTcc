@@ -129,10 +129,10 @@
             dias.push($(this).val());
         });
 
-        var diasSelcionados = dias.join(", ");
+        var diasSelecionados = dias.join(", ");
 
-        alert("Selected say(s) are: " + dias.join(", "));
-        alert("ID do convite é: " + $("#conviteId").val())
+        //alert("Selected say(s) are: " + dias.join(", "));
+        //alert("ID do convite é: " + $("#conviteId").val())
 
         $.ajax({
             type: "POST",
@@ -140,13 +140,13 @@
             data: {
                 idConvite: $("#conviteId").val(),
                 statusConvite: statusConvite,
-                idDiasSelecionados: diasSelcionados
+                idDiasSelecionados: diasSelecionados
             },
             success: function (data) {
                 window.location.replace("https://localhost:5001/Convite/MeusConvites");
             },
             error: function () {
-                alert("deu ruim")
+                window.location.replace("https://localhost:5001/Convite/MeusConvites");
             }
         });
     });
@@ -165,7 +165,7 @@
                 window.location.replace("https://localhost:5001/Convite/MeusConvites");
             },
             error: function () {
-                alert("deu ruim")
+                alert("Erro ao recusar convite! Tente novamente. Caso o erro persista, contate o administrador do sistema.")
             }
         });
     });
@@ -173,22 +173,28 @@
     $("#btn-cancelar").click(function () {
         statusConvite = 3;
 
+        var dias = [];
+        $.each($("input[name='diasSelecionados']:checked"), function () {
+            dias.push($(this).val());
+        });
+
+        var diasSelecionados = dias.join(", ");
+
         $.ajax({
             type: "POST",
             url: "/Convite/AceitarConvite",
             data: {
                 idConvite: $("#conviteId").val(),
-                statusConvite: statusConvite
+                statusConvite: statusConvite,
+                idDiasSelecionados: diasSelecionados
             },
             success: function (data) {
                 window.location.replace("https://localhost:5001/Convite/MeusConvites");
             },
             error: function () {
-                alert("deu ruim")
+                alert("Erro ao cancelar convite! Tente novamente. Caso o erro persista, contate o administrador do sistema.")
             }
         });
     });
-
-
 
 </script>
