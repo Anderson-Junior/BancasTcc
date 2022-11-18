@@ -131,14 +131,15 @@ namespace GerenciamentoBancasTcc.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca")] Banca banca, string alunosBanca, string[] possiveisDiasParaBanca)
+        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca")] Banca banca, int[] alunosBanca, DateTime[] possiveisDiasParaBanca)
         {
-            alunosBanca = "6";
+            //alunosBanca = "6";
             if (ModelState.IsValid)
             {
                 try
                 {
-                    banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
+                    banca.AlunosBancas = alunosBanca.Select(x => new AlunosBancas { AlunoId = x }).ToList();
+                    //alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
 
                     _context.Add(banca);
                     await _context.SaveChangesAsync();
@@ -162,13 +163,13 @@ namespace GerenciamentoBancasTcc.Controllers
                         }
                     }
 
-                    foreach (var dia in possiveisDiasParaBanca)
+                    foreach (var datahora in possiveisDiasParaBanca)
                     {
                         DiaQueDeveOcorrerBanca diaQueDeveOcorrerBanca = new()
                         {
                             BancaId = banca.BancaId,
                             ConviteId = convite.ConviteId,
-                            PossivelDataHoraInicial = DateTime.Parse(dia)
+                            PossivelDataHoraInicial = datahora
                         };
 
                         _context.DiaQueDeveOcorrerBancas.Add(diaQueDeveOcorrerBanca);
