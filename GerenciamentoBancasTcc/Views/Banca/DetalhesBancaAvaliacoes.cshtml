@@ -26,15 +26,18 @@
     <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container align-items-center">
+    <div>
+        <a asp-action="Index" style="text-decoration: none; color: #EEA084;"><i class="fa-solid fa-circle-arrow-left"></i> Voltar para lista</a>
+    </div>
+    <br />
 
-        <div class="card">
+    <div class="container align-items-center">
+        <div class="card" style="border: solid 2px #e5e5e5;">
             <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
                 <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
             </div>
             <div class="card-body">
                 <div>
-
                     <div>
                         @*<p><b>Data/Hora:</b> @Model.DataHora.ToString("dd/MM/yyyy HH:mm")</p>*@
                         <p><b>Curso:</b> @Model.Curso</p>
