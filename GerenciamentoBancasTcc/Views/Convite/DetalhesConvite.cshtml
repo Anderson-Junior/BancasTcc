@@ -60,7 +60,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <input type="checkbox" value="@data.DiaQueDeveOcorrerBancaId" name="diasSelecionados"/>
+                                                    <input type="checkbox" value="@data.DiaQueDeveOcorrerBancaId" name="diasSelecionados" />
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => data.PossivelDataHoraInicial)
@@ -115,6 +115,7 @@
                 }
                 else if (data == 3) {
                     $("#btn-cancelar").hide();
+                    $("#btn-recusar").hide();
                 }
             },
         });
@@ -131,43 +132,59 @@
 
         var diasSelecionados = dias.join(", ");
 
-        //alert("Selected say(s) are: " + dias.join(", "));
-        //alert("ID do convite é: " + $("#conviteId").val())
-
-        $.ajax({
-            type: "POST",
-            url: "/Convite/AceitarConvite",
-            data: {
-                idConvite: $("#conviteId").val(),
-                statusConvite: statusConvite,
-                idDiasSelecionados: diasSelecionados
-            },
-            success: function (data) {
-                window.location.replace("https://localhost:5001/Convite/MeusConvites");
-            },
-            error: function () {
-                window.location.replace("https://localhost:5001/Convite/MeusConvites");
-            }
-        });
+        if (diasSelecionados == "") {
+            alert("Selecione a data que poderá participar.")
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Convite/AceitarConvite",
+                data: {
+                    idConvite: $("#conviteId").val(),
+                    statusConvite: statusConvite,
+                    idDiasSelecionados: diasSelecionados
+                },
+                success: function (data) {
+                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
+                },
+                error: function () {
+                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
+                }
+            });
+        }
     });
 
     $("#btn-recusar").click(function () {
         statusConvite = 2;
 
-        $.ajax({
-            type: "POST",
-            url: "/Convite/AceitarConvite",
-            data: {
-                idConvite: $("#conviteId").val(),
-                statusConvite: statusConvite
-            },
-            success: function (data) {
-                window.location.replace("https://localhost:5001/Convite/MeusConvites");
-            },
-            error: function () {
-                alert("Erro ao recusar convite! Tente novamente. Caso o erro persista, contate o administrador do sistema.")
-            }
+        var dias = [];
+        $.each($("input[name='diasSelecionados']:checked"), function () {
+            dias.push($(this).val());
         });
+
+        var diasSelecionados = dias.join(", ");
+
+        console.log(diasSelecionados)
+        if (diasSelecionados == "") {
+            alert("Selecione a data que deseja recusar o convite.")
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Convite/AceitarConvite",
+                data: {
+                    idConvite: $("#conviteId").val(),
+                    statusConvite: statusConvite,
+                    idDiasSelecionados: diasSelecionados
+                },
+                success: function (data) {
+                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
+                },
+                error: function () {
+                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
+                }
+            });
+        }
     });
 
     $("#btn-cancelar").click(function () {
@@ -180,21 +197,26 @@
 
         var diasSelecionados = dias.join(", ");
 
-        $.ajax({
-            type: "POST",
-            url: "/Convite/AceitarConvite",
-            data: {
-                idConvite: $("#conviteId").val(),
-                statusConvite: statusConvite,
-                idDiasSelecionados: diasSelecionados
-            },
-            success: function (data) {
-                window.location.replace("https://localhost:5001/Convite/MeusConvites");
-            },
-            error: function () {
-                alert("Erro ao cancelar convite! Tente novamente. Caso o erro persista, contate o administrador do sistema.")
-            }
-        });
+        if (diasSelecionados == "") {
+            alert("Selecione a data que deseja cancelar sua participação.")
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/Convite/AceitarConvite",
+                data: {
+                    idConvite: $("#conviteId").val(),
+                    statusConvite: statusConvite,
+                    idDiasSelecionados: diasSelecionados
+                },
+                success: function (data) {
+                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
+                },
+                error: function () {
+                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
+                }
+            });
+        }
     });
 
 </script>

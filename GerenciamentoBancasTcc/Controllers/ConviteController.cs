@@ -117,12 +117,11 @@ namespace GerenciamentoBancasTcc.Controllers
                         else
                         {
                             TempData["mensagemErro"] = "Este convite já foi aceito!";
-
-                            return BadRequest();
+                            return Ok();
                         }
                     }
                 }
-                else if (statusConvite == 2) // 2 = recusado
+                if (statusConvite == 2) // 2 = recusado
                 {
                     convite.StatusConvite = StatusConvite.Recusado;
                     convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor recusou o convite
@@ -130,9 +129,9 @@ namespace GerenciamentoBancasTcc.Controllers
                     await _context.SaveChangesAsync();
 
                     TempData["mensagemSucesso"] = "Convite recusado!";
-                    retorno.mensagem = "Convite recusado.";
+                    return Ok();
                 }
-                else if (statusConvite == 3) // 3 = cancelado
+                if (statusConvite == 3) // 3 = cancelado
                 {
                     var usuarioBanca = await _context.UsuariosBancas.FirstOrDefaultAsync(x => x.UsuarioId == user.Id && x.BancaId == banca.BancaId);
                     if (usuarioBanca != null)
@@ -157,16 +156,13 @@ namespace GerenciamentoBancasTcc.Controllers
                     await _context.SaveChangesAsync();
 
                     TempData["mensagemSucesso"] = "Convite cancelado!";
-                    retorno.mensagem = "Convite cancelado.";
+                    return Ok();
                 }
-
-                retorno.statusCode = 200;
-                return Ok(retorno);
+                return Ok();
             }
             catch (Exception ex)
             {
-                retorno.statusCode = 400;
-                retorno.mensagem = ex.Message;
+                TempData["mensagemErro"] = "Ocorreu um erro no processamento. " + ex.Message;
                 return BadRequest(retorno);
             }
         }

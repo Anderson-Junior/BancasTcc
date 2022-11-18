@@ -281,18 +281,28 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var banca = await _context.Bancas.FindAsync(id);
-            try
-            {
-                _context.Bancas.Remove(banca);
-                await _context.SaveChangesAsync();
-                TempData["mensagemSucesso"] = "Banca excluída com sucesso!";
+            var conviteExiste = await _context.Convites.FirstOrDefaultAsync(x => x.BancaId == banca.BancaId);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
+            if (conviteExiste != null)
             {
-                TempData["mensagemErro"] = "Erro ao excluir banca! " + ex.Message;
+                TempData["mensagemErro"] = "Não foi possível excluir esta banca devido existir um ou mais convites para ela. Primeiramente remova todos os convites.";
             }
+            else
+            {
+                try
+                {
+                    _context.Bancas.Remove(banca);
+                    await _context.SaveChangesAsync();
+                    TempData["mensagemSucesso"] = "Banca excluída com sucesso!";
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["mensagemErro"] = "Erro ao excluir banca! " + ex.Message;
+                }
+            }
+
             return View(banca);
         }
 
