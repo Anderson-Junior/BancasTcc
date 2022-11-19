@@ -49,19 +49,19 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StatusConvite)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Banca.Tema)
-                    </td>
-                    <td>
-                        @foreach (var dia in item.DiaQueDeveOcorrerBancas)
-                        {
-                            @Html.DisplayFor(modelItem => dia.PossivelDataHoraInicial)
-                        }
-                    </td>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StatusConvite)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Banca.Tema)
+                        </td>
+                        <td>
+                            @foreach (var dia in item.DiaQueDeveOcorrerBancas)
+                            {
+                                @Html.DisplayFor(modelItem => dia.PossivelDataHoraInicial)
+                            }
+                        </td>
                         <td style="width: 130px">
                             <a asp-action="DetalhesConvite" asp-route-id="@item.ConviteId" class="btn btn-sm btn-primary" title="Ver detalhes do convite"><i class="fa-solid fa-circle-info"></i></a>
                     </tr>
@@ -76,4 +76,8 @@
     <script type="text/javascript">
         handleDataTables();
     </script>
+    @*Font Awesome - Ícones*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"
+            integrity="sha512-naukR7I+Nk6gp7p5TMA4ycgfxaZBJ7MO5iC3Fp6ySQyKFHOGfpkSZkYVWV5R7u7cfAicxanwYQ5D1e17EfJcMA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 }

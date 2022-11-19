@@ -42,7 +42,6 @@ namespace GerenciamentoBancasTcc.Controllers
                               Curso = curso.Nome,
                               DataHora = banca.DataHora,
                               Orientador = orientador.Nome,
-                              Sala = banca.Sala,
                               Tema = banca.Tema,
                               Turma = turma.Nome,
                               Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),

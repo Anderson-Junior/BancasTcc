@@ -58,7 +58,6 @@ namespace GerenciamentoBancasTcc.Controllers
                                        Turma = turma.Nome,
                                        Orientador = usuario.Nome,
                                        Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
-                                       Sala = banca.Sala,
                                        Tema = banca.Tema,
                                        DiaQueDeveOcorrerBancas = banca.DiaQueDeveOcorrerBancas
                                    }).FirstAsync();
@@ -96,6 +95,10 @@ namespace GerenciamentoBancasTcc.Controllers
                                         possiveisDiasBanca.QtdAceites += 1;
                                     }
                                 }
+                            }
+                            else if (possiveisDiasBanca.QtdAceites == banca.QtdProfBanca)
+                            {
+                                banca.DataHora = possiveisDiasBanca.PossivelDataHoraInicial;
                             }
                         }
 

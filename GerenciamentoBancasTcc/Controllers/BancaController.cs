@@ -110,7 +110,6 @@ namespace GerenciamentoBancasTcc.Controllers
                                     Curso = curso.Nome,
                                     DataHora = banca.DataHora,
                                     Orientador = orientador.Nome,
-                                    Sala = banca.Sala,
                                     Tema = banca.Tema,
                                     Turma = turma.Nome,
                                     Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
@@ -131,20 +130,19 @@ namespace GerenciamentoBancasTcc.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Sala,Descricao,QtdProfBanca")] Banca banca, string alunosBanca, string[] possiveisDiasParaBanca)
+        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Descricao,QtdProfBanca")] Banca banca, int[] alunosBanca, DateTime[] possiveisDiasParaBanca)
         {
-            alunosBanca = "6";
             if (ModelState.IsValid)
             {
                 try
                 {
-                    banca.AlunosBancas = alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x) }).ToList();
+                    banca.AlunosBancas = alunosBanca.Select(x => new AlunosBancas { AlunoId = x }).ToList();
 
                     _context.Add(banca);
                     await _context.SaveChangesAsync();
 
-                    //var professores = await _context.Users.;ToListAsync();
-                    var professores = await _context.Users.Where(x => x.Id == "0a354a4f-c8f4-4d56-b8c3-f92d4408c398").ToListAsync();
+                    var professores = await _context.Users.ToListAsync();
+                    //var professores = await _context.Users.Where(x => x.Id == "0a354a4f-c8f4-4d56-b8c3-f92d4408c398").ToListAsync();
                     Convite convite = new();
 
                     foreach (var professor in professores)
@@ -162,13 +160,13 @@ namespace GerenciamentoBancasTcc.Controllers
                         }
                     }
 
-                    foreach (var dia in possiveisDiasParaBanca)
+                    foreach (var datahora in possiveisDiasParaBanca)
                     {
                         DiaQueDeveOcorrerBanca diaQueDeveOcorrerBanca = new()
                         {
                             BancaId = banca.BancaId,
                             ConviteId = convite.ConviteId,
-                            PossivelDataHoraInicial = DateTime.Parse(dia)
+                            PossivelDataHoraInicial = datahora
                         };
 
                         _context.DiaQueDeveOcorrerBancas.Add(diaQueDeveOcorrerBanca);
@@ -201,7 +199,10 @@ namespace GerenciamentoBancasTcc.Controllers
 
             if (id.HasValue)
             {
-                banca = await _context.Bancas.Include(x => x.Turma).Include(x => x.AlunosBancas).FirstOrDefaultAsync(x => x.BancaId == id.Value);
+                banca = await _context.Bancas
+                    .Include(x => x.Turma)
+                    .Include(x => x.AlunosBancas)
+                    .FirstOrDefaultAsync(x => x.BancaId == id.Value);
             }
 
             if (banca == null)
@@ -218,8 +219,8 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BancaId,TurmaId,Tema,UsuarioId,DataHora,Sala,Descricao")] Banca banca, string alunosBanca)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("BancaId,TurmaId,Tema,UsuarioId,Descricao,QtdProfBanca")] Banca banca, int[] alunosBanca, DateTime[] possiveisDiasParaBanca)
         {
             if (id != banca.BancaId || !BancaExists(banca.BancaId))
             {
@@ -232,12 +233,23 @@ namespace GerenciamentoBancasTcc.Controllers
                 {
                     _context.AlunosBancas.RemoveRange(_context.AlunosBancas.Where(x => x.BancaId == banca.BancaId));
 
-                    if (!string.IsNullOrWhiteSpace(alunosBanca))
+                    if (alunosBanca != null)
                     {
-                        _context.AlunosBancas.AddRange(alunosBanca.Split(',').Select(x => new AlunosBancas { AlunoId = int.Parse(x), BancaId = banca.BancaId }));
+                        _context.AlunosBancas.AddRange(alunosBanca.Select(x => new AlunosBancas { AlunoId = x, BancaId = banca.BancaId }));
                     }
 
                     _context.Update(banca);
+                  
+                    foreach (var datahora in possiveisDiasParaBanca)
+                    {
+                        var diaQueDeveOcorrerBanca = await _context.DiaQueDeveOcorrerBancas.Where(x => x.BancaId == banca.BancaId).ToListAsync();
+
+                        foreach(var item in diaQueDeveOcorrerBanca)
+                        {
+                            item.PossivelDataHoraInicial = datahora;
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                     TempData["mensagemSucesso"] = "Banca atualizada com sucesso!";
                 }
@@ -283,24 +295,17 @@ namespace GerenciamentoBancasTcc.Controllers
             var banca = await _context.Bancas.FindAsync(id);
             var conviteExiste = await _context.Convites.FirstOrDefaultAsync(x => x.BancaId == banca.BancaId);
 
-            if (conviteExiste != null)
+            try
             {
-                TempData["mensagemErro"] = "Não foi possível excluir esta banca devido existir um ou mais convites para ela. Primeiramente remova todos os convites.";
-            }
-            else
-            {
-                try
-                {
-                    _context.Bancas.Remove(banca);
-                    await _context.SaveChangesAsync();
-                    TempData["mensagemSucesso"] = "Banca excluída com sucesso!";
+                _context.Bancas.Remove(banca);
+                await _context.SaveChangesAsync();
+                TempData["mensagemSucesso"] = "Banca excluída com sucesso!";
 
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    TempData["mensagemErro"] = "Erro ao excluir banca! " + ex.Message;
-                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["mensagemErro"] = "Erro ao excluir banca! " + ex.Message;
             }
 
             return View(banca);

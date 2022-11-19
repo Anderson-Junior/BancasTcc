@@ -6,6 +6,21 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/select-pure.css" />
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <!-- JQuery MultiDatesPicker -->
+    @*<link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/dubrox/Multiple-Dates-Picker-for-jQuery-UI@master/jquery-ui.multidatespicker.css">*@
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        /* jQuery UI Datepicker emphasis on selected dates */
+        .ui-datepicker .ui-datepicker-calendar .ui-state-highlight a {
+            background: #1a5f97 none;
+            color: white;
+        }
+    </style>
 }
 @if (TempData["mensagemSucesso"] != null)
 {
@@ -26,9 +41,12 @@
     </div>
 }
 <div>
-    <a asp-action="Index" style="text-decoration: none; color: #EEA084;"><i class="fa-solid fa-circle-arrow-left"></i> Voltar para lista</a>
+    <a asp-action="Index" style="text-decoration: none; color: #EEA084;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
+        </svg> Voltar para lista
+    </a>
 </div>
-
 <div class="container">
     <div class="row">
         <div class="col-md-2"></div>
@@ -38,58 +56,75 @@
                     <b>Editar Banca</b>
                 </div>
                 <div class="card-body">
-
                     <div class="alert alert-warning" role="alert">
                         Tem certeza que deseja editar as informações da banca?
                     </div>
-
-                    <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="BancaId" />
-                        <input type="hidden" id="alunosBanca" name="alunosBanca" value="@ViewBag.AlunosBanca" />
-                        <div class="form-group">
-                            <label class="control-label">Curso - Selecione para filtrar as turmas</label>
-                            <select class="form-control" id="CursoId" asp-items="ViewBag.CursoId"></select>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="BancaId" id="BancaId"/>
+                    <input type="hidden" id="alunosBanca" name="alunosBanca" value="@ViewBag.AlunosBanca" />
+                    <div class="form-group">
+                        <label class="control-label">Curso - Selecione para filtrar as turmas</label>
+                        <select class="form-control" id="CursoId" asp-items="ViewBag.CursoId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TurmaId" class="control-label"></label>
+                        <select asp-for="TurmaId" class="form-control" id="TurmaId" asp-items="ViewBag.TurmaId"></select>
+                        <span asp-validation-for="TurmaId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="select-pure" class="control-label">Alunos</label>
+                        <span id="select-pure"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Tema" class="control-label"></label>
+                        <input asp-for="Tema" id="TemaId" class="form-control" />
+                        <span asp-validation-for="Tema" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UsuarioId" class="control-label"></label>
+                        <select asp-for="UsuarioId" class="form-control" id="UsuarioId" asp-items="ViewBag.UsuarioId"></select>
+                        <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="QtdProfBanca" class="control-label"></label>
+                        <input asp-for="QtdProfBanca" class="form-control" id="QtdProfBancaId" />
+                        <span asp-validation-for="QtdProfBanca" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Informe as possíveis datas e horários em que deve ocorrer a banca</label>
+                        <div id="datetime-container">
+                            <div class="row datetime-row">
+                                <div class="col-md-3">
+                                    <div class="input-group mb-3">
+                                        <input type="date" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-3">
+                                        <select class="form-select">
+                                            <option value="19:00">19:00</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="21:00">21:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-3">
+                                        <input type="button" value="+" id="btn-add" class="btn btn-info" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="TurmaId" class="control-label"></label>
-                            <select asp-for="TurmaId" class="form-control" asp-items="ViewBag.TurmaId"></select>
-                            <span asp-validation-for="TurmaId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="select-pure" class="control-label">Alunos</label>
-                            <span id="select-pure"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Tema" class="control-label"></label>
-                            <input asp-for="Tema" class="form-control" />
-                            <span asp-validation-for="Tema" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="UsuarioId" class="control-label"></label>
-                            <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
-                            <span asp-validation-for="UsuarioId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="DataHora" class="control-label"></label>
-                            <input asp-for="DataHora" class="form-control" />
-                            <span asp-validation-for="DataHora" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Sala" class="control-label"></label>
-                            <input asp-for="Sala" class="form-control" />
-                            <span asp-validation-for="Sala" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Descricao" class="control-label">Descrição (opcional)</label>
-                            <input asp-for="Descricao" class="form-control" />
-                            <span asp-validation-for="Descricao" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Salvar" class="btn btn-primary" />
-                        </div>
-                    </form>
-
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Descricao" class="control-label">Descrição (opcional)</label>
+                        <input asp-for="Descricao" class="form-control" />
+                        <span asp-validation-for="Descricao" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar" id="btn-editar" class="btn btn-primary" />
+                    </div>
                 </div>
             </div>
         </div>

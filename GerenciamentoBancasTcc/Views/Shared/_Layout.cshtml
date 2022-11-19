@@ -27,77 +27,57 @@
                 <ul class="list-unstyled components mb-5">
                     @if (User.IsInRole("Coordenador"))
                     {
-                        <li>
-                            <a asp-action="Index" asp-controller="Aluno">
-                                <i class="fa fa-users" aria-hidden="true" style="margin-right:3px;"></i>
-                                Alunos
-                            </a>
-                        </li>
-                        @*<li>
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <i class="fa fa-file-text" aria-hidden="true" style="margin-right:8px;"></i>
-                                Avaliações
-                            </a>
-                            <ul class="collapse list-unstyled" id="homeSubmenu">
-                                <li>
-                                    <a asp-action="Index" style="padding-left: 25px;" asp-controller="Questoes">
-                                        <i class="fa fa-question-circle" aria-hidden="true" style="margin-right:8px;"></i>
-                                        Questões
-                                    </a>
-                                </li>
-                                <li>
-                                    <a asp-action="Index" style="padding-left: 25px;" asp-controller="Formulario">
-                                        <i class="fa fa-file-text" aria-hidden="true" style="margin-right:8px;"></i>
-                                        Formulários
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>*@
-                        <li>
-                            <a asp-action="Index" asp-controller="Banca">
-                                <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
-                                Bancas
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Curso">
-                                <i class="fa fa-book" aria-hidden="true" style="margin-right:5px;"></i>
-                                Cursos
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Turma">
-                                <i class="fa fa-align-justify" aria-hidden="true" style="margin-right:5px;"></i>
-                                Turmas
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Usuario">
-                                <i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>
-                                Usuários
-                            </a>
-                        </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Aluno">
+                            <i class="fa fa-users" aria-hidden="true" style="margin-right:3px;"></i>
+                            Alunos
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Banca">
+                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
+                            Bancas
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Curso">
+                            <i class="fa fa-book" aria-hidden="true" style="margin-right:5px;"></i>
+                            Cursos
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Turma">
+                            <i class="fa fa-align-justify" aria-hidden="true" style="margin-right:5px;"></i>
+                            Turmas
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Usuario">
+                            <i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>
+                            Usuários
+                        </a>
+                    </li>
                     }
 
                     @if (User.IsInRole("Professor"))
                     {
-                        <li>
-                            <a asp-action="MeusConvites" asp-controller="Convite">
-                                <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
-                                Meus convites
-                            </a>
-                        </li>
+                    <li>
+                        <a asp-action="MeusConvites" asp-controller="Convite">
+                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
+                            Meus convites
+                        </a>
+                    </li>
                     }
 
 
                     @if (User.IsInRole("Administrador"))
                     {
-                        <li>
-                            <a asp-action="Index" asp-controller="Instituicao">Instituições</a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Filial">Filiais</a>
-                        </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Instituicao">Instituições</a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Filial">Filiais</a>
+                    </li>
                     }
                 </ul>
             </div>
@@ -138,7 +118,7 @@
     <script src="~/js/popper.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/main.js"></script>
-    <script src="~/js/all.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

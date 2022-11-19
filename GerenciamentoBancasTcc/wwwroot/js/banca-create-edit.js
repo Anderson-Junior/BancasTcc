@@ -2,11 +2,6 @@
 
     let selectPure;
 
-    $("form").submit(function () {
-        $("#alunosBanca").val(selectPure._config.value);
-        return true;
-    });
-
     $("#CursoId").change(function () {
         getTurmas();
         initSelectPure([]);
@@ -69,4 +64,71 @@
     //    selectMin: 1,
     //    selectCounter: true
     //});
+
+    let html = $('#datetime-container').html();
+
+    $('#btn-add').click(function () {
+        $('#datetime-container').append(html);
+    });
+
+    $("#btn-cadastrar").click(function () {
+
+        let datetimes = [];
+
+        $('.datetime-row').each(function () {
+            let date = $(this).find('input').val();
+            if (date) {
+                datetimes.push(date + ' ' + $(this).find('select').val());
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Banca/Create",
+            data: {
+                TurmaId: $("#TurmaId").val(),
+                Tema: $("#TemaId").val(),
+                UsuarioId: $("#UsuarioId").val(),
+                Descricao: $("#DescricaoId").val(),
+                QtdProfBanca: $("#QtdProfBancaId").val(),
+                alunosBanca: selectPure._config.value,
+                possiveisDiasParaBanca: datetimes
+            },
+
+            success: function (data) {
+                window.location.replace("https://localhost:5001/Banca");
+            }
+        });
+    });
+
+    $("#btn-editar").click(function () {
+
+        let datetimes = [];
+
+        $('.datetime-row').each(function () {
+            let date = $(this).find('input').val();
+            if (date) {
+                datetimes.push(date + ' ' + $(this).find('select').val());
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Banca/Edit?id=" + $("#BancaId").val(),
+            data: {
+                BancaId: $("#BancaId").val(),
+                TurmaId: $("#TurmaId").val(),
+                Tema: $("#TemaId").val(),
+                UsuarioId: $("#UsuarioId").val(),
+                Descricao: $("#DescricaoId").val(),
+                QtdProfBanca: $("#QtdProfBancaId").val(),
+                alunosBanca: selectPure._config.value,
+                possiveisDiasParaBanca: datetimes
+            },
+
+            success: function (data) {
+                window.location.replace("https://localhost:5001/Banca");
+            }
+        });
+    });
 });

@@ -4,14 +4,16 @@ using GerenciamentoBancasTcc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GerenciamentoBancasTcc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221118223615_RemovendoCampoSalaDaBanca")]
+    partial class RemovendoCampoSalaDaBanca
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -665,7 +667,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Banca", "Banca")
                         .WithMany("Convites")
                         .HasForeignKey("BancaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Usuario", "Usuario")
@@ -694,7 +696,7 @@ namespace GerenciamentoBancasTcc.Data.Migrations
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Banca", "Banca")
                         .WithMany("DiaQueDeveOcorrerBancas")
                         .HasForeignKey("BancaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("GerenciamentoBancasTcc.Domains.Entities.Convite", "Convite")

@@ -33,9 +33,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         [Required(ErrorMessage = "É necessário informar quantos professores participarão da banca.")]
         public int QtdProfBanca { get; set; }
 
-        [Required(ErrorMessage = "É necessário informar a sala.")]
-        public int Sala { get; set; }
-
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
@@ -44,7 +41,5 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
         public ICollection<Convite> Convites { get; set; }
         public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
-
-        //public string DiasQueDevemOcorrerBanca{ get; set; }
     }
 }
