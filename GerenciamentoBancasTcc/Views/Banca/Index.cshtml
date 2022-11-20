@@ -67,14 +67,14 @@
                             @Html.DisplayFor(modelItem => item.Usuario.Nome)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DataHora)
+                            @item.DataHora?.ToString("dd/MM/yyyy HH:mm")
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Descricao)
                         </td>
                         <td style="width: 130px">
                             <a asp-action="Edit" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary" title="Editar banca"><i class="fa fa-edit fa-fw"></i></a>
-                            <a asp-action="UploadArquivo" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary" title="Enviar arquivo"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <a asp-action="UploadArquivo" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary" title="Enviar arquivo"><i class="fa fa-upload" aria-hidden="true"></i></a>
                             <a asp-action="Delete" asp-route-id="@item.BancaId" class="btn btn-sm btn-primary _remove" title="Excluir banca"><i class="fa fa-remove fa-fw"></i></a>
                         </td>
                     </tr>

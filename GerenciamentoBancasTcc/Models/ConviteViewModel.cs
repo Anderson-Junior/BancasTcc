@@ -1,8 +1,6 @@
-﻿using GerenciamentoBancasTcc.Domains.Entities;
-using GerenciamentoBancasTcc.Domains.Enums;
+﻿using GerenciamentoBancasTcc.Domains.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace GerenciamentoBancasTcc.Models
 {
@@ -12,12 +10,6 @@ namespace GerenciamentoBancasTcc.Models
 
         public StatusConvite StatusConvite { get; set; }
 
-        public DateTime DataHoraAcao { get; set; }
-
-        public string Banca { get; set; }
-
-        public string Professor { get; set; }
-
         public string Turma { get; set; }
 
         public string Tema { get; set; }
@@ -26,11 +18,10 @@ namespace GerenciamentoBancasTcc.Models
 
         public string Orientador { get; set; }
 
-        public int Sala { get; set; }
+        public IList<string> Alunos { get; set; }
 
-        public List<Aluno> Alunos { get; set; }
+        public IList<DateTime> BancaPossiveisDataHora { get; set; }
 
-        [Display(Name = "Possíveis datas")]
-        public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
+        public IList<DateTime> ConviteAceites { get; set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using GerenciamentoBancasTcc.Data;
-using GerenciamentoBancasTcc.Domains.Dtos;
 using GerenciamentoBancasTcc.Domains.Entities;
 using GerenciamentoBancasTcc.Domains.Enums;
 using GerenciamentoBancasTcc.Models;
-using GerenciamentoBancasTcc.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,27 +16,29 @@ namespace GerenciamentoBancasTcc.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Usuario> _userManager;
-        private readonly IEmailService _emailService;
 
-        public ConviteController(ApplicationDbContext context, UserManager<Usuario> userManager, IEmailService emailService)
+        public ConviteController(ApplicationDbContext context, UserManager<Usuario> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _emailService = emailService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> MeusConvites()
         {
-            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
+            var userId = _userManager.GetUserId(HttpContext.User);
+
             var convitesRecebidos = await _context.Convites
-                .Where(x => x.UsuarioId == user.Id)
+                .Where(x => x.UsuarioId == userId)
                 .Include(x => x.Banca)
-                .Include(x => x.DiaQueDeveOcorrerBancas)
+                .Include(x => x.ConviteAceites)
+                .Include(x => x.Banca.BancaPossiveisDataHora)
                 .ToListAsync();
 
             return View(convitesRecebidos);
         }
 
+        [HttpGet]
         public async Task<IActionResult> DetalhesConvite(Guid? id)
         {
             var resultado = await (from convite in _context.Convites
@@ -50,149 +50,126 @@ namespace GerenciamentoBancasTcc.Controllers
                                    select new ConviteViewModel
                                    {
                                        ConviteId = convite.ConviteId,
-                                       DataHoraAcao = convite.DataHoraAcao,
-                                       Professor = convite.Usuario.Nome,
-                                       Banca = convite.Banca.Tema,
                                        StatusConvite = convite.StatusConvite,
                                        Curso = curso.Nome,
                                        Turma = turma.Nome,
                                        Orientador = usuario.Nome,
-                                       Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
+                                       Alunos = banca.AlunosBancas.Select(x => x.Aluno.Nome).ToList(),
                                        Tema = banca.Tema,
-                                       DiaQueDeveOcorrerBancas = banca.DiaQueDeveOcorrerBancas
+                                       BancaPossiveisDataHora = banca.BancaPossiveisDataHora.Select(x => x.PossivelDataHora).ToList(),
+                                       ConviteAceites = convite.ConviteAceites.Select(x => x.PossivelDataHora).ToList()
                                    }).FirstAsync();
+
+            ViewData["AcceptButtonLabel"] = resultado.StatusConvite != StatusConvite.Aceito ? "Aceitar" : "Alterar aceite";
+            ViewData["RejectButtonLabel"] = resultado.StatusConvite != StatusConvite.Aceito ? "Recusar" : "Cancelar aceite";
 
             return View(resultado);
         }
 
-        public async Task<IActionResult> AceitarConvite(Guid idConvite, int statusConvite, string idDiasSelecionados)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AceitarConvite(Guid id, string datasSelecionadas)
         {
-            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
-            RetornoConviteDto retorno = new();
-
-            string[] _IdsDiaSelecionados = idDiasSelecionados.Split(",");
             try
             {
-                var convite = await _context.Convites.SingleOrDefaultAsync(x => x.ConviteId == idConvite);
-                var banca = await _context.Bancas.SingleOrDefaultAsync(x => x.BancaId == convite.BancaId);
-                var diaQueDeveOcorrerBancas = await _context.DiaQueDeveOcorrerBancas.Where(x => x.BancaId == banca.BancaId).ToListAsync();
+                var convite = _context.Convites
+                    .Include(x => x.Banca)
+                    .Include(x => x.ConviteAceites)
+                    .Include(x => x.Banca.UsuariosBancas)
+                    .FirstOrDefault(x => x.ConviteId == id);
 
-                if (convite != null)
+                if (convite.UsuarioId != _userManager.GetUserId(HttpContext.User))
                 {
-                    if (statusConvite == 1) // 1 = aceito
-                    {
-                        foreach (var possiveisDiasBanca in diaQueDeveOcorrerBancas)
-                        {
-                            if (possiveisDiasBanca.QtdAceites < banca.QtdProfBanca)
-                            {
-                                foreach (var idDiaSelecionado in _IdsDiaSelecionados)
-                                {
-                                    var diaSelecProf = _context.DiaQueDeveOcorrerBancas.SingleOrDefault(x => x.DiaQueDeveOcorrerBancaId == Int32.Parse(idDiaSelecionado));
-                                    if (possiveisDiasBanca.DiaQueDeveOcorrerBancaId == diaSelecProf.DiaQueDeveOcorrerBancaId)
-                                    {
-                                        convite.StatusConvite = StatusConvite.Aceito;
-                                        convite.DataHoraAcao = DateTime.Now;
-                                        possiveisDiasBanca.QtdAceites += 1;
-                                    }
-                                }
-                            }
-                            else if (possiveisDiasBanca.QtdAceites == banca.QtdProfBanca)
-                            {
-                                banca.DataHora = possiveisDiasBanca.PossivelDataHoraInicial;
-                            }
-                        }
-
-                        var usuariosBancas = await _context.UsuariosBancas.FirstOrDefaultAsync(x => x.UsuarioId == user.Id && x.BancaId == banca.BancaId);
-                        if (usuariosBancas == null)
-                        {
-                            UsuarioBanca usuarioBanca = new()
-                            {
-                                BancaId = banca.BancaId,
-                                UsuarioId = user.Id
-                            };
-                            await _context.UsuariosBancas.AddAsync(usuarioBanca);
-                            TempData["mensagemSucesso"] = "Convite aceito com sucesso!";
-
-                            await _context.SaveChangesAsync();
-
-                            return Ok();
-                        }
-                        else
-                        {
-                            TempData["mensagemErro"] = "Este convite já foi aceito!";
-                            return Ok();
-                        }
-                    }
+                    throw new Exception("Convite não pertence ao usuário logado.");
                 }
-                if (statusConvite == 2) // 2 = recusado
+
+                var banca = convite.Banca;
+
+                if (banca.DataHora.HasValue && !banca.UsuariosBancas.Any(x => x.UsuarioId == convite.UsuarioId))
                 {
-                    convite.StatusConvite = StatusConvite.Recusado;
-                    convite.DataHoraAcao = DateTime.Now; // Data e hora que o professor recusou o convite
-
-                    await _context.SaveChangesAsync();
-
-                    TempData["mensagemSucesso"] = "Convite recusado!";
-                    return Ok();
+                    throw new Exception("Não é mais possível aceitar este convite, a banca já está completa.");
                 }
-                if (statusConvite == 3) // 3 = cancelado
-                {
-                    var usuarioBanca = await _context.UsuariosBancas.FirstOrDefaultAsync(x => x.UsuarioId == user.Id && x.BancaId == banca.BancaId);
-                    if (usuarioBanca != null)
-                    {
-                        _context.Remove(usuarioBanca);
-                    }
 
-                    foreach (var possiveisDiasBanca in banca.DiaQueDeveOcorrerBancas)
+                // Deve recalcular a data da banca caso o convite tenha sido aceito anteriormente e o aceite foi alterado removendo ou adicionando alguma data.
+                banca.DataHora = null;
+                banca.UsuariosBancas.Clear();
+
+                convite.ConviteAceites.Clear();
+                convite.StatusConvite = StatusConvite.Aceito;
+                convite.ConviteAceites = datasSelecionadas.Split(',').Select(x => new ConviteAceite { PossivelDataHora = DateTime.Parse(x) }).ToList();
+
+                await _context.SaveChangesAsync();
+
+                var bancaDataHora = (from aceite in _context.ConviteAceites
+                                        where aceite.Convite.BancaId == banca.BancaId
+                                        group aceite by aceite.PossivelDataHora into g
+                                        where g.Count() >= banca.QtdProfBanca
+                                        orderby g.Key
+                                        select g.Key).FirstOrDefault();
+
+                if (bancaDataHora != DateTime.MinValue)
+                {
+                    banca.DataHora = bancaDataHora;
+
+                    // Somente vincular professores à banca quando a data da banca tiver sido definida
+                    foreach (var conviteAceito in _context.Convites.Where(x => x.BancaId == banca.BancaId && x.ConviteAceites.Any(x => x.PossivelDataHora == bancaDataHora)))
                     {
-                        foreach (var idDiaSelecionado in _IdsDiaSelecionados)
+                        banca.UsuariosBancas.Add(new UsuarioBanca
                         {
-                            var diaSelecProf = _context.DiaQueDeveOcorrerBancas.SingleOrDefault(x => x.DiaQueDeveOcorrerBancaId == Int32.Parse(idDiaSelecionado));
-                            if (possiveisDiasBanca.DiaQueDeveOcorrerBancaId == diaSelecProf.DiaQueDeveOcorrerBancaId)
-                            {
-                                convite.StatusConvite = StatusConvite.Cancelado;
-                                convite.DataHoraAcao = DateTime.Now;
-                                possiveisDiasBanca.QtdAceites -= 1;
-                            }
-                        }
+                            UsuarioId = conviteAceito.UsuarioId
+                        });
                     }
 
                     await _context.SaveChangesAsync();
-
-                    TempData["mensagemSucesso"] = "Convite cancelado!";
-                    return Ok();
                 }
-                return Ok();
+
+                TempData["mensagemSucesso"] = "Convite aceito com sucesso!";
             }
             catch (Exception ex)
             {
-                TempData["mensagemErro"] = "Ocorreu um erro no processamento. " + ex.Message;
-                return BadRequest(retorno);
+                TempData["mensagemErro"] = ex.Message;
             }
+
+            return RedirectToAction(nameof(MeusConvites));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetStatusConvite(Guid idConvite)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RecusarConvite(Guid id)
         {
-            Usuario user = await _userManager.GetUserAsync(HttpContext.User);
-            var convitesRecebidos = await _context.Convites.FirstOrDefaultAsync(x => x.ConviteId == idConvite);
-            var statusConvite = 0;
-
-            if (convitesRecebidos.StatusConvite == StatusConvite.Aceito)
+            try
             {
-                statusConvite = 1;
+                var convite = _context.Convites
+                    .Include(x => x.Banca)
+                    .Include(x => x.ConviteAceites)
+                    .Include(x => x.Banca.UsuariosBancas)
+                    .FirstOrDefault(x => x.ConviteId == id);
+
+                if (convite.UsuarioId != _userManager.GetUserId(HttpContext.User))
+                {
+                    throw new Exception("Convite não pertence ao usuário logado!");
+                }
+
+                convite.ConviteAceites.Clear();
+                convite.StatusConvite = StatusConvite.Recusado;
+
+                // Se o convite havia sido aceito anteriormente e o professor estava confirmado na banca, é necessário reverter.
+                if (convite.Banca.UsuariosBancas.Any(x => x.UsuarioId == convite.UsuarioId))
+                {
+                    convite.Banca.DataHora = null;
+                    convite.Banca.UsuariosBancas.Clear();
+                }
+
+                await _context.SaveChangesAsync();
+
+                TempData["mensagemSucesso"] = "Convite recusado!";
+            }
+            catch (Exception ex)
+            {
+                TempData["mensagemErro"] = ex.Message;
             }
 
-            if (convitesRecebidos.StatusConvite == StatusConvite.Recusado)
-            {
-                statusConvite = 2;
-            }
-
-            if (convitesRecebidos.StatusConvite == StatusConvite.Cancelado)
-            {
-                statusConvite = 3;
-            }
-
-            return Json(statusConvite);
+            return RedirectToAction(nameof(MeusConvites));
         }
     }
 }

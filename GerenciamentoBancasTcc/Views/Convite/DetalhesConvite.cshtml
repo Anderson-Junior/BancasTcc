@@ -34,59 +34,67 @@
     <div class="container align-items-center">
         <div class="card">
             <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
-                <p class="mb-0">@Html.DisplayFor(modelItem => Model.Banca)</p>
+                <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
             </div>
             <div class="card-body">
                 <div>
                     <div>
                         <div>
-                            @*<p><b>Data/Hora:</b> @Model.DataHora.ToString("dd/MM/yyyy HH:mm")</p>*@
                             <p><b>Curso:</b> @Model.Curso</p>
                             <p><b>Turma:</b> @Model.Turma</p>
-                            <p><b>Orientador:</b>  @Model.Orientador</p>
+                            <p><b>Orientador:</b> @Model.Orientador</p>
+                            <p><b>Alunos:</b> @string.Join(", ", Model.Alunos)</p>
+                            <p><b>Status:</b> @Html.DisplayFor(m => m.StatusConvite)</p>
                             <p>
-                                <b>Alunos:</b>
-                                @foreach (var aluno in Model.Alunos)
-                                {
-                                    @(aluno.Nome + ", ")
-                                }
-                            </p>
-                            <p><b>Professores:</b> @string.Join(", ", Model.Professor)</p>
-                            <p><b>Sala:</b> @Model.Sala</p>
-                            <p>
-                                <b>Datas:</b>
                                 <table id="data_table" class="table table-hover table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.DiaQueDeveOcorrerBancas)
-                                            </th>
+                                            <th colspan="2">Possíveis datas</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var data in Model.DiaQueDeveOcorrerBancas)
+                                        @foreach (var data in Model.BancaPossiveisDataHora)
                                         {
                                             <tr>
-                                                <td>
-                                                    <input type="checkbox" value="@data.DiaQueDeveOcorrerBancaId" name="diasSelecionados" />
+                                                <td width="5">
+                                                    @if (Model.ConviteAceites.Any(x => x == data))
+                                                    {
+                                                        <input type="checkbox" value="@data" name="datasSelecionadas" checked="checked" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" value="@data" name="datasSelecionadas" />
+                                                    }
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => data.PossivelDataHoraInicial)
+                                                    @data.ToString("dd/MM/yyyy HH:mm")
                                                 </td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
                             </p>
-
-                            <input type="hidden" id="conviteId" value="@Model.ConviteId" />
                         </div>
                     </div>
                     <div>
-                        <input type="button" id="btn-aceitar" class="btn btn-sm btn-primary" value="Aceitar" />
-                        <input type="button" id="btn-recusar" class="btn btn-sm btn-warning" value="Recusar" />
-                        <input type="button" id="btn-cancelar" class="btn btn-sm btn-danger" value="Cancelar" />
+                        <div class="row">
+                            <div class="col-auto">
+                                <form id="formAceitar" asp-action="AceitarConvite">
+                                    <input type="hidden" name="id" value="@Model.ConviteId" />
+                                    <input type="hidden" id="datasSelecionadas" name="datasSelecionadas" />
+                                    <input type="submit" class="btn btn-sm btn-primary" value="@ViewData["AcceptButtonLabel"]" />
+                                </form>
+                            </div>
+                            <div class="col-auto">
+                                @if (Model.StatusConvite != GerenciamentoBancasTcc.Domains.Enums.StatusConvite.Recusado)
+                                {
+                                    <form asp-action="RecusarConvite">
+                                        <input type="hidden" name="id" value="@Model.ConviteId" />
+                                        <input type="submit" class="btn btn-sm btn-warning" value="@ViewData["RejectButtonLabel"]" />
+                                    </form>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,138 +102,28 @@
     </div>
 </body>
 </html>
-
-<!-- Script JQuery-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<!-- JS Bootstrap-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<!--Datatables-->
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
-<!--Datatable checkboxes-->
-<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 <script type="text/javascript">
 
-    $(document).ready(function () {
-        $.ajax({
-            type: "GET",
-            url: "/Convite/GetStatusConvite",
-            data: {
-                idConvite: $("#conviteId").val()
-            },
-            success: function (data) {
-                if (data == 1) {
-                    console.log("status 1")
-                    $("#btn-aceitar").hide();
-                    $("#btn-recusar").hide();
-                }
-                else if (data == 2) {
-                    $("#btn-cancelar").hide();
-                    $("#btn-recusar").hide();
-                }
-                else if (data == 3) {
-                    $("#btn-cancelar").hide();
-                    $("#btn-recusar").hide();
-                }
-            },
-        });
-    });
+    $("#formAceitar").submit(function () {
 
-    var statusConvite;
-    $("#btn-aceitar").click(function () {
-        statusConvite = 1;
+        let datasSelecionadas = [];
 
-        var dias = [];
-        $.each($("input[name='diasSelecionados']:checked"), function () {
-            dias.push($(this).val());
+        $("input[name='datasSelecionadas']:checked").each(function () {
+            datasSelecionadas.push($(this).val());
         });
 
-        var diasSelecionados = dias.join(", ");
+        let hasValues = datasSelecionadas.length > 0;
 
-        if (diasSelecionados == "") {
-            alert("Selecione a data que poderá participar.")
+        if (hasValues) {
+            $("#datasSelecionadas").val(datasSelecionadas);
         }
         else {
-            $.ajax({
-                type: "POST",
-                url: "/Convite/AceitarConvite",
-                data: {
-                    idConvite: $("#conviteId").val(),
-                    statusConvite: statusConvite,
-                    idDiasSelecionados: diasSelecionados
-                },
-                success: function (data) {
-                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
-                },
-                error: function () {
-                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
-                }
-            });
+            alert("Selecione a data que poderá participar.");
         }
-    });
 
-    $("#btn-recusar").click(function () {
-        statusConvite = 2;
-
-        var dias = [];
-        $.each($("input[name='diasSelecionados']:checked"), function () {
-            dias.push($(this).val());
-        });
-
-        var diasSelecionados = dias.join(", ");
-
-        console.log(diasSelecionados)
-        if (diasSelecionados == "") {
-            alert("Selecione a data que deseja recusar o convite.")
-        }
-        else {
-            $.ajax({
-                type: "POST",
-                url: "/Convite/AceitarConvite",
-                data: {
-                    idConvite: $("#conviteId").val(),
-                    statusConvite: statusConvite,
-                    idDiasSelecionados: diasSelecionados
-                },
-                success: function (data) {
-                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
-                },
-                error: function () {
-                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
-                }
-            });
-        }
-    });
-
-    $("#btn-cancelar").click(function () {
-        statusConvite = 3;
-
-        var dias = [];
-        $.each($("input[name='diasSelecionados']:checked"), function () {
-            dias.push($(this).val());
-        });
-
-        var diasSelecionados = dias.join(", ");
-
-        if (diasSelecionados == "") {
-            alert("Selecione a data que deseja cancelar sua participação.")
-        }
-        else {
-            $.ajax({
-                type: "POST",
-                url: "/Convite/AceitarConvite",
-                data: {
-                    idConvite: $("#conviteId").val(),
-                    statusConvite: statusConvite,
-                    idDiasSelecionados: diasSelecionados
-                },
-                success: function (data) {
-                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
-                },
-                error: function () {
-                    window.location.replace("https://localhost:5001/Convite/MeusConvites");
-                }
-            });
-        }
+        return hasValues;
     });
 
 </script>

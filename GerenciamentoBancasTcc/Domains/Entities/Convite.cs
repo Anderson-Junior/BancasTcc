@@ -10,23 +10,19 @@ namespace GerenciamentoBancasTcc.Domains.Entities
     public class Convite
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid ConviteId { get; set; }
 
         [Display(Name = "Status")]
         public StatusConvite StatusConvite { get; set; }
 
-        [Display(Name = "Data/Hora")]
-        public DateTime DataHoraAcao { get; set; }
-
-        public string DiaConvite { get; set; }
         public int BancaId { get; set; }
         public Banca Banca { get; set; }
 
         public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
+        public bool EmailEnviado { get; set; }
 
-        [Display(Name = "Possíveis datas")]
-        public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
+        public ICollection<ConviteAceite> ConviteAceites { get; set; }
     }
 }

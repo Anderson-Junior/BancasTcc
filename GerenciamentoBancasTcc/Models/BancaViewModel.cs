@@ -16,8 +16,6 @@ namespace GerenciamentoBancasTcc.Models
 
         public string Orientador { get; set; }
 
-        public int Sala { get; set; }
-
         public DateTime? DataHora { get; set; }
 
         public List<Aluno> Alunos { get; set; }

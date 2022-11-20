@@ -1,4 +1,5 @@
 ﻿using GerenciamentoBancasTcc.Data;
+using GerenciamentoBancasTcc.Data.Migrations;
 using GerenciamentoBancasTcc.Domains.Entities;
 using GerenciamentoBancasTcc.Models;
 using GerenciamentoBancasTcc.Services.Email;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
@@ -123,72 +126,51 @@ namespace GerenciamentoBancasTcc.Controllers
 
         public IActionResult Create()
         {
-            GetCursos();
-            GetOrientador();
+            SetViewData();
             return View();
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BancaId,TurmaId,Tema,UsuarioId,Descricao,QtdProfBanca")] Banca banca, int[] alunosBanca, DateTime[] possiveisDiasParaBanca)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Banca banca, string alunosBanca, string datasBanca)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    banca.AlunosBancas = alunosBanca.Select(x => new AlunosBancas { AlunoId = x }).ToList();
+                    if (!string.IsNullOrWhiteSpace(alunosBanca))
+                    {
+                        banca.AlunosBancas = alunosBanca.Split(',').Select(alunoId => new AlunosBancas { AlunoId = int.Parse(alunoId) }).ToList();
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(datasBanca))
+                    {
+                        banca.BancaPossiveisDataHora = datasBanca.Split(',').Distinct().Select(datahora => new BancaPossivelDataHora { PossivelDataHora = DateTime.Parse(datahora) }).ToList();
+                    }
 
                     _context.Add(banca);
+
+                    // TODO: remover filtro
+                    var convites = _context.Users
+                        .Where(x => x.Ativo && x.Nome == "Emerson")
+                        .Select(x => new Convite { BancaId = banca.BancaId, UsuarioId = x.Id, ConviteId = Guid.NewGuid() }).ToList();
+
+                    EnviarConvites(convites);
+
+                    _context.Convites.AddRange(convites);
                     await _context.SaveChangesAsync();
 
-                    var professores = await _context.Users.ToListAsync();
-                    //var professores = await _context.Users.Where(x => x.Id == "0a354a4f-c8f4-4d56-b8c3-f92d4408c398").ToListAsync();
-                    Convite convite = new();
-
-                    foreach (var professor in professores)
-                    {
-                        var emailEnviado = _emailService.SendMailInvite(professor.Email,
-                            "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária");
-
-                        if (emailEnviado)
-                        {
-                            convite.UsuarioId = professor.Id;
-                            convite.BancaId = banca.BancaId;
-
-                            _context.Convites.Add(convite);
-                            _context.SaveChanges();
-                        }
-                    }
-
-                    foreach (var datahora in possiveisDiasParaBanca)
-                    {
-                        DiaQueDeveOcorrerBanca diaQueDeveOcorrerBanca = new()
-                        {
-                            BancaId = banca.BancaId,
-                            ConviteId = convite.ConviteId,
-                            PossivelDataHoraInicial = datahora
-                        };
-
-                        _context.DiaQueDeveOcorrerBancas.Add(diaQueDeveOcorrerBanca);
-                        _context.SaveChanges();
-
-                        banca.DiaQueDeveOcorrerBancas.Add(diaQueDeveOcorrerBanca);
-                    }
-
-                    _context.SaveChanges();
                     TempData["mensagemSucesso"] = "Banca cadastrada com sucesso!";
 
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    TempData["mensagemErro"] = "Erro ao cadastrar banca! " + ex.Message;
+                    ModelState.AddModelError("", "Erro ao cadastrar banca! " + ex.Message);
                 }
             }
 
-            GetCursos(banca.BancaId);
-            GetOrientador(banca.BancaId);
-            ViewData["AlunosBanca"] = alunosBanca;
+            SetViewData(banca, alunosBanca, datasBanca);
 
             return View(banca);
         }
@@ -200,8 +182,8 @@ namespace GerenciamentoBancasTcc.Controllers
             if (id.HasValue)
             {
                 banca = await _context.Bancas
-                    .Include(x => x.Turma)
                     .Include(x => x.AlunosBancas)
+                    .Include(x => x.BancaPossiveisDataHora)
                     .FirstOrDefaultAsync(x => x.BancaId == id.Value);
             }
 
@@ -210,19 +192,18 @@ namespace GerenciamentoBancasTcc.Controllers
                 return NotFound();
             }
 
-            GetOrientador(banca.BancaId);
-            GetCursos(banca.Turma.CursoId);
-            GetTurmasEdit(banca.Turma.CursoId, banca.TurmaId);
-            ViewData["AlunosBanca"] = string.Join(',', banca.AlunosBancas.Select(x => x.AlunoId));
+            SetViewData(banca,
+                string.Join(',', banca.AlunosBancas.Select(x => x.AlunoId).ToArray()),
+                string.Join(',', banca.BancaPossiveisDataHora.Select(x => x.PossivelDataHora.ToString("yyyy-MM-dd HH:mm")).ToArray()));
 
             return View(banca);
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BancaId,TurmaId,Tema,UsuarioId,Descricao,QtdProfBanca")] Banca banca, int[] alunosBanca, DateTime[] possiveisDiasParaBanca)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Banca banca, string alunosBanca, string datasBanca)
         {
-            if (id != banca.BancaId || !BancaExists(banca.BancaId))
+            if (!BancaExists(banca.BancaId))
             {
                 return NotFound();
             }
@@ -231,40 +212,33 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 try
                 {
+                    _context.Attach(banca).State = EntityState.Modified;
                     _context.AlunosBancas.RemoveRange(_context.AlunosBancas.Where(x => x.BancaId == banca.BancaId));
+                    _context.BancaPossiveisDataHora.RemoveRange(_context.BancaPossiveisDataHora.Where(x => x.BancaId == banca.BancaId));
 
-                    if (alunosBanca != null)
+                    if (!string.IsNullOrWhiteSpace(alunosBanca))
                     {
-                        _context.AlunosBancas.AddRange(alunosBanca.Select(x => new AlunosBancas { AlunoId = x, BancaId = banca.BancaId }));
+                        banca.AlunosBancas = alunosBanca.Split(',').Select(alunoId => new AlunosBancas { AlunoId = int.Parse(alunoId) }).ToList();
                     }
 
-                    _context.Update(banca);
-                  
-                    foreach (var datahora in possiveisDiasParaBanca)
+                    if (!string.IsNullOrWhiteSpace(datasBanca))
                     {
-                        var diaQueDeveOcorrerBanca = await _context.DiaQueDeveOcorrerBancas.Where(x => x.BancaId == banca.BancaId).ToListAsync();
-
-                        foreach(var item in diaQueDeveOcorrerBanca)
-                        {
-                            item.PossivelDataHoraInicial = datahora;
-                        }
+                        banca.BancaPossiveisDataHora = datasBanca.Split(',').Distinct().Select(datahora => new BancaPossivelDataHora { PossivelDataHora = DateTime.Parse(datahora) }).ToList();
                     }
 
                     await _context.SaveChangesAsync();
-                    TempData["mensagemSucesso"] = "Banca atualizada com sucesso!";
-                }
-                catch (DbUpdateConcurrencyException ex)
-                {
-                    TempData["mensagemErro"] = "Erro ao atualizar a banca! " + ex.Message;
-                    throw;
-                }
 
-                return RedirectToAction(nameof(Index));
+                    TempData["mensagemSucesso"] = "Banca atualizada com sucesso!";
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Erro ao atualizar banca! " + ex.Message);
+                }
             }
 
-            GetOrientador(banca.BancaId);
-            GetTurmasEdit(banca.BancaId);
-            ViewData["AlunosBanca"] = alunosBanca;
+            SetViewData(banca, alunosBanca, datasBanca);
 
             return View(banca);
         }
@@ -280,6 +254,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 .Include(x => x.Turma)
                 .Include(x => x.Usuario)
                 .FirstOrDefaultAsync(m => m.BancaId == id);
+
             if (banca == null)
             {
                 return NotFound();
@@ -293,22 +268,19 @@ namespace GerenciamentoBancasTcc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var banca = await _context.Bancas.FindAsync(id);
-            var conviteExiste = await _context.Convites.FirstOrDefaultAsync(x => x.BancaId == banca.BancaId);
 
             try
             {
                 _context.Bancas.Remove(banca);
                 await _context.SaveChangesAsync();
                 TempData["mensagemSucesso"] = "Banca excluída com sucesso!";
-
-                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 TempData["mensagemErro"] = "Erro ao excluir banca! " + ex.Message;
             }
 
-            return View(banca);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -344,7 +316,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return _context.Bancas.Any(e => e.BancaId == id);
         }
 
-        private void GetCursos(int selectedItem = 0)
+        private void GetCursos(int? selectedItem = null)
         {
             var cursos = _context.Cursos.Where(x => x.Ativo == true).ToList();
             var selectListItems = cursos.ToDictionary(x => x.CursoId.ToString(), y => y.Nome).ToList();
@@ -352,20 +324,37 @@ namespace GerenciamentoBancasTcc.Controllers
             ViewData["CursoId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
 
-        private void GetOrientador(int selectedItem = 0)
+        private void GetOrientador(string selectedItem = null)
         {
             var orientadores = _userManager.Users.ToList();
-            var selectListItems = orientadores.ToDictionary(x => x.Id.ToString(), y => y.Nome).ToList();
+            var selectListItems = orientadores.ToDictionary(x => x.Id, y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["UsuarioId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
         }
 
-        private void GetTurmasEdit(int cursoId, int selectedItem = 0)
+        private void GetTurmasEdit(int? cursoId, int? selectedItem = null)
         {
-            var turmas = _context.Turmas.Where(x => x.CursoId == cursoId && x.Ativo).ToList();
+            var turmas = new List<Turma>();
+
+            if (cursoId.HasValue && cursoId != 0)
+            {
+                turmas = _context.Turmas.Where(x => x.CursoId == cursoId && x.Ativo).ToList();
+            }
+
             var selectListItems = turmas.ToDictionary(x => x.TurmaId.ToString(), y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["TurmaId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
+        }
+
+        private void SetViewData(Banca banca = null, string alunosBanca = null, string datasBanca = null)
+        {
+            var turma = banca != null && banca.TurmaId != 0 ? _context.Turmas.Find(banca.TurmaId) : null;
+
+            GetCursos(turma?.CursoId);
+            GetOrientador(banca?.UsuarioId);
+            GetTurmasEdit(turma?.CursoId, banca?.TurmaId);
+            ViewData["DatasBanca"] = datasBanca;
+            ViewData["AlunosBanca"] = alunosBanca;
         }
 
         [HttpGet]
@@ -376,36 +365,37 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConvidarProfessores(string[] idsProfessores, int idBanca)
+        public IActionResult ConvidarProfessores(int idBanca, string[] idsProfessores)
         {
             try
             {
-                foreach (var id in idsProfessores)
-                {
-                    var professoresConvidados = await _context.Users.Where(x => x.Id == id).ToListAsync();
+                var convites = idsProfessores.Select(x => new Convite { BancaId = idBanca, UsuarioId = x, ConviteId = Guid.NewGuid() }).ToList();
 
-                    foreach (var professor in professoresConvidados)
-                    {
-                        var emailEnviado = _emailService.SendMailInvite(professor.Email,
-                                            "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária");
+                EnviarConvites(convites);
 
-                        if (emailEnviado)
-                        {
-                            Convite convite = new()
-                            {
-                                UsuarioId = professor.Id,
-                                BancaId = idBanca
-                            };
-                            _context.Convites.Add(convite);
-                            _context.SaveChanges();
-                        }
-                    }
-                }
+                _context.Convites.AddRange(convites);
+                _context.SaveChanges();
+
                 return Json(new { result = "Convites enviados" });
             }
             catch (Exception ex)
             {
                 return Json(new { result = ex.Message });
+            }
+        }
+
+        private void EnviarConvites(IList<Convite> convites)
+        {
+            string body = System.IO.File.ReadAllText(@"Views/Shared/EmailConvite.cshtml");
+
+            foreach (var convite in convites)
+            {
+                var user = _context.Users.Find(convite.UsuarioId);
+
+                if (_emailService.SendMail(user.Email, "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária", body))
+                {
+                    convite.EmailEnviado = true;
+                }
             }
         }
     }

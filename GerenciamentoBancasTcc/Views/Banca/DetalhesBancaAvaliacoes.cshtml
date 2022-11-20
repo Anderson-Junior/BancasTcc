@@ -44,11 +44,11 @@
                 <div>
                     <div>
                         @*<p><b>Data/Hora:</b> @Model.DataHora.ToString("dd/MM/yyyy HH:mm")</p>*@
+                        <p><b>Tema:</b> @Model.Tema</p>
                         <p><b>Curso:</b> @Model.Curso</p>
                         <p><b>Turma:</b> @Model.Turma</p>
                         <p><b>Orientador:</b>  @Model.Orientador</p>
                         <p><b>Professores:</b> @string.Join(", ", Model.Professores)</p>
-                        <p><b>Sala:</b> @Model.Sala</p>
                     </div>
                     @if (User.IsInRole("Coordenador") || User.IsInRole("Orientador"))
                     {
@@ -224,7 +224,7 @@
                 alert('Nenhum registro selecionado!');
             }
             else {
-                $.post('/Banca/ConvidarProfessores', { idsProfessores: rows_selected, idBanca: @Model.BancaId }, function (response) {
+                $.post('/Banca/ConvidarProfessores', { idBanca: @Model.BancaId, idsProfessores: rows_selected }, function (response) {
                     alert(response.result);
                 }, 'json');
             }

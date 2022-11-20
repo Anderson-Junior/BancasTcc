@@ -16,12 +16,11 @@ namespace GerenciamentoBancasTcc.Controllers
     
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Usuario> _userManager;
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<Usuario> userManager)
         {
-            _logger = logger;
             _context = context;
             _userManager = userManager;
         }
@@ -53,7 +52,7 @@ namespace GerenciamentoBancasTcc.Controllers
         }
 
         [Authorize(Roles = RolesHelper.COORDENADOR)]
-        public IActionResult cadastroUsuario()
+        public IActionResult CadastroUsuario()
         {
             return View();
         }

@@ -2,8 +2,8 @@
 {
     public enum StatusConvite
     {
+        Nenhum = 0,
         Aceito = 1,
-        Recusado = 2,
-        Cancelado = 3
+        Recusado = 2
     }
 }

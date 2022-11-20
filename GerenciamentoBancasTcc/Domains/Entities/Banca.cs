@@ -26,8 +26,7 @@ namespace GerenciamentoBancasTcc.Domains.Entities
         public Usuario Usuario { get; set; }
 
         [Display(Name = "Data/Hora")]
-        [Required(ErrorMessage = "É necessário informar a data e a hora.")]
-        public DateTime DataHora { get; set; }
+        public DateTime? DataHora { get; set; }
 
         [Display(Name = "Quantidade de professores")]
         [Required(ErrorMessage = "É necessário informar quantos professores participarão da banca.")]
@@ -40,6 +39,6 @@ namespace GerenciamentoBancasTcc.Domains.Entities
 
         public ICollection<UsuarioBanca> UsuariosBancas { get; set; }
         public ICollection<Convite> Convites { get; set; }
-        public ICollection<DiaQueDeveOcorrerBanca> DiaQueDeveOcorrerBancas { get; set; }
+        public ICollection<BancaPossivelDataHora> BancaPossiveisDataHora { get; set; }
     }
 }

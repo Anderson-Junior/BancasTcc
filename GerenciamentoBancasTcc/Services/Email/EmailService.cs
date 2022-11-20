@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 
@@ -7,55 +6,41 @@ namespace GerenciamentoBancasTcc.Services.Email
 {
     public class EmailService : IEmailService
     {
+        private readonly string username, smtpClient, password, port;
+
+        public EmailService(IConfiguration configuration)
+        {
+            username = configuration["EmailConfiguration:Username"];
+            smtpClient = configuration["EmailConfiguration:SmtpClient"];
+            password = configuration["EmailConfiguration:Password"];
+            port = configuration["EmailConfiguration:Port"];
+        }
+
         public bool SendMail(string email, string subject, string body)
         {
             try
             {
-                MailMessage _mailMessage = new MailMessage();
-                _mailMessage.From = new MailAddress("gerenciador.de.bancas@outlook.com");
-                _mailMessage.Subject = subject;
-                _mailMessage.IsBodyHtml = true;
-                _mailMessage.Body = body;
+                var _mailMessage = new MailMessage
+                {
+                    Body = body,
+                    Subject = subject,
+                    IsBodyHtml = true,
+                    From = new MailAddress(username)
+                };
 
-                SmtpClient _smtpClient = new SmtpClient("smtp.office365.com", Convert.ToInt32("587"));
+                var _smtpClient = new SmtpClient(smtpClient, int.Parse(port))
+                {
+                    EnableSsl = true,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(username, password)
+                };
 
-                _smtpClient.UseDefaultCredentials = false;
-                _smtpClient.Credentials = new NetworkCredential("gerenciador.de.bancas@outlook.com", "Gerenciador123@");
-
-                _smtpClient.EnableSsl = true;
-                _mailMessage.CC.Add(email);
-                _smtpClient.Send(_mailMessage);
- 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        public bool SendMailInvite(string email, string subject)
-        {
-            try
-            {
-                MailMessage _mailMessage = new MailMessage();
-                _mailMessage.From = new MailAddress("gerenciador.de.bancas@outlook.com");
-                _mailMessage.Subject = subject;
-                _mailMessage.IsBodyHtml = true;
-                _mailMessage.Body = File.ReadAllText(@"Views/Shared/EmailConvite.cshtml");
-
-                SmtpClient _smtpClient = new SmtpClient("smtp.office365.com", Convert.ToInt32("587"));
-
-                _smtpClient.UseDefaultCredentials = false;
-                _smtpClient.Credentials = new NetworkCredential("gerenciador.de.bancas@outlook.com", "Gerenciador123@");
-
-                _smtpClient.EnableSsl = true;
-                _mailMessage.CC.Add(email);
+                _mailMessage.To.Add(email);
                 _smtpClient.Send(_mailMessage);
 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
