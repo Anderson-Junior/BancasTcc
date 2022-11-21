@@ -104,7 +104,6 @@ namespace GerenciamentoBancasTcc.Controllers
                                 join orientador in _context.Users on banca.UsuarioId equals orientador.Id
                                 join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
                                 join curso in _context.Cursos on turma.CursoId equals curso.CursoId
-                                //join arquivos in _context.Arquivos on banca.BancaId equals arquivos.BancaId
                                 where banca.BancaId == id
                                 orderby banca.DataHora
                                 select new BancaViewModel
@@ -117,7 +116,6 @@ namespace GerenciamentoBancasTcc.Controllers
                                     Turma = turma.Nome,
                                     Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
                                     Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
-                                    //ArquivoId = arquivos.ArquivosId
                                     Arquivos = banca.Arquivos.ToList()
                                 }).FirstAsync();
 
@@ -149,10 +147,11 @@ namespace GerenciamentoBancasTcc.Controllers
                     }
 
                     _context.Add(banca);
+                    await _context.SaveChangesAsync();
 
                     // TODO: remover filtro
                     var convites = _context.Users
-                        .Where(x => x.Ativo && x.Nome == "Emerson")
+                        .Where(x => x.Ativo)
                         .Select(x => new Convite { BancaId = banca.BancaId, UsuarioId = x.Id, ConviteId = Guid.NewGuid() }).ToList();
 
                     EnviarConvites(convites);
