@@ -8,7 +8,7 @@
     "environment"    : "GerenciamentoBancasTcc-dev",
     "enable-xray"    : false,
     "enhanced-health-type" : "basic",
-    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-00ca01b20b165ffbc\";\"aws:ec2:vpc,Subnets\"=\"subnet-0596a912beb48d1b9\"",
+    "additional-options"   : "",
     "solution-stack"       : "64bit Amazon Linux 2 v2.4.1 running .NET Core",
     "environment-type"     : "SingleInstance",
     "cname"                : "gerenciamentobancastcc-dev",
