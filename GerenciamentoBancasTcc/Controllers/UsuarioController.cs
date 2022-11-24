@@ -93,9 +93,9 @@ namespace GerenciamentoBancasTcc.Controllers
             try
             {
                 var user = await _userManager.FindByNameAsync(alias);
-                var result = await _userManager.DeleteAsync(user);
-                string message = string.Join("<br />", result.Errors.Select(p => p.Description));
-                return Json(new { succeeded = result.Succeeded, message });
+                user.Ativo = false;
+                await _context.SaveChangesAsync();
+                return Json(new { succeeded = true});
             }
             catch (Exception ex)
             {
@@ -191,7 +191,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         private IList<Usuario> GetUsers()
         {
-            var users = _context.Users.OrderBy(p => p.UserName).ToList();
+            var users = _context.Users.Where(x => x.Ativo).OrderBy(p => p.UserName).ToList();
             var roles = _context.Roles.ToDictionary(x => x.Id, y => y.Name);
 
             foreach (var user in users)

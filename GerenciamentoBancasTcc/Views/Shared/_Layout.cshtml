@@ -25,70 +25,92 @@
                 </a>
 
                 <ul class="list-unstyled components mb-5">
-                    @if (User.IsInRole("Coordenador"))
+
+                    @if (User.IsInRole("Coordenador") || User.IsInRole("Administrador") || User.IsInRole("Orientador") || User.IsInRole("Professor"))
                     {
-                    <li>
-                        <a asp-action="Index" asp-controller="Aluno">
-                            <i class="fa fa-users" aria-hidden="true" style="margin-right:3px;"></i>
-                            Alunos
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Banca">
-                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
-                            Bancas
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Curso">
-                            <i class="fa fa-book" aria-hidden="true" style="margin-right:5px;"></i>
-                            Cursos
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Turma">
-                            <i class="fa fa-align-justify" aria-hidden="true" style="margin-right:5px;"></i>
-                            Turmas
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Usuario">
-                            <i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>
-                            Usuários
-                        </a>
-                    </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Aluno">
+                                <i class="fa fa-users" aria-hidden="true" style="margin-right:3px;"></i>
+                                Alunos
+                            </a>
+                        </li>
+
+                        <li>
+                            <a asp-action="Index" asp-controller="Banca">
+                                <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
+                                Bancas
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Curso">
+                                <i class="fa fa-book" aria-hidden="true" style="margin-right:5px;"></i>
+                                Cursos
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Turma">
+                                <i class="fa fa-align-justify" aria-hidden="true" style="margin-right:5px;"></i>
+                                Turmas
+                            </a>
+                        </li>
                     }
 
-                    @if (User.IsInRole("Professor"))
+                    @if (User.IsInRole("Coordenador") || User.IsInRole("Administrador"))
                     {
-                    <li>
-                        <a asp-action="MeusConvites" asp-controller="Convite">
-                            <i class="fa fa-calendar" aria-hidden="true" style="margin-right:5px;"></i>
-                            Convites Recebidos
-                        </a>
-                    </li>
+
+                        <li>
+                            <a asp-action="Index" asp-controller="Usuario">
+                                <i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>
+                                Usuários
+                            </a>
+                        </li>
                     }
 
+                    @if (User.IsInRole("Coordenador") || User.IsInRole("Administrador") || User.IsInRole("Orientador") || User.IsInRole("Professor"))
+                    {
+                        <li>
+                            <a asp-action="MeusConvites" asp-controller="Convite">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                                    <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                </svg>
+                                Convites Recebidos
+                            </a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Coordenador") || User.IsInRole("Administrador") || User.IsInRole("Orientador"))
+                    {
+                        <li>
+                            <a asp-action="Index" asp-controller="Convite">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-arrow-up" viewBox="0 0 16 16">
+                                    <path d="M8 11a.5.5 0 0 0 .5-.5V6.707l1.146 1.147a.5.5 0 0 0 .708-.708l-2-2a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L7.5 6.707V10.5a.5.5 0 0 0 .5.5z" />
+                                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                                </svg>
+                                Convites Enviados
+                            </a>
+                        </li>
+                    }
 
                     @if (User.IsInRole("Administrador"))
                     {
-                <li>
-                    <a asp-action="Index" asp-controller="Instituicao">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
-                            <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
-                            <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z" />
-                        </svg>
-                        Instituições
-                    </a>
-                </li>
-                    <li>
-                        <a asp-action="Index" asp-controller="Filial">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-buildings-fill" viewBox="0 0 16 16">
-                                <path d="M15 .5a.5.5 0 0 0-.724-.447l-8 4A.5.5 0 0 0 6 4.5v3.14L.342 9.526A.5.5 0 0 0 0 10v5.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V14h1v1.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V.5ZM2 11h1v1H2v-1Zm2 0h1v1H4v-1Zm-1 2v1H2v-1h1Zm1 0h1v1H4v-1Zm9-10v1h-1V3h1ZM8 5h1v1H8V5Zm1 2v1H8V7h1ZM8 9h1v1H8V9Zm2 0h1v1h-1V9Zm-1 2v1H8v-1h1Zm1 0h1v1h-1v-1Zm3-2v1h-1V9h1Zm-1 2h1v1h-1v-1Zm-2-4h1v1h-1V7Zm3 0v1h-1V7h1Zm-2-2v1h-1V5h1Zm1 0h1v1h-1V5Z" />
-                            </svg>
-                            Filiais
-                        </a>
-                    </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Instituicao">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                                    <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
+                                    <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z" />
+                                </svg>
+                                Instituições
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Filial">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-buildings-fill" viewBox="0 0 16 16">
+                                    <path d="M15 .5a.5.5 0 0 0-.724-.447l-8 4A.5.5 0 0 0 6 4.5v3.14L.342 9.526A.5.5 0 0 0 0 10v5.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V14h1v1.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V.5ZM2 11h1v1H2v-1Zm2 0h1v1H4v-1Zm-1 2v1H2v-1h1Zm1 0h1v1H4v-1Zm9-10v1h-1V3h1ZM8 5h1v1H8V5Zm1 2v1H8V7h1ZM8 9h1v1H8V9Zm2 0h1v1h-1V9Zm-1 2v1H8v-1h1Zm1 0h1v1h-1v-1Zm3-2v1h-1V9h1Zm-1 2h1v1h-1v-1Zm-2-4h1v1h-1V7Zm3 0v1h-1V7h1Zm-2-2v1h-1V5h1Zm1 0h1v1h-1V5Z" />
+                                </svg>
+                                Filiais
+                            </a>
+                        </li>
                     }
                 </ul>
             </div>

@@ -1,7 +1,9 @@
 ﻿using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
 using GerenciamentoBancasTcc.Domains.Enums;
+using GerenciamentoBancasTcc.Helpers;
 using GerenciamentoBancasTcc.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,7 @@ namespace GerenciamentoBancasTcc.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpGet]
         public async Task<IActionResult> MeusConvites()
         {
@@ -38,6 +41,47 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(convitesRecebidos);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.ADMINISTRADOR)]
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var convitesEnviados = await _context.Convites
+                .Include(x => x.Banca)
+                .Include(x => x.ConviteAceites)
+                .Include(x => x.Banca.BancaPossiveisDataHora)
+                .Include(x => x.Usuario)
+                .ToListAsync();
+
+            return View(convitesEnviados);
+        }
+
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.ADMINISTRADOR)]
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            var resultado = await (from convite in _context.Convites
+                                   join banca in _context.Bancas on convite.BancaId equals banca.BancaId
+                                   join usuario in _context.Users on convite.UsuarioId equals usuario.Id
+                                   join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
+                                   join curso in _context.Cursos on turma.CursoId equals curso.CursoId
+                                   where convite.ConviteId == id
+                                   select new ConviteViewModel
+                                   {
+                                       ConviteId = convite.ConviteId,
+                                       StatusConvite = convite.StatusConvite,
+                                       Curso = curso.Nome,
+                                       Turma = turma.Nome,
+                                       Orientador = usuario.Nome,
+                                       Alunos = banca.AlunosBancas.Select(x => x.Aluno.Nome).ToList(),
+                                       Tema = banca.Tema,
+                                       BancaPossiveisDataHora = banca.BancaPossiveisDataHora.Select(x => x.PossivelDataHora).ToList(),
+                                       ConviteAceites = convite.ConviteAceites.Select(x => x.PossivelDataHora).ToList()
+                                   }).FirstAsync();
+
+            return View(resultado);
+        }
+
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpGet]
         public async Task<IActionResult> DetalhesConvite(Guid? id)
         {
@@ -66,6 +110,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(resultado);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AceitarConvite(Guid id, string datasSelecionadas)
@@ -133,6 +178,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return RedirectToAction(nameof(MeusConvites));
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RecusarConvite(Guid id)

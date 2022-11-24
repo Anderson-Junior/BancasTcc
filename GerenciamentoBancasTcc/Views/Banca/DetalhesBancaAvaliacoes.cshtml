@@ -49,6 +49,7 @@
                         <p><b>Turma:</b> @Model.Turma</p>
                         <p><b>Orientador:</b>  @Model.Orientador</p>
                         <p><b>Professores:</b> @string.Join(", ", Model.Professores)</p>
+                        <p><b>Descrição:</b>  @Model.Descricao</p>
                     </div>
                     @if (User.IsInRole("Coordenador") || User.IsInRole("Orientador"))
                     {

@@ -1,8 +1,10 @@
 ﻿using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Data.Migrations;
 using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Helpers;
 using GerenciamentoBancasTcc.Models;
 using GerenciamentoBancasTcc.Services.Email;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,7 @@ namespace GerenciamentoBancasTcc.Controllers
             _emailService = emailService;
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Bancas
@@ -39,6 +42,7 @@ namespace GerenciamentoBancasTcc.Controllers
                 .ToListAsync());
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         [HttpPost]
         public IActionResult UploadImagem(IList<IFormFile> arquivos, int bancaId)
         {
@@ -79,6 +83,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return File(arquivosBanco.Dados, arquivosBanco.ContentType);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         public async Task<IActionResult> UploadArquivo(int? id)
         {
             if (id == null)
@@ -122,12 +127,14 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(result);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public IActionResult Create()
         {
             SetViewData();
             return View();
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Banca banca, string alunosBanca, string datasBanca)
@@ -174,6 +181,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         public async Task<IActionResult> Edit(int? id)
         {
             Banca banca = null;
@@ -198,6 +206,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Banca banca, string alunosBanca, string datasBanca)
@@ -242,6 +251,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -262,6 +272,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -325,7 +336,7 @@ namespace GerenciamentoBancasTcc.Controllers
 
         private void GetOrientador(string selectedItem = null)
         {
-            var orientadores = _userManager.Users.ToList();
+            var orientadores = _userManager.Users.Where(x => x.Ativo).ToList();
             var selectListItems = orientadores.ToDictionary(x => x.Id, y => y.Nome).ToList();
             selectListItems.Insert(0, new KeyValuePair<string, string>("", ""));
             ViewData["UsuarioId"] = new SelectList(selectListItems, "Key", "Value", selectedItem);
@@ -359,10 +370,11 @@ namespace GerenciamentoBancasTcc.Controllers
         [HttpGet]
         public async Task<IActionResult> Professores()
         {
-            var professores = await _context.Users.ToListAsync();
+            var professores = await _context.Users.Where(x => x.Ativo).ToListAsync();
             return Json(professores);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         [HttpPost]
         public IActionResult ConvidarProfessores(int idBanca, string[] idsProfessores)
         {
@@ -383,6 +395,7 @@ namespace GerenciamentoBancasTcc.Controllers
             }
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
         private void EnviarConvites(IList<Convite> convites)
         {
             string body = System.IO.File.ReadAllText(@"Views/Shared/EmailConvite.cshtml");

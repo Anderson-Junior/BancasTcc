@@ -15,6 +15,8 @@ namespace GerenciamentoBancasTcc.Models
         public string Curso { get; set; }
 
         public string Orientador { get; set; }
+        public string Descricao { get; set; }
+        public int QtdProfBanca { get; set; }
 
         public DateTime? DataHora { get; set; }
 

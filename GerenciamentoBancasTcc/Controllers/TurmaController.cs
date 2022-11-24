@@ -1,5 +1,7 @@
 ﻿using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -42,12 +44,14 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public IActionResult Create()
         {
             ViewData["CursoId"] = new SelectList(_context.Cursos, "CursoId", "Nome");
             return View();
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TurmaId,Nome,Ativo,CursoId")] Turma turma)
@@ -70,6 +74,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +91,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TurmaId,Nome,Ativo,CursoId")] Turma turma)
@@ -122,6 +128,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,6 +147,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(turma);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

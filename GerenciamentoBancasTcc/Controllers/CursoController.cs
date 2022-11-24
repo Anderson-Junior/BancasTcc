@@ -1,5 +1,7 @@
 ﻿using GerenciamentoBancasTcc.Data;
 using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -41,12 +43,14 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(curso);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public IActionResult Create()
         {
             ViewData["FilialId"] = new SelectList(_context.Filiais, "FilialId", "Campus");
             return View();
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CursoId,Nome,Periodos,Ativo,FilialId")] Curso curso)
@@ -69,6 +73,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(curso);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +90,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(curso);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CursoId,Nome,Periodos,Ativo,FilialId")] Curso curso)
@@ -121,6 +127,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(curso);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,6 +146,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(curso);
         }
 
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

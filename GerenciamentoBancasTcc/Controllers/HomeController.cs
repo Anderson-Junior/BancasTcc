@@ -33,7 +33,8 @@ namespace GerenciamentoBancasTcc.Controllers
                           join orientador in _context.Users on banca.UsuarioId equals orientador.Id
                           join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
                           join curso in _context.Cursos on turma.CursoId equals curso.CursoId
-                          where banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
+                          where (banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
+                            && banca.DataHora > System.DateTime.Now)
                           orderby banca.DataHora
                           select new BancaViewModel
                           {
@@ -44,14 +45,15 @@ namespace GerenciamentoBancasTcc.Controllers
                               Tema = banca.Tema,
                               Turma = turma.Nome,
                               Alunos = banca.AlunosBancas.Select(x => x.Aluno).ToList(),
-                              Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList()
-
+                              Professores = banca.UsuariosBancas.Select(x => x.Usuarios.Nome).ToList(),
+                              Descricao = banca.Descricao,
+                              QtdProfBanca = banca.QtdProfBanca
                           }).ToList();
 
             return View(result);
         }
 
-        [Authorize(Roles = RolesHelper.COORDENADOR)]
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR)]
         public IActionResult CadastroUsuario()
         {
             return View();

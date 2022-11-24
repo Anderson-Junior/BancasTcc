@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GerenciamentoBancasTcc.Data;
+using GerenciamentoBancasTcc.Domains.Entities;
+using GerenciamentoBancasTcc.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GerenciamentoBancasTcc.Data;
-using GerenciamentoBancasTcc.Domains.Entities;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
+    [Authorize(Roles = RolesHelper.ADMINISTRADOR)]
     public class FilialController : Controller
     {
         private readonly ApplicationDbContext _context;
