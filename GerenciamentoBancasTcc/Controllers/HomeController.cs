@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         //private readonly ILogger<HomeController> _logger;
@@ -29,12 +30,13 @@ namespace GerenciamentoBancasTcc.Controllers
         {
             Usuario user = await _userManager.GetUserAsync(HttpContext.User);
 
+            DateTime dateTimeNow = DateTime.Now;
+            //banca.DataHora > dateTimeNow &&
             var result = (from banca in _context.Bancas
                           join orientador in _context.Users on banca.UsuarioId equals orientador.Id
                           join turma in _context.Turmas on banca.TurmaId equals turma.TurmaId
                           join curso in _context.Cursos on turma.CursoId equals curso.CursoId
-                          where (banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id)
-                            && banca.DataHora > System.DateTime.Now)
+                          where (banca.UsuarioId == user.Id || _context.UsuariosBancas.Any(x => x.BancaId == banca.BancaId && x.UsuarioId == user.Id))
                           orderby banca.DataHora
                           select new BancaViewModel
                           {

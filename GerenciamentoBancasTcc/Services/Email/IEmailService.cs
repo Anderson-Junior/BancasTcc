@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GerenciamentoBancasTcc.Services.Email
+﻿namespace GerenciamentoBancasTcc.Services.Email
 {
     public interface IEmailService
     {

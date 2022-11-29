@@ -1,6 +1,7 @@
 ﻿using GerenciamentoBancasTcc.Domains.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GerenciamentoBancasTcc.Models
 {
@@ -8,6 +9,7 @@ namespace GerenciamentoBancasTcc.Models
     {
         public Guid ConviteId { get; set; }
 
+        [Display(Name = "Status")]
         public StatusConvite StatusConvite { get; set; }
 
         public string Turma { get; set; }

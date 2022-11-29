@@ -98,7 +98,7 @@
             `<div id="${id}" class="row datetime-row">
                 <div class="col-md-3">
                     <div class="input-group mb-3">
-                        <input type="date" id="date" class="form-control" value="${date ? date : ''}" />
+                        <input type="date" class="form-control possiveis-datas" value="${date ? date : ''}" />
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -119,6 +119,9 @@
             </div>`;
 
         $('#datetime-container').append(html);
+
+        var today = new Date().toISOString().split('T')[0];
+        $(".possiveis-datas").attr('min', today);
     }
 
     init();

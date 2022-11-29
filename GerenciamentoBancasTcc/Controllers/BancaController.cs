@@ -33,7 +33,7 @@ namespace GerenciamentoBancasTcc.Controllers
             _emailService = emailService;
         }
 
-        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR)]
+        [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ADMINISTRADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR)]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Bancas
@@ -103,7 +103,7 @@ namespace GerenciamentoBancasTcc.Controllers
             return View(banca);
         }
 
-        public async Task<IActionResult> DetalhesBancaAvaliacoes(int? id)
+        public async Task<IActionResult> DetalhesBanca(int? id)
         {
             var result = await (from banca in _context.Bancas
                                 join orientador in _context.Users on banca.UsuarioId equals orientador.Id
@@ -381,8 +381,6 @@ namespace GerenciamentoBancasTcc.Controllers
             try
             {
                 var convites = idsProfessores.Select(x => new Convite { BancaId = idBanca, UsuarioId = x, ConviteId = Guid.NewGuid() }).ToList();
-
-                EnviarConvites(convites);
 
                 _context.Convites.AddRange(convites);
                 _context.SaveChanges();

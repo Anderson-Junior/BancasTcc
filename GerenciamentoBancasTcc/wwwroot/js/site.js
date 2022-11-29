@@ -3,6 +3,7 @@
 
 // Write your JavaScript code.
 
+
 function redirectToLogin() {
     window.location.href = "/Identity/Account/Login?returnUrl=" + encodeURIComponent(location.pathname + location.search);
 }
@@ -30,6 +31,10 @@ function handleDataTables() {
                 next: "Próxima",
                 previous: "Anterior"
             }
-        }
+        },
+        dom: 'Bfrtip',
+        buttons: [
+            'pdf'
+        ],
     });
 }
