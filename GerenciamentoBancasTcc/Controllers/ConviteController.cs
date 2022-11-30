@@ -135,6 +135,15 @@ namespace GerenciamentoBancasTcc.Controllers
                     throw new Exception("Não é mais possível aceitar este convite, a banca já está completa.");
                 }
 
+                var teste = datasSelecionadas.Split(',').Select(x => new ConviteAceite { PossivelDataHora = DateTime.Parse(x) }).ToList();
+                foreach(var item in teste)
+                {
+                    if(item.PossivelDataHora < DateTime.Now)
+                    {
+                        throw new Exception($"Não é mais possível aceitar o convite para o dia {item.PossivelDataHora}, pois esta data já passou.");
+                    }
+                }
+
                 // Deve recalcular a data da banca caso o convite tenha sido aceito anteriormente e o aceite foi alterado removendo ou adicionando alguma data.
                 banca.DataHora = null;
                 banca.UsuariosBancas.Clear();
