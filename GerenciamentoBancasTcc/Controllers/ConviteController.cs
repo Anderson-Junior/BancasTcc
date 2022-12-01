@@ -135,12 +135,23 @@ namespace GerenciamentoBancasTcc.Controllers
                     throw new Exception("Não é mais possível aceitar este convite, a banca já está completa.");
                 }
 
-                var teste = datasSelecionadas.Split(',').Select(x => new ConviteAceite { PossivelDataHora = DateTime.Parse(x) }).ToList();
-                foreach(var item in teste)
+                var diasSelecionados = datasSelecionadas.Split(',').Select(x => new ConviteAceite { PossivelDataHora = DateTime.Parse(x) }).ToList();
+                foreach (var dia in diasSelecionados)
                 {
-                    if(item.PossivelDataHora < DateTime.Now)
+                    if (dia.PossivelDataHora < DateTime.Now)
                     {
-                        throw new Exception($"Não é mais possível aceitar o convite para o dia {item.PossivelDataHora}, pois esta data já passou.");
+                        throw new Exception($"Não é mais possível aceitar o convite para o dia {dia.PossivelDataHora}, pois esta data já passou.");
+                    }
+
+                    var usuarioBanca =_context.UsuariosBancas.FirstOrDefault(x => x.UsuarioId == _userManager.GetUserId(HttpContext.User));
+                    
+                    if (usuarioBanca != null)
+                    {
+                        var banc = _context.Bancas.FirstOrDefault(x => x.BancaId == usuarioBanca.BancaId);
+                        if (banc.DataHora == dia.PossivelDataHora)
+                        {
+                            throw new Exception($"Não é possível aceitar o convite para o dia {dia.PossivelDataHora}, pois já esta participando de uma banca neste mesmo dia e horário.");
+                        }
                     }
                 }
 
