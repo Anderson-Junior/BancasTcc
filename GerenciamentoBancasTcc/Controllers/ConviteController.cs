@@ -3,6 +3,7 @@ using GerenciamentoBancasTcc.Domains.Entities;
 using GerenciamentoBancasTcc.Domains.Enums;
 using GerenciamentoBancasTcc.Helpers;
 using GerenciamentoBancasTcc.Models;
+using GerenciamentoBancasTcc.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,13 @@ namespace GerenciamentoBancasTcc.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Usuario> _userManager;
+        private readonly IEmailService _emailService;
 
-        public ConviteController(ApplicationDbContext context, UserManager<Usuario> userManager)
+        public ConviteController(ApplicationDbContext context, UserManager<Usuario> userManager, IEmailService emailService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         [Authorize(Roles = RolesHelper.COORDENADOR + "," + RolesHelper.ORIENTADOR + "," + RolesHelper.PROFESSOR + "," + RolesHelper.ADMINISTRADOR)]
@@ -184,8 +187,17 @@ namespace GerenciamentoBancasTcc.Controllers
                             UsuarioId = conviteAceito.UsuarioId
                         });
                     }
-
                     await _context.SaveChangesAsync();
+
+                    var usuariosBanca = await _context.UsuariosBancas.Where(x => x.BancaId == banca.BancaId).ToListAsync();
+
+                    foreach (var item in usuariosBanca)
+                    {
+                        var user = _context.Users.FirstOrDefault(x => x.Id == item.UsuarioId);
+                        string body = $"Olá querido(a) professor(a)! O horário para a banca de TCC <b>{banca.Tema}</b> foi definida para o dia <b>{banca.DataHora}</b>. Nos vemos lá!";
+
+                        _emailService.SendMail(user.Email, "Confirmação de data para banca de TCC na UNIFACEAR Araucária", body);
+                    }  
                 }
 
                 TempData["mensagemSucesso"] = "Convite aceito com sucesso!";
