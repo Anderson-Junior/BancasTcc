@@ -17,3 +17,11 @@
     color: black;
     font-size: 16px;
 }
+
+h4 {
+    font-family: fantasy;
+    font-size: xx-large;
+    color: #EEA084;
+    text-align: center;
+    margin-bottom: 20px;
+}
