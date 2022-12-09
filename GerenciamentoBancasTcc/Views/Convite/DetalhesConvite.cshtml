@@ -34,73 +34,80 @@
     </div>
     <br />
     <div class="container align-items-center">
-        <div class="card">
-            <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
-                <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
-            </div>
-            <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8"><div class="card">
+    <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
+        <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
+    </div>
+    <div class="card-body">
+        <div>
+            <div>
                 <div>
-                    <div>
-                        <div>
-                            <p><b>Curso:</b> @Model.Curso</p>
-                            <p><b>Turma:</b> @Model.Turma</p>
-                            <p><b>Orientador:</b> @Model.Orientador</p>
-                            <p><b>Alunos:</b> @string.Join(", ", Model.Alunos)</p>
-                            <p><b>Status:</b> @Html.DisplayFor(m => m.StatusConvite)</p>
-                            <p>
-                                <table id="data_table" class="table table-hover table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">Possíveis datas</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var data in Model.BancaPossiveisDataHora)
-                                        {
-                                            <tr>
-                                                <td width="5">
-                                                    @if (Model.ConviteAceites.Any(x => x == data))
-                                                    {
-                                                        <input type="checkbox" value="@data" name="datasSelecionadas" checked="checked" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input type="checkbox" value="@data" name="datasSelecionadas" />
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @data.ToString("dd/MM/yyyy HH:mm")
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="row">
-                            <div class="col-auto">
-                                <form id="formAceitar" asp-action="AceitarConvite">
-                                    <input type="hidden" name="id" value="@Model.ConviteId" />
-                                    <input type="hidden" id="datasSelecionadas" name="datasSelecionadas" />
-                                    <input type="submit" class="btn btn-sm btn-primary" value="@ViewData["AcceptButtonLabel"]" />
-                                </form>
-                            </div>
-                            <div class="col-auto">
-                                @if (Model.StatusConvite != GerenciamentoBancasTcc.Domains.Enums.StatusConvite.Recusado)
+                    <p><b>Curso:</b> @Model.Curso</p>
+                    <p><b>Turma:</b> @Model.Turma</p>
+                    <p><b>Orientador:</b> @Model.Orientador</p>
+                    <p><b>Alunos:</b> @string.Join(", ", Model.Alunos)</p>
+                    <p><b>Status:</b> @Html.DisplayFor(m => m.StatusConvite)</p>
+                    <p>
+                        <table id="data_table" class="table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Possíveis datas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var data in Model.BancaPossiveisDataHora)
                                 {
-                                    <form id="formRecusar" asp-action="RecusarConvite">
-                                        <input type="hidden" name="id" value="@Model.ConviteId" />
-                                        <input type="submit" class="btn btn-sm btn-warning" value="@ViewData["RejectButtonLabel"]" />
-                                    </form>
+                                    <tr>
+                                        <td width="5">
+                                            @if (Model.ConviteAceites.Any(x => x == data))
+                                            {
+                                                <input type="checkbox" value="@data" name="datasSelecionadas" checked="checked" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" value="@data" name="datasSelecionadas" />
+                                            }
+                                        </td>
+                                        <td>
+                                            @data.ToString("dd/MM/yyyy HH:mm")
+                                        </td>
+                                    </tr>
                                 }
-                            </div>
-                        </div>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-auto">
+                        <form id="formAceitar" asp-action="AceitarConvite">
+                            <input type="hidden" name="id" value="@Model.ConviteId" />
+                            <input type="hidden" id="datasSelecionadas" name="datasSelecionadas" />
+                            <input type="submit" class="btn btn-sm btn-primary" value="@ViewData["AcceptButtonLabel"]" />
+                        </form>
+                    </div>
+                    <div class="col-auto">
+                        @if (Model.StatusConvite != GerenciamentoBancasTcc.Domains.Enums.StatusConvite.Recusado)
+                        {
+                            <form id="formRecusar" asp-action="RecusarConvite">
+                                <input type="hidden" name="id" value="@Model.ConviteId" />
+                                <input type="submit" class="btn btn-sm btn-warning" value="@ViewData["RejectButtonLabel"]" />
+                            </form>
+                        }
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div></div>
+            <div class="col-md-2"></div>
+        </div>
+
+        
     </div>
 </body>
 </html>

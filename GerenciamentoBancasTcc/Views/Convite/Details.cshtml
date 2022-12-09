@@ -32,24 +32,31 @@
     </div>
     <br />
     <div class="container align-items-center">
-        <div class="card">
-            <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
-                <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
-            </div>
-            <div class="card-body">
-                <div>
-                    <div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
+                        <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
+                    </div>
+                    <div class="card-body">
                         <div>
-                            <p><b>Curso:</b> @Model.Curso</p>
-                            <p><b>Turma:</b> @Model.Turma</p>
-                            <p><b>Orientador:</b> @Model.Orientador</p>
-                            <p><b>Alunos:</b> @string.Join(", ", Model.Alunos)</p>
-                            <p><b>Status:</b> @Html.DisplayFor(m => m.StatusConvite)</p>
+                            <div>
+                                <div>
+                                    <p><b>Curso:</b> @Model.Curso</p>
+                                    <p><b>Turma:</b> @Model.Turma</p>
+                                    <p><b>Orientador:</b> @Model.Orientador</p>
+                                    <p><b>Alunos:</b> @string.Join(", ", Model.Alunos)</p>
+                                    <p><b>Status:</b> @Html.DisplayFor(m => m.StatusConvite)</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-2"></div>
         </div>
+        
     </div>
 </body>
 </html>

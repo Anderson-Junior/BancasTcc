@@ -37,76 +37,83 @@
     <br />
 
     <div class="container align-items-center">
-        <div class="card" style="border: solid 2px #e5e5e5;">
-            <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
-                <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
-            </div>
-            <div class="card-body">
-                <div>
-                    <div>
-                        <p><b>Data/Hora:</b> @Model.DataHora</p>
-                        <p><b>Tema:</b> @Model.Tema</p>
-                        <p><b>Curso:</b> @Model.Curso</p>
-                        <p><b>Turma:</b> @Model.Turma</p>
-                        <p><b>Orientador:</b>  @Model.Orientador</p>
-                        <p><b>Professores:</b> @string.Join(", ", Model.Professores)</p>
-                        <p><b>Descrição:</b>  @Model.Descricao</p>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="card" style="border: solid 2px #e5e5e5;">
+                    <div class="card-header text-center" style=" background-color: #94DDDE; color: #fff; font-size: 22px">
+                        <p class="mb-0">@Html.DisplayFor(modelItem => Model.Tema)</p>
                     </div>
-                    <div>
-                        @if (Model.Arquivos?.Count > 0)
-                        {
-                            <p><b>Anexos</b></p>
-                            <table id="data_table" class="table table-striped table-bordered">
-                                <tbody>
-                                    @foreach (var arquivo in Model.Arquivos)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <a asp-action="Visualizar" class="btn btn-primary btn-sm" asp-route-id="@arquivo.ArquivosId" target="_blank">Visualizar Documentação</a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                    </div>
-                    <div>
-                        <p><b>Alunos</b></p>
-                        <table id="data_table" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Nome
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var aluno in Model.Alunos)
-                                {
-                                    <tr>
-                                        <td>
-                                            @aluno.Nome
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    @if (Model.DataHora.ToString() == string.Empty)
-                    {
-                        @if (User.IsInRole("Coordenador") || User.IsInRole("Orientador"))
-                        {
+                    <div class="card-body">
+                        <div>
                             <div>
-                                <button type="button" class="btn btn-primary btn-sm" id="btn_convidar" data-toggle="modal" data-target="#exampleModal">
-                                    Convidar Professores
-                                </button>
+                                <p><b>Data/Hora:</b> @Model.DataHora</p>
+                                <p><b>Tema:</b> @Model.Tema</p>
+                                <p><b>Curso:</b> @Model.Curso</p>
+                                <p><b>Turma:</b> @Model.Turma</p>
+                                <p><b>Orientador:</b>  @Model.Orientador</p>
+                                <p><b>Professores:</b> @string.Join(", ", Model.Professores)</p>
+                                <p><b>Descrição:</b>  @Model.Descricao</p>
                             </div>
-                        }
-                    }
+                            <div>
+                                @if (Model.Arquivos?.Count > 0)
+                                {
+                                    <p><b>Anexos</b></p>
+                                    <table id="data_table" class="table table-striped table-bordered">
+                                        <tbody>
+                                            @foreach (var arquivo in Model.Arquivos)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a asp-action="Visualizar" class="btn btn-primary btn-sm" asp-route-id="@arquivo.ArquivosId" target="_blank">Visualizar Documentação</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+                            <div>
+                                <p><b>Alunos:</b></p>
+                                <table id="data_table" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Nome
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aluno in Model.Alunos)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @aluno.Nome
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            @if (Model.DataHora.ToString() == string.Empty)
+                            {
+                                @if (User.IsInRole("Coordenador") || User.IsInRole("Orientador"))
+                                {
+                                    <div>
+                                        <button type="button" class="btn btn-primary btn-sm" id="btn_convidar" data-toggle="modal" data-target="#exampleModal">
+                                            Convidar Professores
+                                        </button>
+                                    </div>
+                                }
+                            }
 
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-2"></div>
         </div>
+        
     </div>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
