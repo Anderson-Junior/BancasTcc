@@ -382,6 +382,8 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 var convites = idsProfessores.Select(x => new Convite { BancaId = idBanca, UsuarioId = x, ConviteId = Guid.NewGuid() }).ToList();
 
+                EnviarConvites(convites);
+
                 _context.Convites.AddRange(convites);
                 _context.SaveChanges();
 
@@ -402,7 +404,7 @@ namespace GerenciamentoBancasTcc.Controllers
             {
                 var user = _context.Users.Find(convite.UsuarioId);
 
-                if (_emailService.SendMail(user.Email, "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária", body))
+                if (_emailService.SendEmail(user.Email, "Você está sendo convidado para participar de uma banca de TCC na UNIFACEAR Araucária", body))
                 {
                     convite.EmailEnviado = true;
                 }

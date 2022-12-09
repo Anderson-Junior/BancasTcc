@@ -196,7 +196,7 @@ namespace GerenciamentoBancasTcc.Controllers
                         var user = _context.Users.FirstOrDefault(x => x.Id == item.UsuarioId);
                         string body = $"Olá querido(a) professor(a)! O horário para a banca de TCC <b>{banca.Tema}</b> foi definida para o dia <b>{banca.DataHora}</b>. Nos vemos lá!";
 
-                        _emailService.SendMail(user.Email, "Confirmação de data para banca de TCC na UNIFACEAR Araucária", body);
+                        _emailService.SendEmail(user.Email, "Confirmação de data para banca de TCC na UNIFACEAR Araucária", body);
                     }  
                 }
 

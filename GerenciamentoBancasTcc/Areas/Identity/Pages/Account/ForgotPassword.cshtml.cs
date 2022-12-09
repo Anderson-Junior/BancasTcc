@@ -55,7 +55,7 @@ namespace GerenciamentoBancasTcc.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                _emailService.SendMail(Input.Email, "Resetar senha", $"Por favor resete sua senha <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicando aqui</a>.");
+                _emailService.SendEmail(Input.Email, "Resetar senha", $"Por favor resete sua senha <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicando aqui</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

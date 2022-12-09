@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace GerenciamentoBancasTcc.Services.Email
 {
@@ -17,7 +18,7 @@ namespace GerenciamentoBancasTcc.Services.Email
             port = configuration["EmailConfiguration:Port"];
         }
 
-        public bool SendMail(string email, string subject, string body)
+        public bool SendEmail(string email, string subject, string body)
         {
             try
             {
@@ -41,7 +42,7 @@ namespace GerenciamentoBancasTcc.Services.Email
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
